@@ -1,0 +1,161 @@
+/* 文章页H1-H6图标样式效果 */
+h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
+    -webkit-animation: ccc 1.6s linear infinite ;
+    animation: ccc 1.6s linear infinite ;
+}
+@-webkit-keyframes ccc {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(-1turn);
+        transform: rotate(-1turn)
+    }
+}
+@keyframes ccc {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(-1turn);
+        transform: rotate(-1turn)
+    }
+}
+
+#content-inner.layout h1::before {
+    color: #ef50a8 ;
+    margin-left: -1.55rem;
+    font-size: 1.3rem;
+    margin-top: -0.23rem;
+}
+#content-inner.layout h2::before {
+    color: #fb7061 ;
+    margin-left: -1.35rem;
+    font-size: 1.1rem;
+    margin-top: -0.12rem;
+}
+#content-inner.layout h3::before {
+    color: #ffbf00 ;
+    margin-left: -1.22rem;
+    font-size: 0.95rem;
+    margin-top: -0.09rem;
+}
+#content-inner.layout h4::before {
+    color: #a9e000 ;
+    margin-left: -1.05rem;
+    font-size: 0.8rem;
+    margin-top: -0.09rem;
+}
+#content-inner.layout h5::before {
+    color: #57c850 ;
+    margin-left: -0.9rem;
+    font-size: 0.7rem;
+    margin-top: 0.0rem;
+}
+#content-inner.layout h6::before {
+    color: #5ec1e0 ;
+    margin-left: -0.9rem;
+    font-size: 0.66rem;
+    margin-top: 0.0rem;
+}
+
+#content-inner.layout h1:hover, #content-inner.layout h2:hover, #content-inner.layout h3:hover, #content-inner.layout h4:hover, #content-inner.layout h5:hover, #content-inner.layout h6:hover {
+    color: #49b1f5 ;
+}
+#content-inner.layout h1:hover::before, #content-inner.layout h2:hover::before, #content-inner.layout h3:hover::before, #content-inner.layout h4:hover::before, #content-inner.layout h5:hover::before, #content-inner.layout h6:hover::before {
+    color: #49b1f5 ;
+    -webkit-animation: ccc 3.2s linear infinite ;
+    animation: ccc 3.2s linear infinite ;
+}
+
+/* 页面设置icon转动速度调整 */
+#rightside_config i.fas.fa-cog.fa-spin {
+    animation: fa-spin 5s linear infinite ;
+}
+
+
+/*--------更换字体------------*/
+@font-face {
+    font-family: 'tzy';
+    /* 字体名自定义即可 */
+    src: url('https://cdn.jsdelivr.net/gh/tzy13755126023/BLOG_SOURCE/font/ZhuZiAWan.woff2');
+    /* 字体文件路径 */
+    font-display: swap;
+}
+
+body,
+.gitcalendar {
+    font-family: tzy !important;
+}
+
+
+.categoryBar-list {
+    max-height: 400px;
+}
+
+.clock-row {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*3s为加载动画的时间，1为加载动画的次数，ease-in-out为动画效果*/
+
+#page-header,
+#web_bg {
+    -webkit-animation: imgblur 2s 1 ease-in-out;
+    animation: imgblur 2s 1 ease-in-out;
+}
+
+@keyframes imgblur {
+    0% {
+        filter: blur(5px);
+    }
+    100% {
+        filter: blur(0px);
+    }
+}
+
+/*适配使用-webkit内核的浏览器 */
+
+@-webkit-keyframes imgblur {
+    0% {
+        -webkit-filter: blur(5px);
+    }
+    100% {
+        -webkit-filter: blur(0px);
+    }
+}
+.table-wrap img {
+    margin: .6rem auto .1rem !important;
+}
+
+/* 标签外挂 网站卡片 start */
+
+.site-card-group img {
+    margin: 0 auto .1rem !important;
+}
+
+.site-card-group .info a img {
+    margin-right: 10px !important;
+}
+
+[data-theme='dark'] .site-card-group .site-card .info .title {
+    color: #f0f0f0 !important;
+}
+
+[data-theme='dark'] .site-card-group .site-card .info .desc {
+    color: rgba(255, 255, 255, .7) !important;
+}
+
+.site-card-group .info .desc {
+    margin-top: 4px !important;
+}
+/* 代码块颜色 */
+
+figure.highlight pre .addition {
+    color: #00bf03 !important;
+}
+
+
