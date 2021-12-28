@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>ACID及实现原理</title>
+      <link href="/2021/12/28/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"/>
+      <url>/2021/12/28/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<h1 id="ACID简介"><a href="#ACID简介" class="headerlink" title="ACID简介"></a>ACID简介</h1><p>以最常见的 InnoDB 引擎来说，是如何保证 ACID 的。</p><ul><li>（Atomicity）原子性： 事务是最小的执行单位，不允许分割。原子性确保动作要么全部完成，要么完全不起作用；</li><li>（Consistency）一致性： 执行事务前后，数据保持一致，（原子性、隔离性、持久性就是为了来保证一致性）；</li><li>（Isolation）隔离性： 并发访问数据库时，一个事务不被其他事务所干扰；</li><li>（Durability）持久性: 一个事务被提交之后。对数据库中数据的改变是持久的，即使数据库发生故障也不会收到影响。</li></ul><h1 id="原子性（A）"><a href="#原子性（A）" class="headerlink" title="原子性（A）"></a>原子性（A）</h1><p>实现原子性的关键，是当事务回滚时能够撤销所有已经成功执行的sql语句（<strong>undo log</strong>）。<br>当事务对数据库进行修改时，InnoDB会生成对应的 undo log；如果事务执行失败或调用了 rollback，导致事务需要回滚，便可以利用 undo log 中的信息将数据回滚到修改之前的样子。<br>undo log 属于逻辑日志，它记录的是sql执行相关的信息。当发生回滚时，InnoDB 会根据 undo log 的内容做与之前相反的工作：</p><ul><li>对于每个 insert，回滚时会执行 delete；</li><li>对于每个 delete，回滚时会执行insert；</li><li>对于每个 update，回滚时会执行一个相反的 update，把数据改回去。</li></ul><h1 id="隔离性（I）"><a href="#隔离性（I）" class="headerlink" title="隔离性（I）"></a>隔离性（I）</h1><p>首先回忆四种mysql隔离级别</p><table><thead><tr><th align="left">隔离级别</th><th>说明</th></tr></thead><tbody><tr><td align="left">读未提交（read un）</td><td>一个事务还没提交时，它做的变更就能被别的事务看到</td></tr><tr><td align="left">读提交</td><td>一个事务提交之后，它做的变更才会被其他事务看到</td></tr><tr><td align="left">可重复读</td><td>一个事务中，对同一份数据的读取结果总是相同的，无论是否有其他事务对这份数据进行操作，以及这个事务是否提交。<strong>InnoDB默认级别</strong>。</td></tr><tr><td align="left">串行化</td><td>事务串行化执行，每次读都需要获得表级共享锁，读写相互都会阻塞，隔离级别最高，牺牲系统并发性。</td></tr></tbody></table><p>不同的隔离级别是为了解决不同的问题。也就是脏读、幻读、不可重复读。</p><table><thead><tr><th><strong>隔离级别</strong></th><th><strong>脏读</strong></th><th><strong>不可重复读</strong></th><th><strong>幻读</strong></th></tr></thead><tbody><tr><td>读未提交</td><td>可以出现</td><td>可以出现</td><td>可以出现</td></tr><tr><td>读提交</td><td>不允许出现</td><td>可以出现</td><td>可以出现</td></tr><tr><td>可重复读</td><td>不允许出现</td><td>不允许出现</td><td>可以出现</td></tr><tr><td>序列化</td><td>不允许出现</td><td>不允许出现</td><td>不允许出现</td></tr></tbody></table><p><strong>不同的隔离级别下，隔离性是靠锁和MVCC共同实现的。</strong></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 7.mysql </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>ConcurrentHashMap源码解读</title>
       <link href="/2021/12/11/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/"/>
       <url>/2021/12/11/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/</url>
