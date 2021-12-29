@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://zhangxin66666.github.io/images/cover/mysql.png">
 <meta property="article:published_time" content="2021-12-29T01:45:02.460Z">
-<meta property="article:modified_time" content="2021-12-29T07:36:46.823Z">
+<meta property="article:modified_time" content="2021-12-29T12:37:07.568Z">
 <meta property="article:author" content="金子爸爸">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -58,7 +58,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2021-12-29 15:36:46'
+  postUpdate: '2021-12-29 20:37:07'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -152,12 +152,12 @@
       }
     }
     detectApple()
-    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/mysql.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ACID及实现原理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-29T01:45:02.460Z" title="发表于 2021-12-29 09:45:02">2021-12-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-29T07:36:46.823Z" title="更新于 2021-12-29 15:36:46">2021-12-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/7-mysql/">7.mysql</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ACID及实现原理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="ACID简介"><a href="#ACID简介" class="headerlink" title="ACID简介"></a>ACID简介</h1><p>以最常见的 InnoDB 引擎来说，是如何保证 ACID 的。</p>
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/mysql.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ACID及实现原理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-29T01:45:02.460Z" title="发表于 2021-12-29 09:45:02">2021-12-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-29T12:37:07.568Z" title="更新于 2021-12-29 20:37:07">2021-12-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/7-mysql/">7.mysql</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ACID及实现原理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="ACID简介"><a href="#ACID简介" class="headerlink" title="ACID简介"></a>ACID简介</h1><p>以最常见的 InnoDB 引擎来说，是如何保证 ACID 的。</p>
 <ul>
-<li>（Atomicity）原子性： 事务是最小的执行单位，不允许分割。原子性确保动作要么全部完成，要么完全不起作用；</li>
+<li>（Atomicity）原子性： 事务是最小的执行单位，不允许分割。要么全都执行,要么全都不执行；</li>
 <li>（Consistency）一致性： 执行事务前后，数据保持一致，（原子性、隔离性、持久性就是为了来保证一致性）；</li>
-<li>（Isolation）隔离性： 并发访问数据库时，一个事务不被其他事务所干扰；</li>
-<li>（Durability）持久性: 一个事务被提交之后。对数据库中数据的改变是持久的，即使数据库发生故障也不会收到影响。</li>
+<li>（Isolation）隔离性： 并发访问数据库时，一个事务不被其他事务所干扰，数据库系统提供一定的隔离机制,保证事务在不受外部并发操作影响的“独立”环境执行；</li>
+<li>（Durability）持久性: 一个事务被提交之后。对数据库中数据的改变是持久的，即使数据库发生故障也不会受到影响。</li>
 </ul>
 <h1 id="原子性（A）"><a href="#原子性（A）" class="headerlink" title="原子性（A）"></a>原子性（A）</h1><p>实现原子性的关键，是当事务回滚时能够撤销所有已经成功执行的sql语句（<strong>undo log</strong>）。<br>当事务对数据库进行修改时，InnoDB会生成对应的 undo log；如果事务执行失败或调用了 rollback，导致事务需要回滚，便可以利用 undo log 中的信息将数据回滚到修改之前的样子。<br>undo log 属于逻辑日志，它记录的是sql执行相关的信息。当发生回滚时，InnoDB 会根据 undo log 的内容做与之前相反的工作：</p>
 <ul>
@@ -190,10 +190,12 @@
 <td>事务串行化执行，每次读都需要获得表级共享锁，读写相互都会阻塞，隔离级别最高，牺牲系统并发性。</td>
 </tr>
 </tbody></table>
+<p>查看当前数据库的事务隔离级别:show variables like ‘%tx_isolation%’;</p>
+<p>设置事务隔离级别：set tx_isolation=’REPEATABLE-READ’;</p>
 <p>不同的隔离级别是为了解决不同的问题。也就是脏读、幻读、不可重复读。</p>
-<h2 id="脏读、不可重复读、幻读区别"><a href="#脏读、不可重复读、幻读区别" class="headerlink" title="脏读、不可重复读、幻读区别"></a>脏读、不可重复读、幻读区别</h2><p>脏读：读取到了未提交的数据（如果事务这时候回滚了，那么第二个事务就读到了脏数据）。</p>
-<p>不可重复读：同一个事务中，对于同一数据，执行完全相同的select语句时可能看到不一样的结果。</p>
-<p>幻读：当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行。</p>
+<h2 id="脏读、不可重复读、幻读区别"><a href="#脏读、不可重复读、幻读区别" class="headerlink" title="脏读、不可重复读、幻读区别"></a>脏读、不可重复读、幻读区别</h2><p>脏读：事务A读取到了事务B已经修改但尚未提交的数据，。</p>
+<p>不可重复读：事务A内部的相同查询语句在不同时刻读出的结果不一致，不符合隔离性。</p>
+<p>幻读：事务A读取到了事务B提交的新增数据，不符合隔离性</p>
 <p>不可重复读&amp;&amp;幻读区别</p>
 <p>不可重复读，重点是修改。在同一事务中，同样的条件，第一次读的数据和第二次读的数据不一样，数据变化</p>
 <p>幻读，重点在于新增或者删除。在同一事务中，同样的条件,，第一次和第二次读出来的记录数不一样，行数变化。</p>
@@ -238,10 +240,10 @@
 <h3 id="数据表额外字段"><a href="#数据表额外字段" class="headerlink" title="数据表额外字段"></a>数据表额外字段</h3><p><strong>DB_TRX_ID(6字节)</strong>: 在innoDB中, 会为每个事物分配一个事务ID. 而该字段表示的就是插入或更新该行的最后一个事务的事务标识符.</p>
 <p><strong>DB_ROLL_PTR(7字节)</strong>: 这个字段称为回滚指针, 指向了回滚段的撤销日志. (undo log)</p>
 <p><strong>DB_ROW_ID(6字节)</strong>:  这个字段包含了一个行ID. 该ID在插入新行时会单调增加. 这个字段是为了在表里没有主键ID的时候, 生成聚簇索引使用的.</p>
-<p><img src="/Users/a58/Documents/hexoWorkspase/dog-lee-blog/source/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E8%A1%8C%E7%BB%93%E6%9E%84.png" alt="聚簇索引行结构"></p>
+<p><img src="/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E8%A1%8C%E7%BB%93%E6%9E%84.png" alt="聚簇索引行结构"></p>
 <hr>
 <h3 id="事务链表"><a href="#事务链表" class="headerlink" title="事务链表"></a>事务链表</h3><p>MySQL中的事务在开始到提交这段过程中，都会被保存到一个叫trx_sys的事务链表中，基本的链表结构如下：</p>
-<p><img src="/Users/a58/Documents/hexoWorkspase/dog-lee-blog/source/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/%E4%BA%8B%E5%8A%A1%E9%93%BE%E8%A1%A8.png" alt="事务链表"></p>
+<p><img src="/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/%E4%BA%8B%E5%8A%A1%E9%93%BE%E8%A1%A8.png" alt="事务链表"></p>
 <p>事务链表中保存的都是还未提交的事务，事务一旦被提交，则会被从事务链表中摘除。</p>
 <hr>
 <h3 id="read-view"><a href="#read-view" class="headerlink" title="read view"></a>read view</h3><p><strong>RC级别下每次都是重新生成read view，而在RR级别下则是一直使用事务内第一次查询时产生的read view。</strong></p>
@@ -251,7 +253,7 @@
 <p><code>trx_ids</code>: 表示事务开启的时候, 其它未提交的活跃的事务ID. 这个集合中的事务对于当前事务来说, 一直都是不可见的.</p>
 <p><code>low_limit_id</code>: 表示在生成ReadView时当前系统中最大事务id.</p>
 <p><code>up_limit_id</code>: 表示未提交活跃事务Id(trx_ids)的最大值. 如果trx_ids为空, 则up_limit_id=low_limit_id.</p>
-<p><img src="/Users/a58/Documents/hexoWorkspase/dog-lee-blog/source/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/readview.png" alt="readview"></p>
+<p><img src="/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/readview.png" alt="readview"></p>
 <p>通过该ReadView，新的事务可以根据查询到的所有活跃事务记录的事务ID来匹配能够看见该记录，从而实现数据库的事务隔离，主要逻辑如下：</p>
 <p>通过聚簇索引的行结构中DB_TRX_ID隐藏字段可以知道最近被哪个事务ID修改过。一个新的事务开始时会根据事务链表构造一个ReadView。当前事务根据ReadView中的数据去跟检索到的每一条数据去校验,看看当前事务是不是能看到这条数据</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">// 判断数据对应的聚簇索引中的事务id在这个readview中是否可见</span><br><span class="line">bool changes_visible(</span><br><span class="line">        trx_id_t        id, // 记录的id</span><br><span class="line">    const table_name_t&amp; name) const</span><br><span class="line">MY_ATTRIBUTE((warn_unused_result))</span><br><span class="line">&#123;</span><br><span class="line">    ut_ad(id &gt; 0);</span><br><span class="line">    // 如果当前记录id &lt; 事务链表的最小值或者等于创建该readview的id就是它自己,那么是可见的</span><br><span class="line">    if (id &lt; m_up_limit_id || id == m_creator_trx_id) &#123;</span><br><span class="line">        return(true);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    check_trx_id_sanity(id, name);</span><br><span class="line">    // 如果该记录的事务id大于事务链表中的最大值,那么不可见</span><br><span class="line">    if (id &gt;= m_low_limit_id) &#123;</span><br><span class="line">        return(false);</span><br><span class="line">        // 如果事务链表是空的,那也是可见的</span><br><span class="line">    &#125; else if (m_ids.empty()) &#123;</span><br><span class="line">        return(true);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    const ids_t::value_type*    p = m_ids.data();</span><br><span class="line"></span><br><span class="line">    //判断是否在ReadView中，如果在说明在创建ReadView时 此条记录还处于活跃状态则不应该查询到，否则说明创建ReadView是此条记录已经是不活跃状态则可以查询到</span><br><span class="line">    return(!std::binary_search(p, p + m_ids.size(), id));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -273,11 +275,11 @@
 <p>insert undo log是指在insert操作中产生的undo log，因为insert操作的记录，只对事务本身可见，对其他事务不可见（这是事务隔离性的要求），故该undo log可以在事务提交后直接删除，不需要进行purge操作。</p>
 <p><strong>update undo log</strong>：</p>
 <p>update undo log记录的是delete和update操作产生的undo log。该undo log可能需要提供MVCC机制，因此不能在事务提交时就进行删除，提交时放入undo log链表，等待purge线程进行最后的删除。下面是两种undo log的结构图。</p>
-<p><img src="/Users/a58/Documents/hexoWorkspase/dog-lee-blog/source/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/undolog.png" alt="undolog"></p>
+<p><img src="/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/undolog.png" alt="undolog"></p>
 <h3 id="purge"><a href="#purge" class="headerlink" title="purge"></a>purge</h3><p>对于一条delete语句 delete from t where a = 1，如果列a有聚集索引，则不会进行真正的删除，而只是在主键列等于1的记录delete flag设置为1，即记录还是存在在B+树中。而对于update操作，不是直接对记录进行更新，而是标识旧记录为删除状态，然后新产生一条记录。那这些旧版本标识位删除的记录何时真正的删除？怎么删除？</p>
 <p>其实InnoDB是通过undo日志来进行旧版本的删除操作的，在InnoDB内部，这个操作被称之为purge操作，原来在srv_master_thread主线程中完成，后来进行优化，开辟了purge线程进行purge操作，并且可以设置purge线程的数量。purge操作每10s进行一次。</p>
 <p>为了节省存储空间，InnoDB存储引擎的undo log设计是这样的：一个页上允许多个事务的undo log存在。虽然这不代表事务在全局过程中提交的顺序，但是后面的事务产生的undo log总在最后。此外，InnoDB存储引擎还有一个history列表，它根据事务提交的顺序，将undo log进行连接，如下面的一种情况：</p>
-<p><img src="/Users/a58/Documents/hexoWorkspase/dog-lee-blog/source/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/purge.png" alt="purge"></p>
+<p><img src="/images/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/purge.png" alt="purge"></p>
 <p>在执行purge过程中，InnoDB存储引擎首先从history list中找到第一个需要被清理的记录，这里为trx1，清理之后InnoDB存储引擎会在trx1所在的Undo page中继续寻找是否存在可以被清理的记录，这里会找到事务trx3，接着找到trx5，但是发现trx5被其他事务所引用而不能清理，故再去history list中取查找，发现最尾端的记录时trx2，接着找到trx2所在的Undo page，依次把trx6、trx4清理，由于Undo page2中所有的记录都被清理了，因此该Undo page可以进行重用。</p>
 <p>InnoDB存储引擎这种先从history list中找undo log，然后再从Undo page中找undo log的设计模式是为了避免大量随机读操作，从而提高purge的效率。</p>
 <hr>
