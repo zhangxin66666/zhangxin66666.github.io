@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>行页索引底层结构 | 金子爸爸の家</title><meta name="keywords" content="Mysql"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍mysql行、页、索引底层结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="行页索引底层结构">
+<meta property="og:url" content="https://zhangxin66666.github.io/2021/12/29/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="介绍mysql行、页、索引底层结构">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/mysql.png">
+<meta property="article:published_time" content="2021-12-29T01:45:02.460Z">
+<meta property="article:modified_time" content="2022-01-05T12:26:00.909Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/mysql.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2021/12/29/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '行页索引底层结构',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-01-05 20:26:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/mysql.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">行页索引底层结构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-29T01:45:02.460Z" title="发表于 2021-12-29 09:45:02">2021-12-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-01-05T12:26:00.909Z" title="更新于 2022-01-05 20:26:00">2022-01-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/7-mysql/">7.mysql</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="行页索引底层结构"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>首先明确下什么是索引呢？假设我一张数据库的表存了10亿条数据，如果要查找出其中的10条数据，如果逐条遍历匹配的话，效率上肯定是无法容忍的。所以为了提高数据查询的效率，就需要对数据进行一些格式化的存储，来方便我们更快的查找，这就是索引。</p>
+<p>索引其实是对数据按照某种格式进行存储的文件。就InnoDB来讲，索引文件里面会有很多的基本单元【页】，为什么要有页呢？</p>
+<p>如果我们在查询数据的时候直接交互磁盘，效率显然又会很慢，所以真正处理数据的过程其实是在内存中，这样就需要把磁盘的数据加载到内存，如果是写操作，可能还要将内存的数据再次刷新到磁盘。如果内存与磁盘的数据交互过程是基于一条条记录来进行的，显然又会很慢，所以InnoDB采取的方式是将数据划分为若干个页，以页来作为内存和磁盘交互的基本单位，默认大小为16KB。</p>
+<p>换句话讲，其实就是内存一次拉到磁盘的数据最少是16KB，内存写入磁盘的数据一次最少也是16KB。</p>
+<p>上面解释清楚了索引和页，MySQL的InnoDB存储引擎是基于页来进行内存和磁盘的数据交互的。所以我们的数据或者叫记录，其实是以【行】的格式存储在页里面的，可以简单的理解成页里面的一行对应一条记录。</p>
+<p>当然索引文件里面肯定不光只有页，还会有其余的东西，页里面也不光只有行格式，也会有额外的信息，这个下面我们会详细分析，至此我们仅仅需要明确一下索引的概念和层级关系。</p>
+<p><img src="/images/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/%E9%A1%B5%E8%A1%8C%E5%B1%82%E7%BA%A7%E5%85%B3%E7%B3%BB.png" alt="页行层级关系"></p>
+<p>明确了这个层级关系之后，接下来我们来从最基础的行格式来进行分析。</p>
+<h1 id="一、行"><a href="#一、行" class="headerlink" title="一、行"></a>一、行</h1><p>我们平时都是以记录为单位向表中插入数据的，这些记录在磁盘上的存储形式被称为行格式或者记录格式，截至目前，一共有4种行格式。分别是 <code>compact</code> <code>redundant</code> <code>dynamic</code> <code>compressed</code>，MySQL5.7默认的行格式为<code>**dynamic**</code>。</p>
+<h2 id="1-如何指定行格式"><a href="#1-如何指定行格式" class="headerlink" title="1. 如何指定行格式"></a>1. 如何指定行格式</h2><p>首先来看下，我们如何来指定行格式呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE 表名 (列的信息) ROW_FORMAT=行格式名称</span><br><span class="line">    </span><br><span class="line">ALTER TABLE 表名 ROW_FORMAT=行格式名称</span><br></pre></td></tr></table></figure>
+
+<p>比如我们创建一张表来指定行格式：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> record_format(</span><br><span class="line">  c1 <span class="type">varchar</span>(<span class="number">10</span>),</span><br><span class="line">  c2 <span class="type">varchar</span>(<span class="number">10</span>) <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">  c3 <span class="type">char</span>(<span class="number">10</span>),</span><br><span class="line">  c4 <span class="type">varchar</span>(<span class="number">10</span>)</span><br><span class="line">)charset<span class="operator">=</span>ascii row_format<span class="operator">=</span>compact;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-compact-行格式"><a href="#2-compact-行格式" class="headerlink" title="2.compact 行格式"></a>2.compact 行格式</h2><p>一条完整的行格式可以被分为两个部分：记录额外信息的部分&amp;记录真实数据的部分。</p>
+<p><img src="/images/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/%E8%A1%8C%E6%A0%BC%E5%BC%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="行格式示意图"></p>
+<h3 id="2-1-额外的信息"><a href="#2-1-额外的信息" class="headerlink" title="2.1 额外的信息"></a>2.1 额外的信息</h3><p>先来看额外的信息，其实包含三部分：变长字段的长度列表，NULL值列表和记录头信息。</p>
+<h4 id="2-1-1-变长字段长度列表"><a href="#2-1-1-变长字段长度列表" class="headerlink" title="2.1.1 变长字段长度列表"></a>2.1.1 变长字段长度列表</h4><p>MySQL支持很多的变长字段，我们就以最经典的varchar来进行举例，变长字段的数据存储多少字节其实是不固定的，所以在存储真实的数据的时候，要记录一下真实数据的字节数，这样的话，一个变长字段列实际上就占用了两部分的空间来存储：【真实数据】&amp;【真实数据占用字节数】</p>
+<p>注意：对于一个列varchar(100)，我们实际上存储一个10字节的数据，当在内存中为这个列的数据分配内存空间的时候，实际上会分配100字节，但是这个列的数据在磁盘上，实际上只会分配10字节。</p>
+<p>在Compact行格式中，会把所有的变长字段占用的真实长度全部逆序存储在记录的开头位置，形成一个变长字段长度列表。</p>
+<p>比如我们刚才创建的那张表，我们来分析一下：</p>
+<p>c1,c2,c4三个列都是变长字段，所以这三个列的值的长度其实都需要保存到变长字段长度列表，因为这张表的字符集的ASCII，所以每个字符实际只占用1字节来进行编码：</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>储存内容</th>
+<th>内容长度(十进制表示)</th>
+<th>内容长度(十六进制表示)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>‘aaaa’</td>
+<td>4</td>
+<td>0x04</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>‘bbb’</td>
+<td>3</td>
+<td>0x03</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>‘d’</td>
+<td>1</td>
+<td>0x01</td>
+</tr>
+</tbody></table>
+<p>因为这些长度是按照逆序来存放的，所以最终变长字段长度列表的字节串用十六进制表示的效果就是【010304】。</p>
+<p><img src="/images/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/%E8%A1%8C%E8%AE%B0%E5%BD%95demo.png" alt="行记录demo"></p>
+<p>因为我们演示的这条记录中，c1,c2,c4列中的字符串都比较短，所以真实的数据占用的字节数就比较小，真实数据的长度用一个字节就可以表示，但是如果变长列的内容占用字节数比较多，可能就需要用2个字节来表示。对此InnoDB的规定是：</p>
+<p>【W】：某个字符集中表示一个字符最多需要使用的字节数</p>
+<p>【M】：当前列类型最多能存储的字符数(比如varchar(100),M=100),如果换算成字节数就是W*M</p>
+<p>【L】：真实占用的字节数</p>
+<ol>
+<li><ol>
+<li>如果M*W&lt;=255,那么使用1字节来表示字符串实际用到的字节数。</li>
+</ol>
+<p>InnoDB在读记录的变长字段长度列表的时候会先去查看表结构，判断用几个字节去存储的。</p>
+</li>
+<li><p>如果M*W&gt;=255,这个时候再次分为两种情况： </p>
+</li>
+<li><ol>
+<li>如果L&lt;=127，那就用1个字节表示</li>
+<li>否则就用2个字节表示</li>
+</ol>
+</li>
+</ol>
+<p>如果某个变长字段允许存储的最大字节数大于255的时候，怎么区分他正在读取的字节是一个单独的字段长度还是半个字段长度呢？</p>
+<p>InnoDB用该字节的第一个二进制为作为标志位，0：单独的字段长度，1：半个字段长度。</p>
+<p>对于一些占用字节数特别多的字段，单个页都无法存储的时候，InnoDB会把一部分数据放到所谓的溢出页，在变长字段长度列表中只会记录当前页的字段长度，所以用两个字节也可以存的下。</p>
+<p>此外，变长字段的长度列表中只存储真实数据值为非NULL的列占用的长度，真实数据为NULL的列的长度是不存储的。</p>
+<p>也并不是所有的记录都会有变长字段长度列表，假如表中的列要是没有变长字段，或者记录中的变长字段值都是NULL，那就没有变长字段长度列表了。</p>
+<h4 id="2-1-2-NULL值列表"><a href="#2-1-2-NULL值列表" class="headerlink" title="2.1.2 NULL值列表"></a>2.1.2 NULL值列表</h4><p>如果一条记录有多个字段的真实值为NULL，不统一管理的话就会比较占用空间，所以抽取出来了NULL值列表。</p>
+<p>当然如果这个表的所有字段都是NOT NULL约束的，就不会有NULL值列表。</p>
+<p>看一下处理过程：</p>
+<ol>
+<li>首先统计出表中允许存储NULL的字段</li>
+<li>如果表中没有NULL字段的列，那就没必要再往下了，否则将每个允许存储NULL的列对应的一个二进制位按照列的顺序逆序排列。1：NULL，0：不是NULL。</li>
+<li>MySQL规定NULL值必须用整数个字节的位表示，如果使用的二进制位个数不是整数个字节，则在字节的高位补0。</li>
+</ol>
+<p>以此类推，如果一个表中有9个字段允许为NULL，那么这个记录的NULL值列表部分就需要2个字节来表示。</p>
+<p>这个时候再来看我们上面创建的表中的记录。</p>
+<p><img src="/images/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/%E8%A1%8C%E8%AE%B0%E5%BD%95null%E5%80%BC%E5%88%97.png" alt="行记录null值列"></p>
+<h4 id="2-1-3-记录头信息"><a href="#2-1-3-记录头信息" class="headerlink" title="2.1.3 记录头信息"></a>2.1.3 记录头信息</h4><p>由五个固定的字节组成，换算成二进制就是40位，每一部分代表不同的信息。</p>
+<p><img src="/images/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/%E8%AE%B0%E5%BD%95%E5%A4%B4%E4%BF%A1%E6%81%AF.png" alt="记录头信息"></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>大小(bit)</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>预留位1</td>
+<td>1</td>
+<td>没有使用</td>
+</tr>
+<tr>
+<td>预留位2</td>
+<td>1</td>
+<td>没有使用</td>
+</tr>
+<tr>
+<td>delete_mask</td>
+<td>1</td>
+<td>标记该记录是否被删除</td>
+</tr>
+<tr>
+<td>min_rec_mask</td>
+<td>1</td>
+<td>B+树的每层非叶子节点中的最小记录都会添加该标记</td>
+</tr>
+<tr>
+<td>n_owned</td>
+<td>4</td>
+<td>表示当前记录拥有的记录数</td>
+</tr>
+<tr>
+<td>heap_no</td>
+<td>13</td>
+<td>表示当前记录在记录堆的位置信息</td>
+</tr>
+<tr>
+<td>record_type</td>
+<td>3</td>
+<td>表示当前记录的类型  0 ：普通记录，1：B+树非页节点记录，2：最小记录，3：最大记录</td>
+</tr>
+<tr>
+<td>next_record</td>
+<td>16</td>
+<td>下一条记录的相对位置</td>
+</tr>
+</tbody></table>
+<p>除了表中显式定义的列，MySQL会往我们的表中放一些隐藏列。</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>是否必须</th>
+<th>占用空间</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>row_id</td>
+<td>否</td>
+<td>6字节</td>
+<td>行ID，唯一标识一条记录</td>
+</tr>
+<tr>
+<td>transaction_id</td>
+<td>是</td>
+<td>6字节</td>
+<td>事务ID</td>
+</tr>
+<tr>
+<td>roll_pointer</td>
+<td>是</td>
+<td>7字节</td>
+<td>回滚指针</td>
+</tr>
+</tbody></table>
+<p>【row_id】：这个玩意，跟主键的选择有关，如果我们显式定义了表的主键，就不会有它，如果我们没显式定义主键，那么会去选择一个unique的列作为主键，如果unique的列也没有，那么就会生成一个row_id列作为隐藏的主键。</p>
+<p>【transaction_id】&amp;【roll_pointer】和一致性非锁读(MVCC)有关,后面遇到的时候我会在分析介绍。</p>
+<p>在完善下我们开头创建的那张表的记录形象。</p>
+<p><img src="/images/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/%E8%A1%8C%E7%9C%9F%E5%AE%9E%E6%95%B0%E6%8D%AE.png" alt="行真实数据"></p>
+<p>至此，其实就剩下我们显式插入数据库的真实记录了，但是还有一个特殊的类型需要说明一下。</p>
+<h4 id="2-2-1-CHAR-也是变长的？"><a href="#2-2-1-CHAR-也是变长的？" class="headerlink" title="2.2.1 CHAR 也是变长的？"></a>2.2.1 CHAR 也是变长的？</h4><p>在Compact行格式下只会把变长类型的列的长度逆序记录到变长字段长度列表，但是这其实和我们的字符集有关系，上面我们创建的表显式指定为ASCII字符集，这个时候一个字符只会用一个字节表示，但是假如我们指定的是其它字符集，比如utf8，这个时候一个字符用几个字节表示就不确定了，所以CHAR列的真实字节长度也会被记录到变长字段长度列表。</p>
+<p>另外，变长字符集的CHAR(M)类型的列要求至少占用M个字节，而VARCHAR(M)就没有这个要求。</p>
+<p>对于使用utf8字符集的CHAR(10)的列来说，该列存储的数据字节长度的范围是10～30个字节。即使我们向该列中存储一个空字符串也会占用10个字节，这是怕将来更新该列的值的字节长度大于原有值的字节长度而小于10个字节时，可以在该记录处直接更新，而不是在存储空间中重新分配一个新的记录空间，导致原有的记录空间成为所谓的碎片。</p>
+<h2 id="3-行溢出"><a href="#3-行溢出" class="headerlink" title="3. 行溢出"></a>3. 行溢出</h2><h2 id="4-Dynamic-amp-Compressed-行格式"><a href="#4-Dynamic-amp-Compressed-行格式" class="headerlink" title="4.Dynamic &amp; Compressed 行格式"></a>4.Dynamic &amp; Compressed 行格式</h2><h1 id="二、页"><a href="#二、页" class="headerlink" title="二、页"></a>二、页</h1><h1 id="三、索引"><a href="#三、索引" class="headerlink" title="三、索引"></a>三、索引</h1><p><img src="/images/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/%E8%A1%8C%E7%9C%9F%E5%AE%9E%E6%95%B0%E6%8D%AE.png" alt="行真实数据"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2021/12/29/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/">https://zhangxin66666.github.io/2021/12/29/7.mysql/行页索引底层结构/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Mysql/">Mysql</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/mysql.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/29/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"><img class="prev-cover" src="/images/cover/mysql.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ACID及实现原理</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/11/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/"><img class="next-cover" src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ConcurrentHashMap源码解读</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/12/29/7.mysql/mysql%E4%B8%89%E5%A4%A7%E6%97%A5%E5%BF%97/" title="mysql三大日志"><img class="cover" src="/images/cover/mysql.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-29</div><div class="title">mysql三大日志</div></div></a></div><div><a href="/2021/12/29/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" title="ACID及实现原理"><img class="cover" src="/images/cover/mysql.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-29</div><div class="title">ACID及实现原理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%A1%8C"><span class="toc-text">一、行</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%A6%82%E4%BD%95%E6%8C%87%E5%AE%9A%E8%A1%8C%E6%A0%BC%E5%BC%8F"><span class="toc-text">1. 如何指定行格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-compact-%E8%A1%8C%E6%A0%BC%E5%BC%8F"><span class="toc-text">2.compact 行格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%A2%9D%E5%A4%96%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">2.1 额外的信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E5%8F%98%E9%95%BF%E5%AD%97%E6%AE%B5%E9%95%BF%E5%BA%A6%E5%88%97%E8%A1%A8"><span class="toc-text">2.1.1 变长字段长度列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-NULL%E5%80%BC%E5%88%97%E8%A1%A8"><span class="toc-text">2.1.2 NULL值列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-%E8%AE%B0%E5%BD%95%E5%A4%B4%E4%BF%A1%E6%81%AF"><span class="toc-text">2.1.3 记录头信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-CHAR-%E4%B9%9F%E6%98%AF%E5%8F%98%E9%95%BF%E7%9A%84%EF%BC%9F"><span class="toc-text">2.2.1 CHAR 也是变长的？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%A1%8C%E6%BA%A2%E5%87%BA"><span class="toc-text">3. 行溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Dynamic-amp-Compressed-%E8%A1%8C%E6%A0%BC%E5%BC%8F"><span class="toc-text">4.Dynamic &amp; Compressed 行格式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%A1%B5"><span class="toc-text">二、页</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%B4%A2%E5%BC%95"><span class="toc-text">三、索引</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/12/29/7.mysql/mysql%E4%B8%89%E5%A4%A7%E6%97%A5%E5%BF%97/" title="mysql三大日志"><img src="/images/cover/mysql.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mysql三大日志"/></a><div class="content"><a class="title" href="/2021/12/29/7.mysql/mysql%E4%B8%89%E5%A4%A7%E6%97%A5%E5%BF%97/" title="mysql三大日志">mysql三大日志</a><time datetime="2021-12-29T01:45:02.460Z" title="发表于 2021-12-29 09:45:02">2021-12-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/29/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" title="ACID及实现原理"><img src="/images/cover/mysql.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ACID及实现原理"/></a><div class="content"><a class="title" href="/2021/12/29/7.mysql/ACID%E5%8F%8A%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" title="ACID及实现原理">ACID及实现原理</a><time datetime="2021-12-29T01:45:02.460Z" title="发表于 2021-12-29 09:45:02">2021-12-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/29/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/" title="行页索引底层结构"><img src="/images/cover/mysql.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="行页索引底层结构"/></a><div class="content"><a class="title" href="/2021/12/29/7.mysql/%E8%A1%8C%E9%A1%B5%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84/" title="行页索引底层结构">行页索引底层结构</a><time datetime="2021-12-29T01:45:02.460Z" title="发表于 2021-12-29 09:45:02">2021-12-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/11/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2021/12/11/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2021-12-11T04:02:22.769Z" title="发表于 2021-12-11 12:02:22">2021-12-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/mysql.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
