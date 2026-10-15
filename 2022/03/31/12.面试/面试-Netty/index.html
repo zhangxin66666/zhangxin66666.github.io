@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>面试题·Netty | 金子爸爸の家</title><meta name="keywords" content="面试"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="NIO、线程模型与组件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题·Netty">
+<meta property="og:url" content="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Netty/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="NIO、线程模型与组件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E9%9D%A2%E8%AF%95.png">
+<meta property="article:published_time" content="2022-03-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-15T06:07:35.768Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E9%9D%A2%E8%AF%95.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Netty/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '面试题·Netty',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-15 14:07:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">180</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E9%9D%A2%E8%AF%95.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">面试题·Netty</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-30T16:00:00.000Z" title="发表于 2022-03-31 00:00:00">2022-03-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-15T06:07:35.768Z" title="更新于 2026-10-15 14:07:35">2026-10-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="面试题·Netty"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p><strong>总目录：</strong> <a href="../常见面试题/" target="_blank">常见面试题索引</a></p>
+</blockquote>
+<h1 id="十一、Netty"><a href="#十一、Netty" class="headerlink" title="十一、Netty"></a>十一、Netty</h1><h3 id="NIO三大核心组件"><a href="#NIO三大核心组件" class="headerlink" title="NIO三大核心组件"></a>NIO三大核心组件</h3><p> <strong>Channel(通道)， Buffer(缓冲区)，Selector(多路复用器)</strong></p>
+<ol>
+<li>channel 类似于流，每个 channel 对应一个 buffer缓冲区，buffer 底层就是个数组</li>
+<li>channel 会注册到 selector 上，由 selector 根据 channel 读写事件的发生将其交由某个空闲的线程处理</li>
+<li>NIO 的 Buffer 和 channel 都是既可以读也可以写</li>
+</ol>
+<h3 id="Netty线程模型"><a href="#Netty线程模型" class="headerlink" title="Netty线程模型"></a>Netty线程模型</h3><p>Netty通过Reactor模型基于多路复用器接收并处理用户请求，内部实现boss和work两个线程池，其中boss的线程负责处理请求的accept事件，当接收到accept事件的请求时，把对应的socket封装到一个NioSocketChannel中，并交给work线程池，其中work线程池负责请求的read和write事件，交由对应的Handler处理。</p>
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202203/31/5cJC8M.png" />
+
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202203/31/5N67yC.png"/> 
+
+<ol>
+<li>Netty 抽象出两组线程池BossGroup和WorkerGroup，BossGroup专门负责接收客户端的连接, WorkerGroup专门负责网络的读写</li>
+<li>BossGroup和WorkerGroup类型都是NioEventLoopGroup</li>
+<li>NioEventLoopGroup 相当于一个事件循环<strong>线程组</strong>, 这个组中含有多个事件循环线程 ， 每一个事件循环线程是NioEventLoop</li>
+<li>每个NioEventLoop都有一个selector , 用于监听注册在其上的socketChannel的网络通讯</li>
+<li> 每个BossNioEventLoop线程内部循环执行的步骤有 3 步</li>
+<li>处理accept事件 , 与client 建立连接 , 生成 NioSocketChannel </li>
+<li>将NioSocketChannel注册到某个worker  NIOEventLoop上的selector</li>
+<li>处理任务队列的任务 ， 即runAllTasks</li>
+<li>每个workerNIOEventLoop线程循环执行的步骤<ol>
+<li>轮询注册到自己selector上的所有NioSocketChannel 的read, write事件</li>
+<li>处理 I/O 事件， 即read , write 事件， 在对应NioSocketChannel 处理业务</li>
+<li>runAllTasks处理任务队列TaskQueue的任务 ，一些耗时的业务处理一般可以放入TaskQueue中慢慢处理，这样不影响数据在 pipeline 中的流动处理</li>
+</ol>
+</li>
+</ol>
+<h3 id="Netty模块组件"><a href="#Netty模块组件" class="headerlink" title="Netty模块组件"></a>Netty模块组件</h3><ul>
+<li><p><strong>Bootstrap、ServerBootstrap</strong>：Bootstrap 意思是引导，一个 Netty 应用通常由一个 Bootstrap 开始，主要作用是配置整个 Netty 程序，串联各个组件，Netty 中 Bootstrap 类是客户端程序的启动引导类，ServerBootstrap 是服务端启动引导类。</p>
+</li>
+<li><p><strong>Future、ChannelFuture</strong>：正如前面介绍，在 Netty 中所有的 IO 操作都是异步的，不能立刻得知消息是否被正确处理。但是可以过一会等它执行完成或者直接注册一个监听，具体的实现就是通过 Future 和 ChannelFutures，他们可以注册一个监听，当操作执行成功或失败时监听会自动触发注册的监听事件。</p>
+</li>
+<li><p><strong>Channel</strong>：Netty 网络通信的组件，能够用于执行网络 I/O 操作。Channel 为用户提供：</p>
+<ol>
+<li><p>当前网络连接的通道的状态（例如是否打开？是否已连接？）</p>
+</li>
+<li><p>网络连接的配置参数 （例如接收缓冲区大小）</p>
+</li>
+<li><p>提供异步的网络 I/O 操作(如建立连接，读写，绑定端口)，异步调用意味着任何 I/O 调用都将立即返回，并且不保证在调用结束时所请求的 I/O 操作已完成。</p>
+</li>
+<li><p>调用立即返回一个 ChannelFuture 实例，通过注册监听器到 ChannelFuture 上，可以 I/O 操作成功、失败或取消时回调通知调用方。</p>
+</li>
+<li><p>支持关联 I/O 操作与对应的处理程序。</p>
+</li>
+<li><p>不同协议、不同的阻塞类型的连接都有不同的 Channel 类型与之对应。</p>
+</li>
+<li><pre><code>NioSocketChannel，异步的客户端 TCP Socket 连接。
+NioServerSocketChannel，异步的服务器端 TCP Socket 连接。
+NioDatagramChannel，异步的 UDP 连接。
+NioSctpChannel，异步的客户端 Sctp 连接。
+NioSctpServerChannel，异步的 Sctp 服务器端连接。
+这些通道涵盖了 UDP 和 TCP 网络 IO 以及文件 IO。
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p><strong>Selector</strong>：Netty 基于 Selector 对象实现 I/O 多路复用，通过 Selector 一个线程可以监听多个连接的 Channel 事件。当向一个 Selector 中注册 Channel 后，Selector 内部的机制就可以自动不断地查询(Select) 这些注册的 Channel 是否有已就绪的 I/O 事件（例如可读，可写，网络连接完成等），这样程序就可以很简单地使用一个线程高效地管理多个 Channel 。</p>
+</li>
+<li><p><strong>NioEventLoop</strong>：NioEventLoop 中维护了一个线程和任务队列，支持异步提交执行任务，线程启动时会调用 NioEventLoop 的 run 方法，执行 I/O 任务和非 I/O 任务：I/O 任务，即 selectionKey 中 ready 的事件，如 accept、connect、read、write 等，由 processSelectedKeys 方法触发。非 IO 任务，添加到 taskQueue 中的任务，如 register0、bind0 等任务，由 runAllTasks 方法触发。</p>
+</li>
+<li><p><strong>NioEventLoopGroup</strong>：NioEventLoopGroup，主要管理 eventLoop 的生命周期，可以理解为一个线程池，内部维护了一组线程，每个线程(NioEventLoop)负责处理多个 Channel 上的事件，而一个 Channel 只对应于一个线程。</p>
+</li>
+<li><p><strong>ChannelHandler</strong>：ChannelHandler 是一个接口，处理 I/O 事件或拦截 I/O 操作，并将其转发到其 ChannelPipeline(业务处理链)中的下一个处理程序。</p>
+</li>
+<li><p><strong>ChannelHandlerContext</strong>：保存 Channel 相关的所有上下文信息，同时关联一个 ChannelHandler 对象。</p>
+</li>
+<li><p><strong>ChannelPipline</strong>：保存 ChannelHandler 的 List，用于处理或拦截 Channel 的入站事件和出站操作。ChannelPipeline 实现了一种高级形式的拦截过滤器模式，使用户可以完全控制事件的处理方式，以及 Channel 中各个的 ChannelHandler 如何相互交互。在 Netty 中每个 Channel 都有且仅有一个 ChannelPipeline 与之对应，它们的组成关系如下：</p>
+</li>
+</ul>
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202203/31/OnweVR.png"/> 
+
+<p>一个 Channel 包含了一个 ChannelPipeline，而 ChannelPipeline 中又维护了一个由 ChannelHandlerContext 组成的双向链表，并且每个 ChannelHandlerContext 中又关联着一个 ChannelHandler。read事件(入站事件)和write事件(出站事件)在一个双向链表中，入站事件会从链表 head 往后传递到最后一个入站的 handler，出站事件会从链表 tail 往前传递到最前一个出站的 handler，两种类型的 handler 互不干扰。</p>
+<h3 id="Netty粘包拆包"><a href="#Netty粘包拆包" class="headerlink" title="Netty粘包拆包"></a>Netty粘包拆包</h3><p>TCP是一个流协议，就是没有界限的一长串二进制数据。TCP作为传输层协议并不不了解上层业务数据的具体含义，它会根据TCP缓冲区的实际情况进行数据包的划分，所以在业务上认为是一个完整的包，可能会被TCP拆分成多个包进行发送，也有可能把多个小的包封装成一个大的数据包发送，这就是所谓的TCP粘包和拆包问题。面向流的通信是无消息保护边界的。</p>
+<p><strong>解决方案</strong></p>
+<ol>
+<li><p>消息定长度，传输的数据大小固定长度，例如每段的长度固定为100字节，如果不够空位补空格</p>
+</li>
+<li><p>在数据包尾部添加特殊分隔符，比如下划线，中划线等，这种方法简单易行，但选择分隔符的时候一定要注意每条数据的内部一定不能出现分隔符。</p>
+</li>
+<li><p>发送长度：发送每条数据的时候，将数据的长度一并发送，比如可以选择每条数据的前4位是数据的长度，应用层处理时可以根据长度来判断每条数据的开始和结束。</p>
+<p>Netty提供了多个解码器，可以进行分包的操作，如下：</p>
+<ol>
+<li>LineBasedFrameDecoder （回车换行分包）</li>
+<li>DelimiterBasedFrameDecoder（特殊分隔符分包）</li>
+<li>FixedLengthFrameDecoder（固定长度报文来分包）</li>
+</ol>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Netty/">https://zhangxin66666.github.io/2022/03/31/12.面试/面试-Netty/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95/">面试</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E9%9D%A2%E8%AF%95.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MySQL/"><img class="prev-cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">面试题·MySQL</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Spring/"><img class="next-cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">面试题·Spring</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Dubbo/" title="面试题·Dubbo"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·Dubbo</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98/" title="面试知识点总结"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试知识点总结</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-JVM/" title="面试题·JVM"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·JVM</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MQ/" title="面试题·MQ"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·MQ</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MySQL/" title="面试题·MySQL"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·MySQL</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Spring/" title="面试题·Spring"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·Spring</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">180</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81Netty"><span class="toc-text">十一、Netty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NIO%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-text">NIO三大核心组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Netty%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-text">Netty线程模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Netty%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6"><span class="toc-text">Netty模块组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Netty%E7%B2%98%E5%8C%85%E6%8B%86%E5%8C%85"><span class="toc-text">Netty粘包拆包</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E9%9D%A2%E8%AF%95.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

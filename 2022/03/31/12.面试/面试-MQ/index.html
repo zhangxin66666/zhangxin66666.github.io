@@ -1,0 +1,1635 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>面试题·MQ | 金子爸爸の家</title><meta name="keywords" content="面试"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="RabbitMQ、Kafka、RocketMQ 与可靠性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题·MQ">
+<meta property="og:url" content="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MQ/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="RabbitMQ、Kafka、RocketMQ 与可靠性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E9%9D%A2%E8%AF%95.png">
+<meta property="article:published_time" content="2022-03-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-15T06:07:35.766Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E9%9D%A2%E8%AF%95.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MQ/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '面试题·MQ',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-15 14:07:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">180</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E9%9D%A2%E8%AF%95.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">面试题·MQ</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-30T16:00:00.000Z" title="发表于 2022-03-31 00:00:00">2022-03-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-15T06:07:35.766Z" title="更新于 2026-10-15 14:07:35">2026-10-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">18.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>63分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="面试题·MQ"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p><strong>总目录：</strong> <a href="../常见面试题/" target="_blank">常见面试题索引</a></p>
+</blockquote>
+<h1 id="五、MQ"><a href="#五、MQ" class="headerlink" title="五、MQ"></a>五、MQ</h1><blockquote>
+<p>格式说明：每题先 <strong>口述版</strong>，下方 <strong>具体介绍</strong>。<strong>RB</strong>=RabbitMQ，<strong>KF</strong>=Kafka。</p>
+</blockquote>
+<h2 id="5-1-为什么用-MQ-与选型"><a href="#5-1-为什么用-MQ-与选型" class="headerlink" title="5.1 为什么用 MQ 与选型"></a>5.1 为什么用 MQ 与选型</h2><h3 id="M1-引入-MQ-解决什么问题？"><a href="#M1-引入-MQ-解决什么问题？" class="headerlink" title="M1. 引入 MQ 解决什么问题？"></a>M1. 引入 MQ 解决什么问题？</h3><p><strong>口述版：</strong> 四个词：异步减 RT、削峰保护下游、解耦上下游、最终一致（发消息驱动别的系统）。比如下单后发 MQ 做积分、短信，不用等全部做完才返回。</p>
+<h4 id="具体介绍"><a href="#具体介绍" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>异步</strong>：主流程只写 DB+发 MQ，消费者慢慢处理。<ul>
+<li>面试可量化：接口 RT 从「串行调 3 个 RPC 各 200ms」降到「写库 50ms + 发 MQ 10ms」。</li>
+<li>RB/KF/Rocket 均支持异步发送；同步 send 仅用于强校验场景（confirm / acks 结果）。</li>
+</ul>
+</li>
+<li><strong>削峰</strong>：秒杀流量先进队列，消费者按能力拉。<ul>
+<li>队列深度 = 生产 TPS × 持续时间 − 消费 TPS × 持续时间；消费能力不足时 depth/lag 单调涨（见 M15、M55）。</li>
+</ul>
+</li>
+<li><strong>解耦</strong>：接口契约变成 Topic/Queue，改消费者不影响生产者编译。<ul>
+<li>RB：Exchange + Binding 改路由；KF：新 Consumer Group 订阅同一 Topic；Rocket：Tag/Filter 订阅子集。</li>
+</ul>
+</li>
+<li><strong>最终一致</strong>：跨库、跨服务用事件驱动。<ul>
+<li>与 M6、M21 本地消息表 / Outbox / 事务消息衔接；监控「pending 消息表条数」「lag」作为一致性滞后指标。</li>
+</ul>
+</li>
+<li><strong>边界</strong>：MQ 解决跨进程协作，不替代缓存、不解决强一致读；选型仍要看 M2/M5。</li>
+<li><strong>失败语义</strong>：异步链路要有 <strong>可查询状态 + 补偿</strong>（M52），避免用户重复提交。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>异步后用户如何知道最终结果？失败如何通知与重试？（<strong>答：</strong> 提供 <strong>订单/任务状态查询</strong>、<strong>WebSocket/轮询</strong>、短信邮件；失败走 <strong>重试 + DLQ + 告警</strong>，业务表记录 <strong>终态与幂等键</strong>。）</li>
+<li>削峰后 lag 长期不降，你会从哪三层（生产/ Broker/消费）查？</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>上线前必须有 lag、DLQ、confirm/发送失败率告警；无监控勿强依赖 MQ。</li>
+<li>消费者扩容前先算 <strong>DB 连接池与下游 QPS</strong>（M51），否则 lag 仍涨。</li>
+</ul>
+<h3 id="M2-MQ-vs-RPC-vs-Redis-Stream？"><a href="#M2-MQ-vs-RPC-vs-Redis-Stream？" class="headerlink" title="M2. MQ vs RPC vs Redis Stream？"></a>M2. MQ vs RPC vs Redis Stream？</h3><p><strong>口述版：</strong> 要立刻结果用 RPC；要缓冲、广播、堆积、回溯用 MQ；轻量队列、已有 Redis 可 Stream/List，但缺完整 ACK、消费组、运维生态时用专业 MQ。</p>
+<h4 id="具体介绍-1"><a href="#具体介绍-1" class="headerlink" title="具体介绍"></a>具体介绍</h4><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>适用</th>
+<th>与 MQ 边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RPC</td>
+<td>强同步、查即得</td>
+<td>超时、重试、熔断在客户端；无天然堆积</td>
+</tr>
+<tr>
+<td>MQ</td>
+<td>异步、削峰、多订阅者</td>
+<td>有 backlog、可 DLQ、可回溯（KF 尤其强）</td>
+</tr>
+<tr>
+<td>Redis Stream/List</td>
+<td>简单队列、短消息、已有运维</td>
+<td>Stream 有消费组与 ACK，但无 RB 级路由、无 KF 级日志 retention 生态</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>选型口诀</strong>：要「等结果」→ RPC；要「扛峰值 + 多下游」→ MQ；Redis 适合 <strong>低 QPS、短 retention、团队不想上新中间件</strong> 的过渡方案。</li>
+<li><strong>组合用法</strong>：RPC 查实时状态 + MQ 发变更事件很常见；Stream 适合 <strong>已有 Redis、量级不大</strong> 的过渡。</li>
+<li><strong>迁移成本</strong>：从 List/Stream 迁到 RB/KF 要重做 ack、路由、运维面板。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Redis Stream 消费组 ack 与 Kafka offset 提交有什么相似与不同？（<strong>答：</strong> 相似：都标记 <strong>已处理进度</strong>；不同：Stream <strong>按消息 ID ack</strong>，Kafka <strong>按 offset 批量 commit</strong>；KF 有 <strong>__consumer_offsets</strong> 与 rebalance，Stream 更轻、无完整 ISR 语义。）</li>
+<li>什么情况下「RPC 超时改 MQ」反而是反模式？（<strong>答：</strong> 需要 <strong>同步结果/强一致读</strong>、调用链短且可 <strong>熔断重试</strong> 时；改 MQ 会 <strong>延迟可见、状态难查</strong>，反而增加 <strong>对账与幂等</strong> 成本。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>Stream 无长期 retention 与跨机房联邦时，别承担 <strong>审计级消息留存</strong> 需求。</li>
+</ul>
+<h3 id="M3-点对点-vs-发布订阅？"><a href="#M3-点对点-vs-发布订阅？" class="headerlink" title="M3. 点对点 vs 发布订阅？"></a>M3. 点对点 vs 发布订阅？</h3><p><strong>口述版：</strong> 点对点一条消息通常只被一个消费者消费；发布订阅一条消息可被多个订阅者各收一份。Rabbit 用 Exchange 做 pub/sub；Kafka 用多个 Consumer Group 各读一份。</p>
+<h4 id="具体介绍-2"><a href="#具体介绍-2" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>JMS：Queue vs Topic。</li>
+<li>Kafka：同一 Group 内 partition 竞争；不同 Group 各自消费全量。</li>
+<li><strong>三件套对照</strong>：<table>
+<thead>
+<tr>
+<th>语义</th>
+<th>RB</th>
+<th>KF</th>
+<th>Rocket</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>点对点</td>
+<td>单 Queue 多 Consumer（竞争）</td>
+<td>同 Group 分 partition 竞争</td>
+<td>同 Group 竞争</td>
+</tr>
+<tr>
+<td>发布订阅</td>
+<td>Fanout/Topic Exchange → 多 Queue</td>
+<td>多 Consumer Group</td>
+<td>多 Group / 广播 Topic</td>
+</tr>
+</tbody></table>
+</li>
+<li>RB 注意：竞争消费需 <strong>prefetch + 手动 ack</strong>；KF 注意：partition 数上限并行度。</li>
+<li><strong>重复投递</strong>：pub/sub 下游各收一份，<strong>每条链路都要幂等</strong>；点对点竞争消费只需组内幂等。</li>
+<li><strong>RB 实践</strong>：Fanout 绑多个 Queue 实现广播；每个 Queue 独立 DLQ 与消费速率。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Kafka 同一 Topic 两个 Group 同时消费，Broker 存储会翻倍吗？（<strong>答：</strong> <strong>不会</strong>；日志 <strong>只存一份</strong>，各 Group <strong>独立 offset</strong>；存储由 <strong>retention/compact</strong> 决定，与 Group 数量无关。）</li>
+<li>Rabbit 竞争消费时如何保证「尽量均匀」？（<strong>答：</strong> 多 consumer 绑 <strong>同一 Queue</strong>；调 <strong><code>prefetch</code></strong> 避免单 consumer  hoard；消息 <strong>无 key 时</strong> 近似轮询，热点 key 需 <strong>拆队列或 sharding</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>广播场景消费慢会拖垮单个 Queue depth；按下游 SLA 拆 Queue 或限流。</li>
+</ul>
+<h3 id="M4-丢失-重复-乱序-与投递语义？"><a href="#M4-丢失-重复-乱序-与投递语义？" class="headerlink" title="M4. 丢失 / 重复 / 乱序 与投递语义？"></a>M4. 丢失 / 重复 / 乱序 与投递语义？</h3><p><strong>口述版：</strong> 丢失要从生产、Broker、消费三端加固；重复几乎不可避免，靠幂等；乱序靠单队列或单 partition 保序。工业界多是 at-least-once + 业务幂等。</p>
+<h4 id="具体介绍-3"><a href="#具体介绍-3" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>At-most-once</strong>：可能丢，不重复。</li>
+<li><strong>At-least-once</strong>：可能重复，一般不丢（配合 ack）。</li>
+<li><strong>Exactly-once</strong>：Broker 与业务都复杂，Kafka 有语义但业务仍要幂等设计。</li>
+</ul>
+<p><strong>可靠性三板斧（生产 / Broker / 消费）— 总纲</strong></p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>丢失典型原因</th>
+<th>RB 加固要点</th>
+<th>KF 加固要点</th>
+<th>Rocket 加固要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>生产</td>
+<td>发送失败未重试、以为成功实际未落盘</td>
+<td>Publisher Confirm + mandatory/return</td>
+<td><code>acks=all</code> + retries + 等 metadata</td>
+<td>同步发送 + 重试 + 事务消息（关键链路）</td>
+</tr>
+<tr>
+<td>Broker</td>
+<td>单点、未持久化、副本未同步</td>
+<td>durable + 镜像/Quorum Queue</td>
+<td>replica ISR + <code>min.insync.replicas</code></td>
+<td>同步刷盘策略 + 主从同步</td>
+</tr>
+<tr>
+<td>消费</td>
+<td>自动 ack、先 ack 后业务、处理中宕机</td>
+<td>手动 ack，业务成功后再 ack</td>
+<td>处理成功后 commit offset</td>
+<td>消费成功再 CONSUME_SUCCESS</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>重复</strong>：三板斧任一端重试或 rebalance 都会带来；<strong>业务幂等</strong>（M19）是必答题，不是可选项。</li>
+<li><strong>乱序</strong>：全局顺序代价是单线程；业务常用 <strong>同一业务 key</strong> 进同一 queue/partition（M20）。</li>
+<li><strong>乱序处理</strong>：除单 partition/单队列外，可接受乱序的业务用 <strong>版本号/时间戳</strong> 丢弃旧事件。</li>
+<li><strong>监控映射</strong>：丢消息查三板斧表；重复查幂等表与 messageId；乱序查 key 路由是否变更。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">消费端 at-least-once（推荐）:</span><br><span class="line">  msg = poll / basicDeliver</span><br><span class="line">  try:</span><br><span class="line">    biz_process(msg)           // DB 事务 + 幂等键</span><br><span class="line">    commit offset / basicAck   // 业务成功后再确认</span><br><span class="line">  catch:</span><br><span class="line">    // 不 ack / 不 commit → 重投；毒消息 → DLQ + ack</span><br></pre></td></tr></table></figure>
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li>at-least-once 下「业务执行一次」和「消息投递一次」是一回事吗？（<strong>答：</strong> <strong>不是</strong>；消息可能 <strong>重复投递</strong>，业务须 <strong>幂等</strong> 保证「效果一次」；投递语义与 <strong>本地事务</strong> 是两层问题。）</li>
+<li>Kafka exactly-once 能替代业务幂等表吗？为什么？（<strong>答：</strong> <strong>不能</strong>；EOS 管 <strong>生产-消费-Kafka 事务边界</strong>，<strong>跨 DB/HTTP/外部系统</strong> 仍可能重复；业务 <strong>幂等键/唯一索引</strong> 仍是最后防线。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>宣称 exactly-once 前问清范围：仅 Broker 写？含 consume-transform-produce？</li>
+<li>改 partition 数、换 routing key 策略会导致 <strong>顺序语义变化</strong>，需评审。</li>
+</ul>
+<h3 id="M5-RabbitMQ-Kafka-RocketMQ-对比？"><a href="#M5-RabbitMQ-Kafka-RocketMQ-对比？" class="headerlink" title="M5. RabbitMQ / Kafka / RocketMQ 对比？"></a>M5. RabbitMQ / Kafka / RocketMQ 对比？</h3><p><strong>口述版：</strong> Rabbit 路由灵活、延迟低、吞吐中等，适合业务消息；Kafka 日志型、超高吞吐、回溯，适合日志/大数据；Rocket 阿里系、事务消息成熟，国内电商常用。</p>
+<h4 id="具体介绍-4"><a href="#具体介绍-4" class="headerlink" title="具体介绍"></a>具体介绍</h4><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>RabbitMQ</th>
+<th>Kafka</th>
+<th>RocketMQ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>模型</td>
+<td>Exchange + Queue，AMQP</td>
+<td>Topic + Partition 日志</td>
+<td>Topic + Queue 索引 + CommitLog</td>
+</tr>
+<tr>
+<td>吞吐</td>
+<td>万～十万/s（视消息大小与镜像）</td>
+<td>百万级/s（批量+顺序写）</td>
+<td>十万级/s</td>
+</tr>
+<tr>
+<td>延迟</td>
+<td>毫秒级，适合业务命令</td>
+<td>批量拉取，ms～百 ms</td>
+<td>毫秒～十 ms 级</td>
+</tr>
+<tr>
+<td>顺序</td>
+<td>单 Queue</td>
+<td>单 Partition</td>
+<td>单 Queue / 单 Partition</td>
+</tr>
+<tr>
+<td>路由</td>
+<td>Direct/Topic/Fanout 灵活</td>
+<td>Topic + Key → Partition</td>
+<td>Tag、SQL92 过滤</td>
+</tr>
+<tr>
+<td>回溯</td>
+<td>消费即 ack 删除（无长期 log）</td>
+<td>retention 可重放</td>
+<td>按时间/offset 可重消费</td>
+</tr>
+<tr>
+<td>延迟消息</td>
+<td>TTL + DLX</td>
+<td>外部调度 / 时间轮</td>
+<td>固定 18 级 delay level</td>
+</tr>
+<tr>
+<td>事务消息</td>
+<td>无原生半消息（靠本地表）</td>
+<td>事务 API + 幂等生产者</td>
+<td><strong>半消息 + 回查</strong> 成熟</td>
+</tr>
+<tr>
+<td>HA</td>
+<td>镜像 / Quorum Queue</td>
+<td>ISR + Controller</td>
+<td>主从 + Dledger（4.x+）</td>
+</tr>
+<tr>
+<td>运维</td>
+<td>Erlang 集群，内存水位敏感</td>
+<td>ZK/KRaft、partition 均衡</td>
+<td>NameServer 无 ZK</td>
+</tr>
+</tbody></table>
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202203/31/dvvBBU.png" alt="RabbitMQ / ActiveMQ / RocketMQ / Kafka 对比" />
+
+<ul>
+<li>图中 <strong>ActiveMQ</strong> 偏老牌 JMS，新项目较少选；对比时重点 <strong>Rabbit / Rocket / Kafka</strong> 即可。</li>
+</ul>
+<p><strong>选型速查</strong></p>
+<ul>
+<li><strong>订单、支付通知、工作流、复杂路由</strong> → RB 或 Rocket（国内电商偏 Rocket）。</li>
+<li><strong>日志、埋点、CDC、流计算、大数据管道</strong> → KF。</li>
+<li><strong>要 Broker 侧事务消息 + 国内案例</strong> → Rocket；<strong>要 AMQP 生态 + 低延迟路由</strong> → RB。</li>
+</ul>
+<p><strong>常见配置锚点（面试提名词即可）</strong></p>
+<ul>
+<li>RB：<code>publisher-confirm-type=correlated</code>、<code>durable=true</code>、Quorum Queue policy。</li>
+<li>KF：<code>acks=all</code>、<code>min.insync.replicas=2</code>、<code>replication.factor=3</code>、<code>enable.idempotence=true</code>。</li>
+<li>Rocket：<code>sendMsgTimeout</code>、同步刷盘、<code>transactionCheckListener</code> 回查。</li>
+<li><strong>消息大小</strong>：KF 适合大 batch 小消息；RB 单消息过大占内存，建议 <strong>大附件走 OSS + 消息传 URL</strong>。</li>
+<li><strong>合规与多租户</strong>：Pulsar/云 MQ 在多租户隔离上更成熟；自建三件套靠 <strong>vhost/ACL/Topic ACL</strong>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>订单系统选 RB 还是 Rocket，你会问业务哪三个问题？（<strong>答：</strong> <strong>吞吐与堆积量级</strong>、<strong>是否需要事务/延迟/顺序</strong>、<strong>团队运维与生态</strong>（路由/DLQ/监控/多活）；强事务本地消息 vs Rocket 半消息也要问。）</li>
+<li>Kafka 做业务命令通道的最大坑是什么？（<strong>答：</strong> <strong>无原生延迟/DLQ/路由</strong>，<strong>消费慢导致 rebalance</strong>；命令类还要 <strong>幂等 + 状态机</strong>，否则 <strong>重复消费</strong> 直接改业务数据。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>镜像/Quorum、ISR、同步刷盘等 HA 配置按 SLA 写进 <strong>变更 checklist</strong>，避免口头「高可用」。</li>
+</ul>
+<h3 id="M6-事务消息、本地消息表、Outbox？"><a href="#M6-事务消息、本地消息表、Outbox？" class="headerlink" title="M6. 事务消息、本地消息表、Outbox？"></a>M6. 事务消息、本地消息表、Outbox？</h3><p><strong>口述版：</strong> 本地消息表是 DB 和业务同事务写「待发送」，定时扫表发 MQ；Outbox 类似；Rocket 半消息+回查是 Broker 侧事务；都是解决「DB 成功消息必 eventual 发出」。</p>
+<h4 id="具体介绍-5"><a href="#具体介绍-5" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>本地消息表</strong>：状态 pending/sent/confirmed。<ul>
+<li>表字段建议：<code>id, biz_key, payload, status, retry_count, next_retry_at, created_at</code>。</li>
+<li>定时任务扫 <code>pending</code> + 指数退避；发送成功改 <code>sent</code>；消费者回调或业务确认改 <code>confirmed</code>。</li>
+</ul>
+</li>
+<li><strong>Outbox + CDC</strong>：Debezium 读 binlog 发 MQ。<ul>
+<li>优点：业务只写 Outbox 表，不发 MQ 代码路径；缺点：CDC 延迟与 schema 变更治理。</li>
+</ul>
+</li>
+<li><strong>Rocket 半消息</strong>：Broker 存 half → 本地事务 → commit/rollback → 超时 <strong>回查</strong>（M22、M48）。</li>
+<li><strong>TCC/Saga</strong>：与 MQ 配合做长事务（S）；MQ 发 <strong>补偿事件</strong>，消费端必须幂等。</li>
+<li><strong>选型</strong>：强一致「写库必发」→ 本地表/Outbox/ Rocket 半消息；长流程 → Saga + 补偿 Topic。</li>
+<li><strong>对账</strong>：无论哪种方案，都要有 <strong>pending 超时扫描 + 人工介入</strong> 通道。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">本地消息表（与业务同事务）:</span><br><span class="line">  BEGIN</span><br><span class="line">    UPDATE biz ...</span><br><span class="line">    INSERT outbox(biz_key, payload, status=PENDING)</span><br><span class="line">  COMMIT</span><br><span class="line">  // 异步：扫 PENDING → send MQ → status=SENT；失败指数退避</span><br><span class="line"></span><br><span class="line">Outbox + CDC:</span><br><span class="line">  业务只 INSERT outbox（同事务）</span><br><span class="line">  Debezium 读 binlog → Kafka → 下游 consumer（业务进程不直连 MQ 发送）</span><br></pre></td></tr></table></figure>
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Outbox + CDC 与本地消息表扫表发 MQ，各适合什么团队规模？（<strong>答：</strong> Outbox+CDC 适合 <strong>有 DBA/流平台、要解耦扫表</strong> 的中大团队；扫表发 MQ 适合 <strong>小团队快速落地</strong>，但要控 <strong>扫表频率与连接池</strong>。）</li>
+<li>半消息回查接口超时，Broker 会怎么处理？（<strong>答：</strong> Broker <strong>按策略重试回查</strong>；长期 UNKNOWN 可能 <strong>rollback 半消息</strong> 或告警；业务回查应 <strong>快速只读查本地事务状态</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>本地消息表与业务同库，注意 <strong>表膨胀与索引</strong>（status + next_retry_at）。</li>
+<li>CDC 链路要测 <strong>DDL 变更</strong> 与 tombstone 对下游的影响。</li>
+</ul>
+<h3 id="M7-什么场景不该用-MQ？"><a href="#M7-什么场景不该用-MQ？" class="headerlink" title="M7. 什么场景不该用 MQ？"></a>M7. 什么场景不该用 MQ？</h3><p><strong>口述版：</strong> 必须同步返回、流量小直连就够、消费者无幂等、团队无 MQ 运维能力、问题难排查却强依赖链路——别为了「架构先进」硬上。</p>
+<h4 id="具体介绍-6"><a href="#具体介绍-6" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>强一致读己之写：RPC+DB 更直接。</li>
+<li>链路过长：故障点增多，需全链路监控。</li>
+<li><strong>反模式清单</strong>：无 DLQ / 无幂等 / 无 lag 告警仍上 MQ；消费者数 &gt; KF partition 数却期望线性扩容；RB 镜像未开却宣称「消息绝不丢」。</li>
+<li><strong>同步强依赖</strong>：用户提交后必须立刻看到结果（余额、库存扣减确认）→ 同步 RPC + 单库事务更可控。</li>
+<li><strong>低 QPS 直连</strong>：无峰值、无多订阅，MQ 只增加 <strong>运维、排查、一致性滞后</strong>。</li>
+<li><strong>组织成熟度</strong>：无 on-call、无 lag/DLQ  playbook 时，MQ 故障会拖垮全链路。</li>
+<li><strong>调试成本</strong>：分布式异步比同步难 trace，无 traceId 透传（M58）勿大规模上 MQ。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>必须同步返回且强一致</td>
+<td>RPC + DB，或 Seata 等，慎 MQ</td>
+</tr>
+<tr>
+<td>消费者无法幂等</td>
+<td>先补幂等键/状态机再接入</td>
+</tr>
+<tr>
+<td>峰值 &lt; 下游 2 倍容量</td>
+<td>限流/扩容直连往往够用</td>
+</tr>
+<tr>
+<td>无监控与 DLQ</td>
+<td>先补可观测性再引 MQ</td>
+</tr>
+</tbody></table>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>「解耦」是否值得用 MQ？什么耦合其实是 healthy coupling？（<strong>答：</strong> 为 <strong>削峰、异步、多订阅</strong> 值得；<strong>强一致同一聚合根</strong> 的同步调用是 healthy coupling，硬上 MQ 只会 <strong>分布式一致性问题</strong>。）</li>
+<li>团队第一次上 MQ，你会要求哪些最低运维基线？（<strong>答：</strong> <strong>Lag/堆积、发送失败率、DLQ 深度</strong> 告警；<strong>镜像/quorum/ISR</strong> 说明；<strong>消费幂等与重试</strong> 规范；<strong>演练：Broker 宕机、磁盘满</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>反模式：为「技术栈先进」引入 MQ，却无 <strong>积压与毒消息</strong> 处理预案。</li>
+<li>强依赖 MQ 的核心链路要有 <strong>降级</strong>（同步兜底或本地队列限域），避免 Broker 全挂业务停摆。</li>
+</ul>
+<hr>
+<h2 id="5-2-通用核心概念"><a href="#5-2-通用核心概念" class="headerlink" title="5.2 通用核心概念"></a>5.2 通用核心概念</h2><h3 id="M8-Producer、Broker、Consumer-等术语？"><a href="#M8-Producer、Broker、Consumer-等术语？" class="headerlink" title="M8. Producer、Broker、Consumer 等术语？"></a>M8. Producer、Broker、Consumer 等术语？</h3><p><strong>口述版：</strong> 生产者发消息到 Broker，Broker 存/路由，消费者拉或推；Topic 是逻辑分类，Queue 是存储；Consumer Group 是负载均衡单位。</p>
+<h4 id="具体介绍-7"><a href="#具体介绍-7" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>Binding</strong>：Rabbit 里 Queue 连 Exchange 的规则。</li>
+<li><strong>Offset</strong>：Kafka 消费位移。</li>
+<li><strong>Lag</strong>：未消费条数。</li>
+<li><strong>对照表</strong>：<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>RB</th>
+<th>KF</th>
+<th>Rocket</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>逻辑分类</td>
+<td>Exchange + routing key</td>
+<td>Topic</td>
+<td>Topic</td>
+</tr>
+<tr>
+<td>存储单元</td>
+<td>Queue</td>
+<td>Partition 日志段</td>
+<td>Queue + CommitLog</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>Queue 上竞争消费</td>
+<td>Consumer Group</td>
+<td>Consumer Group</td>
+</tr>
+<tr>
+<td>未消费积压</td>
+<td><code>messages_ready</code></td>
+<td>consumer lag</td>
+<td>consume lag</td>
+</tr>
+</tbody></table>
+</li>
+<li><strong>Producer 生命周期</strong>：连接池、channel 复用（RB）；KF producer 线程安全可单例；Rocket 注意 <code>ProducerGroup</code>。</li>
+<li><strong>Consumer 伸缩</strong>：KF 以 partition 为上限；RB 以 Queue + prefetch 平衡；Rocket 以 Queue 数与线程池。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Lag 是 consumer 概念还是 broker 概念？RB 上如何近似看 lag？（<strong>答：</strong> Lag 本质是 <strong>生产 offset − 消费 offset</strong>；RB 无统一 lag，看 <strong>Queue 深度、ready/unacked、消费速率</strong> 近似。）</li>
+<li>Binding 改动能热更新吗？对正在 fly 的消息有何影响？（<strong>答：</strong> 一般 <strong>可动态改 binding</strong>；已在途消息按 <strong>旧路由</strong> 或已入队规则走，<strong>新 binding 只影响之后 publish</strong>；改错可能导致 <strong>丢路由或进错队列</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>术语混用面试易扣分：Kafka 没有 Queue；Rabbit 没有 Consumer Group（是竞争消费）。</li>
+</ul>
+<h3 id="M9-Push-vs-Pull-消费？"><a href="#M9-Push-vs-Pull-消费？" class="headerlink" title="M9. Push vs Pull 消费？"></a>M9. Push vs Pull 消费？</h3><p><strong>口述版：</strong> Push 是 Broker 推给消费者，实时性好但要控 prefetch 防压垮；Pull 是消费者拉，Kafka 典型，可自己控速率。</p>
+<h4 id="具体介绍-8"><a href="#具体介绍-8" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Rabbit：基本 Push + QoS。</li>
+<li>Kafka：Long polling pull。</li>
+<li>Rocket：推模式为主（长轮询），也可拉。</li>
+<li><strong>反压</strong>：慢消费要减并发或扩容消费者；RB 调小 prefetch；KF 减小 <code>max.poll.records</code>、增大 <code>max.poll.interval.ms</code>；避免消费者线程池无限排队导致 OOM。</li>
+<li><strong>Push 典型问题</strong>：Broker 推太快 → 消费者 OOM、DB 打满；必须用 <strong>prefetch / 并发上限 / 背压</strong>。</li>
+<li><strong>Pull 典型问题</strong>：poll 间隔过大延迟高；过小空轮询浪费 CPU；需调 <code>fetch.max.wait.ms</code> 等。</li>
+<li><strong>长轮询</strong>：Rocket/KF 减少空 poll，兼顾实时与资源。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>优点</th>
+<th>风险</th>
+<th>代表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Push</td>
+<td>低延迟、实现简单</td>
+<td>需流控</td>
+<td>Rabbit 默认</td>
+</tr>
+<tr>
+<td>Pull</td>
+<td>消费速率自控</td>
+<td>参数调不好则延迟或空转</td>
+<td>Kafka</td>
+</tr>
+<tr>
+<td>推+长轮询</td>
+<td>折中</td>
+<td>仍要限并发</td>
+<td>Rocket</td>
+</tr>
+</tbody></table>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>慢消费者场景 Push 如何「不丢消息又不被压垮」？（<strong>答：</strong> 调低 <strong>prefetch</strong>、<strong>限流</strong>、<strong>独立队列</strong>；Broker <strong>流控 block publisher</strong>；必要时 <strong>扩容 consumer</strong> 或 <strong>降级非核心消费</strong>。）</li>
+<li>Kafka consumer 是 Push 还是 Pull？为什么说「伪 Push」？（<strong>答：</strong> API 层 <strong>poll 拉取</strong>；长轮询 + broker 攒 batch 像 Push；背压由 <strong>consumer 主动 poll 频率</strong> 控制。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>RB：<code>prefetch</code> 与 <code>consumer</code> 数乘积 ≈ 未 ack 上限，要小于下游连接池与内存预算。</li>
+<li>KF：<code>max.poll.records</code> × 单条处理内存 × 并发线程 ≈ 堆占用，大消息要特别压测。</li>
+</ul>
+<h3 id="M10-ACK-机制？"><a href="#M10-ACK-机制？" class="headerlink" title="M10. ACK 机制？"></a>M10. ACK 机制？</h3><p><strong>口述版：</strong> 自动 ack 收到就确认，可能处理中宕机丢消息；手动 ack 处理完再 ack，配合重试。失败可 nack 重新入队或进 DLQ。</p>
+<h4 id="具体介绍-9"><a href="#具体介绍-9" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>至少一次</strong>：手动 ack 在业务成功后。</li>
+<li><strong>重复</strong>：ack 前宕机会重投。</li>
+<li>幂等必须配合（M19）。</li>
+<li><strong>三端 ACK 对照</strong>：<ul>
+<li>RB：<code>basicAck</code> / <code>basicNack(requeue=false)</code> 进 DLQ。</li>
+<li>KF：auto commit vs <code>commitSync</code> after business success。</li>
+<li>Rocket：<code>CONSUME_SUCCESS</code> vs <code>RECONSUME_LATER</code>（有限次后进 DLQ）。</li>
+</ul>
+</li>
+<li><strong>半成功</strong>：批量 ack 时部分失败要明确 <strong>nack 哪几条</strong> 或拆批；KF 批次 offset 提交粒度要谨慎。</li>
+<li><strong>重试风暴</strong>：<code>requeue=true</code> 无限重试会堵死队列；必须 <strong>上限 + DLQ</strong>（M13、M54）。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Rabbit 手动 ack:</span><br><span class="line">  deliver(msg)</span><br><span class="line">  ok = handle(msg)</span><br><span class="line">  if ok: basicAck(deliveryTag)</span><br><span class="line">  else if retryable: basicNack(requeue=true)</span><br><span class="line">  else: basicNack(requeue=false)  // 进 DLQ（需 DLX 配置）</span><br></pre></td></tr></table></figure>
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li>自动 ack 在什么 demo 场景可以，生产为什么几乎不用？（<strong>答：</strong> Demo <strong>单线程、可丢可重跑</strong>；生产 <strong>处理完再 ack</strong> 才能 at-least-once，自动 ack 可能在 <strong>业务失败前已 ack</strong> 导致 <strong>静默丢消息</strong>。）</li>
+<li>消费失败 requeue 与进 DLQ 如何选择？（<strong>答：</strong> ** transient 错误<strong>（网络抖动）有限次 <strong>requeue+退避</strong>；</strong>毒消息/逻辑错误** 进 <strong>DLQ</strong> 人工修复，避免 <strong>无限 requeue 打满 Broker</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>RB 先 ack 后写 DB 是经典丢消息写法；面试/生产都要说清 <strong>先 commit 业务再 ack</strong>。</li>
+</ul>
+<h3 id="M11-Prefetch-批量拉取？"><a href="#M11-Prefetch-批量拉取？" class="headerlink" title="M11. Prefetch / 批量拉取？"></a>M11. Prefetch / 批量拉取？</h3><p><strong>口述版：</strong> prefetch 大则消费者一次拿很多条，吞吐高但可能堆积在慢消费者；prefetch=1 更公平。Kafka 用 <code>max.poll.records</code> 类似。</p>
+<h4 id="具体介绍-10"><a href="#具体介绍-10" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Rabbit：<code>basicQos(prefetchCount)</code>，global=false 按 channel 限流。</li>
+<li>KF：<code>max.poll.records</code>（单次 poll 条数）、<code>fetch.min.bytes</code> / <code>fetch.max.wait.ms</code>（批量凑包）。</li>
+<li>消费慢时调小 prefetch / max.poll.records 或加消费者；<strong>RB prefetch 过大</strong> 会导致一条慢消息占满 channel 未 ack 窗口。</li>
+<li><strong>公平性 vs 吞吐</strong>：prefetch=1 最公平但 RTT 多；大 prefetch 适合 <strong>批处理、同质耗时</strong> 消息。</li>
+<li><strong>全局 QoS</strong>：<code>basicQos(global=true)</code> 少见，理解 per-channel 限流即可。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>三个 consumer 同 Queue，prefetch=10，最多多少条 unacked？（<strong>答：</strong> 最多约 <strong>3×10=30</strong> 条 <strong>已投递未 ack</strong>（各 channel 独立 prefetch）；实际还受 <strong>Broker credit</strong> 与 <strong>consumer 处理速度</strong> 影响。）</li>
+<li>KF <code>fetch.min.bytes</code> 和 prefetch 思想上的对应关系？（<strong>答：</strong> 都控制 <strong>「攒一批再往下游推」</strong>；<code>fetch.min.bytes</code> 让 consumer <strong>少空 poll</strong>，prefetch 限制 <strong>未 ack 在途量</strong>，减轻慢消费者压力。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>消费逻辑变长时，未 ack 堆积会占满 prefetch，表现为 <strong>其它 consumer 饿死</strong>，需降 prefetch 或拆队列。</li>
+</ul>
+<h3 id="M12-持久化三处配合？"><a href="#M12-持久化三处配合？" class="headerlink" title="M12. 持久化三处配合？"></a>M12. 持久化三处配合？</h3><p><strong>口述版：</strong> 消息、队列、Exchange 设 durable；Producer 开 confirm；Consumer 手动 ack；三者缺一会增加丢消息概率。</p>
+<h4 id="具体介绍-11"><a href="#具体介绍-11" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>持久化消息仍要经过 <strong>刷盘</strong> 策略。</li>
+<li>集群下还要 <strong>镜像/副本</strong>（M17、M25）。</li>
+<li><strong>检查清单</strong>：<ol>
+<li>RB：Queue/Exchange <code>durable</code> + <code>deliveryMode=2</code> + confirm。</li>
+<li>KF：<code>acks=all</code> + 足够 replica（非 <code>acks=1</code> 单副本）。</li>
+<li>Rocket：同步刷盘 vs 异步刷盘（性能 tradeoff 要说清）。</li>
+</ol>
+</li>
+<li><strong>非持久化场景</strong>：临时通知、可丢的 metrics 可用 transient，但要 <strong>文档化</strong> 可丢范围。</li>
+<li><strong>集群切换</strong>：durable 消息在未 mirror/quorum 时，节点故障仍可能不可达（M26）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>deliveryMode=1 和 2 在 RB 里分别代表什么？谁决定落盘？（<strong>答：</strong> <strong>1 非持久</strong>（内存），<strong>2 持久</strong>（需 <strong>durable queue + 持久消息</strong> 才可靠落盘）；落盘由 <strong>队列/消息属性 + 镜像/quorum</strong> 共同决定。）</li>
+<li>KF 没有「队列 durable」概念，持久化靠哪些参数？（<strong>答：</strong> <strong>Topic retention</strong>、<code>cleanup.policy</code>、<strong>replication.factor</strong>、<strong>min.insync.replicas</strong>、producer **<code>acks=all</code>**；日志在 broker <strong>本地盘</strong> 多副本。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>三处缺一：常见 bug 是 Queue durable 但消息 transient，或开了 confirm 但 Exchange 非 durable。</li>
+</ul>
+<h3 id="M13-死信队列-DLQ？"><a href="#M13-死信队列-DLQ？" class="headerlink" title="M13. 死信队列 DLQ？"></a>M13. 死信队列 DLQ？</h3><p><strong>口述版：</strong> 消费被拒、TTL 到期、队列超长可进 DLQ，避免毒消息无限重试堵死主队列；DLQ 要监控+人工/补偿任务。</p>
+<h4 id="具体介绍-12"><a href="#具体介绍-12" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Rabbit：<code>x-dead-letter-exchange</code>、<code>x-dead-letter-routing-key</code>；或 <code>x-delivery-limit</code>（3.8+）。</li>
+<li>KF：无原生 DLQ，常用 <strong>重试 topic + 最终进 dead-letter topic</strong> 或 Streams 侧车。</li>
+<li>Rocket：<code>%RETRY%</code> 队列 + <code>%DLQ%</code>（重试次数耗尽）。</li>
+<li>重试次数上限后转 DLQ；DLQ depth 告警 + 审计 requeue。</li>
+<li><strong>DLQ 消费</strong>：DLQ 也要 <strong>幂等 + 限流</strong>，避免补偿任务再次打爆下游。</li>
+<li><strong>requeue 审计</strong>：从 DLQ 重回主队列要记录 operator、原因、messageId。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>毒消息不进 DLQ 一直 requeue，对 Rabbit 内存和磁盘有什么影响？（<strong>答：</strong> <strong>无限 redelivery</strong> 占 <strong>unacked/队列深度</strong>，打高 <strong>CPU/磁盘 IO</strong>，可能触发 <strong>内存/alarm 流控</strong>，拖垮 <strong>同集群其他队列</strong>。）</li>
+<li>Kafka 没有原生 DLQ，你们项目怎么实现「最终进死信」？（<strong>答：</strong> 消费失败 <strong>retry topic</strong> 或 <strong>计数后写入 DLQ topic</strong>；用 <strong>拦截器/包装 listener</strong> 统一路由；配合 <strong>监控与人工 replay</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>DLQ 只堆积不处理等于 <strong>延迟炸弹</strong>；depth 告警阈值要低于磁盘/内存水位。</li>
+</ul>
+<h3 id="M14-延迟消息实现？"><a href="#M14-延迟消息实现？" class="headerlink" title="M14. 延迟消息实现？"></a>M14. 延迟消息实现？</h3><p><strong>口述版：</strong> Rabbit 用 TTL+DLX 到延迟队列；Rocket 固定延迟级别；Kafka 用时间轮或外部调度；也可用 Redis 延迟 ZSet。</p>
+<h4 id="具体介绍-13"><a href="#具体介绍-13" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>延迟精度、堆积、重启可靠性各不同。</li>
+<li>订单超时关单常用。</li>
+<li><strong>对比</strong>：RB TTL+DLX 灵活但 <strong>同队列不同 TTL 头阻塞</strong>；Rocket <code>1s 5s 10s ... 2h</code> 固定档；KF 常用 <strong>延迟 topic + 时间轮 consumer</strong> 或 DB/Redis 调度发正式 topic。</li>
+<li><strong>订单关单</strong>：延迟到期后 <strong>幂等关单</strong>（状态机只允许待支付→关闭一次）。</li>
+<li><strong>精度需求</strong>：Rocket 固定档 vs RB TTL 灵活 vs 外部调度（XXL-Job/Redis ZSet）按 SLA 选。</li>
+<li><strong>重启可靠性</strong>：延迟状态在 Broker 队列 vs 外部调度器，要明确 <strong>重启后是否丢延迟任务</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>精度</th>
+<th>坑</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RB TTL+DLX</td>
+<td>较灵活</td>
+<td>同队列头阻塞</td>
+</tr>
+<tr>
+<td>Rocket delay level</td>
+<td>固定 18 档</td>
+<td>非任意毫秒</td>
+</tr>
+<tr>
+<td>KF 时间轮/外部</td>
+<td>可定制</td>
+<td>自建运维</td>
+</tr>
+<tr>
+<td>Redis ZSet</td>
+<td>灵活</td>
+<td>与 MQ 一致性要自己兜</td>
+</tr>
+</tbody></table>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>TTL 在 message 上和在 queue 上有什么区别？（<strong>答：</strong> <strong>消息 TTL</strong> 单条过期；<strong>队列 TTL</strong> 整队 idle 过期；过期常进 <strong>DLX</strong>，配置在 <strong>policy/arguments</strong>，别混用导致 <strong>误删</strong>。）</li>
+<li>延迟消息堆积百万级，Broker 扛不住时如何降级？（<strong>答：</strong> 限 <strong>生产速率</strong>、<strong>扩容</strong>、改 <strong>外部时间轮/DB 调度</strong>；非核心延迟 <strong>丢弃或合并</strong>；Rocket <strong>固定级别</strong> 比任意 delay 更易控资源。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>RB 头阻塞场景：<strong>一队列一 TTL 档</strong> 或 per-message TTL + 多 DLX 路由。</li>
+<li>延迟触发后的消费仍可能重复，关单接口必须幂等。</li>
+</ul>
+<h3 id="M15-消息堆积排查？"><a href="#M15-消息堆积排查？" class="headerlink" title="M15. 消息堆积排查？"></a>M15. 消息堆积排查？</h3><p><strong>口述版：</strong> 看 lag/队列 depth、生产速率 vs 消费速率、是否单条慢 SQL、消费者数够不够、是否 rebalance 卡住。</p>
+<h4 id="具体介绍-14"><a href="#具体介绍-14" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>临时扩容消费者（Kafka 不超过 partition 数）。</li>
+<li>降级：先丢弃非核心、转储后慢慢消费（S）。</li>
+</ul>
+<p><strong>通用排查步骤（5 步）</strong></p>
+<ol>
+<li><strong>量化</strong>：RB <code>messages_ready</code> / <code>messages_unacknowledged</code>；KF <code>kafka-consumer-groups.sh --describe</code> 看 LAG；Rocket Console lag。</li>
+<li><strong>生产侧</strong>：TPS 是否突增、是否有 batch 重放、定时任务重复发。</li>
+<li><strong>消费侧</strong>：实例数、是否全 down、GC STW、<code>max.poll.interval</code> 超时被踢、单条耗时 P99。</li>
+<li><strong>Broker</strong>：磁盘/IO、RB memory/disk alarm、KF under-replicated、Rocket commitlog 写满。</li>
+<li><strong>处置</strong>：扩 consumer（≤ partition 数）、优化慢 SQL、临时降级非核心 topic、增加 partition（KF 长期）、RB 增加消费者 + 调 prefetch。</li>
+</ol>
+<ul>
+<li><strong>长期方案</strong>：临时扩容后仍要 <strong>优化单条耗时、加 partition、削生产</strong>；否则 lag 周期性复发。</li>
+<li><strong>业务降级</strong>：非核心 topic 可暂停消费或丢弃并 <strong>审计</strong>，为核心链路腾资源。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Kafka consumer 数大于 partition 数，多出来的进程在干什么？（<strong>答：</strong> <strong>空闲 standby</strong>；同一 Group 内 <strong>一 partition 同一时刻只一个 consumer 读</strong>；多实例只为 <strong>failover 或减 rebalance 时间</strong>。）</li>
+<li>unacked 很高而 ready 很低说明什么（RB）？</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>扩容 consumer 前先看 <strong>是否慢 SQL/GC</strong>；否则只是把堆积从 Broker 挪到 consumer 内存。</li>
+</ul>
+<hr>
+<h2 id="5-3-可靠性与幂等"><a href="#5-3-可靠性与幂等" class="headerlink" title="5.3 可靠性与幂等"></a>5.3 可靠性与幂等</h2><h3 id="M16-生产端如何尽量不丢？"><a href="#M16-生产端如何尽量不丢？" class="headerlink" title="M16. 生产端如何尽量不丢？"></a>M16. 生产端如何尽量不丢？</h3><p><strong>口述版：</strong> 发送失败重试+退避；开 Publisher Confirm 等 Broker 落盘再认为成功；关键消息落本地消息表，扫表补发。</p>
+<h4 id="具体介绍-15"><a href="#具体介绍-15" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Rabbit：<strong>confirm 模式</strong>、mandatory+return 处理不可路由。</li>
+<li>Kafka：<code>acks=all</code>、retries、min.insync.replicas。</li>
+<li>同步 send 等结果 vs 异步 callback。</li>
+<li><strong>生产端配置示例（口述）</strong>：<ul>
+<li>RB：<code>spring.rabbitmq.publisher-confirm-type=correlated</code>，confirm 回调失败入补发表；<code>publisher-returns=true</code> + <code>mandatory=true</code>。</li>
+<li>KF：<code>acks=all</code>，<code>retries=Integer.MAX_VALUE</code>，<code>delivery.timeout.ms</code>，<code>enable.idempotence=true</code> 防重试重复写。</li>
+<li>Rocket：同步 <code>send</code> 对关键消息；失败落本地消息表异步重发。</li>
+</ul>
+</li>
+<li><strong>别踩坑</strong>：异步 send 不等 confirm 就关进程；RB confirm 与 transaction 模式别混用搞不清语义。</li>
+<li><strong>顺序与重试</strong>：生产端重试可能导致 <strong>乱序</strong>；关键 key 要用同一 partition/顺序发送或接受乱序+版本号。</li>
+<li><strong>超时</strong>：<code>delivery.timeout.ms</code> 与 retries 配合，避免无限阻塞发送线程。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>confirm 成功是否等于 consumer 一定收到？差在哪一段？（<strong>答：</strong> <strong>不等于</strong>；confirm 只到 <strong>Exchange/队列入队</strong>（或 KF broker ack）；<strong>consumer 未拉取/处理失败/宕机</strong> 仍可能丢或重复，需 <strong>ack+幂等</strong>。）</li>
+<li>本地消息表与 confirm 能否同时用？如何防双发？（<strong>答：</strong> <strong>可以</strong>；表记录 <strong>SENT 状态 + 唯一 bizId</strong>，confirm 回调与 <strong>定时扫表</strong> 用 <strong>CAS 更新</strong> 防双发；consumer 仍要 <strong>幂等</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>KF <code>acks=1</code> 在 leader 宕机切换时可能 <strong>丢已 ack 未复制</strong> 的消息，生产应用 all+min.insync。</li>
+</ul>
+<h3 id="M17-Broker-如何尽量不丢？"><a href="#M17-Broker-如何尽量不丢？" class="headerlink" title="M17. Broker 如何尽量不丢？"></a>M17. Broker 如何尽量不丢？</h3><p><strong>口述版：</strong> 队列/消息持久化；多副本同步复制；磁盘、内存告警与流控；集群避免单点。</p>
+<h4 id="具体介绍-16"><a href="#具体介绍-16" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Rabbit：<strong>镜像队列</strong>（M25）/ <strong>Quorum Queue</strong>（Raft，推荐新项目）。</li>
+<li>Kafka：replica 进 ISR 才 ack；<code>unclean.leader.election.enable=false</code> 防丢数据选 leader。</li>
+<li>Rocket：同步双写 / 同步刷盘（配置级 tradeoff）。</li>
+<li>刷盘：性能 vs 可靠性 tradeoff（RB lazy queue、KF <code>log.flush</code>、Rocket flushDiskType）。</li>
+<li><strong>RB lazy queue</strong>：大堆积落盘减内存，但 <strong>磁盘 IO</strong> 上升，与 M32 联动监控。</li>
+<li><strong>KF 磁盘规划</strong>：retention × 吞吐决定磁盘；under-replicated 期间别扩 retention 雪上加霜。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Quorum Queue 与经典镜像在一致性模型上差异一句话？（<strong>答：</strong> Quorum 基于 <strong>Raft 多数派复制</strong>；经典镜像是 <strong>异步/master 复制</strong>，故障时 <strong>丢消息风险与脑裂</strong> 行为不同。）</li>
+<li>ISR  shrink 时 producer 还能写吗？取决于哪些配置？（<strong>答：</strong> 看 <strong><code>acks</code></strong> 与 **<code>min.insync.replicas</code>**；ISR 小于 min 时 <strong><code>acks=all</code> 会写失败</strong>；<code>acks=1</code> 可能 <strong>降级写 leader</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>流控/block 连接时，上游应用要有 <strong>发送超时与降级</strong>，避免线程池耗尽。</li>
+</ul>
+<h3 id="M18-消费端如何尽量不丢？"><a href="#M18-消费端如何尽量不丢？" class="headerlink" title="M18. 消费端如何尽量不丢？"></a>M18. 消费端如何尽量不丢？</h3><p><strong>口述版：</strong> 手动 ack，业务处理成功再 ack；处理幂等；宕机未 ack 会重投，要有重复处理能力。</p>
+<h4 id="具体介绍-17"><a href="#具体介绍-17" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>先 DB 事务提交再 ack，顺序要对。</li>
+<li>长处理：延长 visibility timeout / max.poll.interval。</li>
+<li><strong>推荐顺序</strong>：开本地事务 → 写业务 + 幂等表 → commit → <strong>再</strong> ack/commit offset。</li>
+<li><strong>反例</strong>：先 ack 再调 DB → 宕机则 <strong>消息丢处理</strong>（at-most-once 效果）。</li>
+<li>RB 长任务：心跳续期或拆小消息；KF：<code>max.poll.interval.ms</code> &gt; 最坏处理时间。</li>
+<li><strong>幂等与 ack 顺序</strong>：同一 messageId 重复处理应 <strong>结果一致</strong>；ack 仅影响是否重投。</li>
+<li><strong>批量消费</strong>：一批 10 条一条失败，是 <strong>整批 nack</strong> 还是记录失败单条进 DLQ，要设计清楚。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>消费线程处理 5 分钟，KF 被踢出 group 的根因参数是？（<strong>答：</strong> <strong><code>max.poll.interval.ms</code></strong> 超过（处理时间 &gt; 两次 poll 间隔）；另 <strong><code>session.timeout.ms</code>/<code>heartbeat</code></strong> 失效也会 rebalance。）</li>
+<li>RB 消费中如何续期避免 channel 被关？（<strong>答：</strong> 长任务 <strong>拆小 ack</strong> 或 <strong>独立线程消费+短 ack</strong>；调大 <strong>consumer_timeout</strong>（慎用）；避免 <strong>同 channel 阻塞 IO</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li><code>max.poll.interval.ms</code> 必须大于 <strong>P99 处理时间 + GC</strong>；留 2～3 倍余量。</li>
+</ul>
+<h3 id="M19-重复消费与幂等？"><a href="#M19-重复消费与幂等？" class="headerlink" title="M19. 重复消费与幂等？"></a>M19. 重复消费与幂等？</h3><p><strong>口述版：</strong> 用业务唯一键：订单号+事件类型做 DB 唯一索引；或 Redis setnx；或状态机只允许从 A→B 一次。</p>
+<h4 id="具体介绍-18"><a href="#具体介绍-18" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>天然幂等</strong>：覆盖写、删除。</li>
+<li><strong>非幂等</strong>：扣库存要先查是否已扣。</li>
+<li>消息带 <strong>messageId</strong> 去重表。</li>
+<li><strong>三 MQ 携带键</strong>：RB <code>messageId</code> in properties；KF header <code>idempotency-key</code>；Rocket <code>keys</code> / 业务 property。</li>
+<li>表设计：<code>uniq(biz_type, biz_id, event_type)</code> 或 <code>processed_message(message_id)</code>。</li>
+<li><strong>状态机幂等</strong>：只允许 <code>CREATED→PAID</code> 一次，重复 <code>PAID</code> 事件直接 return success。</li>
+<li><strong>去重表 TTL</strong>：messageId 表可定期归档，但要覆盖 <strong>最大重投窗口</strong>（如 7 天）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>数据库唯一索引冲突时，算成功还是失败？对 ack 有何影响？（<strong>答：</strong> 若业务定义 <strong>重复=已成功</strong>，应 <strong>ack</strong> 并记日志；若未知冲突应 <strong>nack/DLQ</strong>；<strong>幂等设计</strong> 要把冲突当 <strong>成功路径</strong>。）</li>
+<li>Redis setnx 幂等与 DB 唯一索引各适合什么场景？（<strong>答：</strong> setnx 适合 <strong>轻量去重/短 TTL 防重</strong>；DB 唯一索引适合 <strong>强一致落库、审计</strong>；高并发 <strong>先 Redis 挡再 DB</strong> 常见。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>幂等键要覆盖 <strong>所有入口</strong>（HTTP 回调 + MQ + 定时补偿），否则双通道重复扣款（M56）。</li>
+</ul>
+<h3 id="M20-顺序消息？"><a href="#M20-顺序消息？" class="headerlink" title="M20. 顺序消息？"></a>M20. 顺序消息？</h3><p><strong>口述版：</strong> 全局顺序只能单线程单队列；一般只要 <strong>同一订单同一 partition/同一 routing key</strong> 顺序即可；提高并行就多分 partition，key 相同进同 partition。</p>
+<h4 id="具体介绍-19"><a href="#具体介绍-19" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Kafka：<code>key hash % partition</code>。</li>
+<li>Rabbit：单队列单 consumer 或 <strong>一致性 hash 多队列</strong>（相同 routing key 进同队列）。</li>
+<li>Rocket：<code>MessageQueueSelector</code> 按 orderId 选队列。</li>
+<li>乱序重排：业务可接受则用时间戳排序（有限）；<strong>扩 partition 后</strong> 仅保证分区内序。</li>
+<li><strong>局部顺序</strong>：同一 <code>orderId</code> 进同一 partition/queue；不同订单并行，全局无序通常可接受。</li>
+<li><strong>失败重试</strong>：重试可能 <strong>乱序到达</strong>，业务用版本号或状态机拒绝旧事件。</li>
+<li><strong>扩容</strong>：增加 partition 只保证 <strong>分区内</strong> 序；新 partition 不参与旧 key 的历史序。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>产品</th>
+<th>保序手段</th>
+<th>并行度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kafka</td>
+<td>key → partition</td>
+<td>partition 数</td>
+</tr>
+<tr>
+<td>Rabbit</td>
+<td>单队列或 consistent hash</td>
+<td>队列数 × consumer</td>
+</tr>
+<tr>
+<td>Rocket</td>
+<td>MessageQueueSelector</td>
+<td>队列数</td>
+</tr>
+</tbody></table>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>消费端多线程处理同一 queue 的消息还能保序吗？怎么改？（<strong>答：</strong> <strong>不能保全局序</strong>；要顺序则 <strong>单线程消费</strong> 或 <strong>按 key 分片到固定线程</strong>（KF 用 <strong>单 partition</strong>）。）</li>
+<li>全局顺序和分区顺序的 QPS 上限差多少量级？（<strong>答：</strong> 全局顺序 <strong>单线程/单 partition</strong>，QPS 常 <strong>数百~数千</strong>；分区顺序 <strong>线性扩展</strong>，可 <strong>一个数量级以上</strong> 差距。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>改 key 哈希或增 partition 前评估 <strong>顺序业务</strong> 是否受影响；需要 <strong>双写或灰度</strong> 验证。</li>
+</ul>
+<h3 id="M21-本地事务-发-MQ-失败？"><a href="#M21-本地事务-发-MQ-失败？" class="headerlink" title="M21. 本地事务 + 发 MQ 失败？"></a>M21. 本地事务 + 发 MQ 失败？</h3><p><strong>口述版：</strong> 同事务写业务表+本地消息表 pending；异步线程发 MQ 成功改 sent；失败重试；消费者处理完回调 confirmed，定时对账补发。</p>
+<h4 id="具体介绍-20"><a href="#具体介绍-20" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>避免「DB 回滚了消息已发出」：先发 MQ 再 DB 更危险，常用 <strong>事务消息或本地表</strong>。</li>
+<li>最大努力通知+对账兜底。</li>
+<li><strong>对账任务</strong>：扫描 <code>pending</code> 超过 N 分钟、或 <code>sent</code> 无 <code>confirmed</code> 超过 M 分钟，告警 + 补发/人工。</li>
+<li><strong>先发 MQ 再 DB</strong> 的典型事故：DB 失败但消息已发出 → 下游脏读；故 <strong>事务内写 outbox/本地表</strong> 优先。</li>
+<li><strong>状态机</strong>：pending → sending → sent → confirmed；每步可监控与重试。</li>
+<li><strong>与 Seata</strong>：2PC 重；本地表 + MQ 是互联网 <strong>最常见最终一致</strong> 落地。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>扫表线程与业务争抢 DB 连接怎么办？（<strong>答：</strong> <strong>独立连接池/只读从库</strong>、<strong>限流扫表</strong>、<strong>索引+分批</strong>；Outbox+CDC <strong>移出业务库轮询</strong>。）</li>
+<li>消息已 sent 但消费者 never consume，如何对账？（<strong>答：</strong> 对 <strong>消息表/offset vs 业务终态</strong>；<strong>超时告警</strong>；<strong>补发或关单</strong>；KF 看 <strong>consumer lag</strong>，RB 看 <strong>queue depth</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>本地表 <strong>biz_key 唯一</strong> 防重复插入；扫表任务要 <strong>分布式锁或分片</strong> 防多实例重复发。</li>
+</ul>
+<h3 id="M22-事务消息（半消息）？"><a href="#M22-事务消息（半消息）？" class="headerlink" title="M22. 事务消息（半消息）？"></a>M22. 事务消息（半消息）？</h3><p><strong>口述版：</strong> Rocket：先发 half 消息，本地事务提交后 commit，失败 rollback；Broker 回查本地事务状态。Kafka 事务生产者+消费隔离级别了解即可。</p>
+<h4 id="具体介绍-21"><a href="#具体介绍-21" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>适合 <strong>订单创建+发消息</strong> 强一致诉求。</li>
+<li>实现复杂，监控回查失败（S）。</li>
+<li><strong>Rocket 流程</strong>：<code>sendMessageInTransaction</code> → 执行本地事务 → <code>commit</code>/<code>rollback</code> → Broker 定时 <strong>checkLocalTransaction</strong>。</li>
+<li><strong>Kafka</strong>：<code>transactional.id</code> + <code>read_committed</code> 消费；端到端仍常配合幂等表。</li>
+<li><strong>回查风暴</strong>：本地事务慢或 check 接口超时会导致 Broker <strong>频繁回查</strong>，要限流与缓存状态。</li>
+<li><strong>Kafka 事务</strong>：适合 <strong>consume-transform-produce</strong> 同集群；跨库仍靠幂等。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Rocket 半消息:</span><br><span class="line">  half = sendMessageInTransaction(halfMsg)</span><br><span class="line">  local_tx = executeLocalTransaction()   // 订单落库等</span><br><span class="line">  if local_tx == COMMIT:</span><br><span class="line">    commit(half)    → 消费者可见</span><br><span class="line">  else:</span><br><span class="line">    rollback(half)</span><br><span class="line">  // 超时未决 → Broker checkLocalTransaction() 回查业务状态</span><br></pre></td></tr></table></figure>
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li>half 消息 commit 前，消费者能拉到吗？（<strong>答：</strong> <strong>不能</strong>；半消息对下游 <strong>不可见</strong>，直到 <strong>commit/rollback</strong>；避免 <strong>未决事务被消费</strong>。）</li>
+<li>回查返回 UNKNOWN 多次会怎样？（<strong>答：</strong> Broker <strong>继续回查</strong> 直至 <strong>超时 rollback</strong> 或得到 <strong>COMMIT/ROLLBACK</strong>；业务应 <strong>避免长期 UNKNOWN</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>Rocket 事务消息 <strong>仅适合单库本地事务 + 发一条消息</strong>；多资源协调用 Saga/本地表。</li>
+</ul>
+<hr>
+<h2 id="5-4-RabbitMQ-专章"><a href="#5-4-RabbitMQ-专章" class="headerlink" title="5.4 RabbitMQ 专章"></a>5.4 RabbitMQ 专章</h2><h3 id="M23-Exchange-类型？"><a href="#M23-Exchange-类型？" class="headerlink" title="M23. Exchange 类型？"></a>M23. Exchange 类型？</h3><p><strong>口述版：</strong> Direct 精确 routing key；Fanout 广播；Topic 通配符；Headers 很少用。业务路由选 Direct/Topic 最多。</p>
+<h4 id="具体介绍-22"><a href="#具体介绍-22" class="headerlink" title="具体介绍"></a>具体介绍</h4><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>路由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Direct</td>
+<td>key 完全匹配</td>
+</tr>
+<tr>
+<td>Fanout</td>
+<td>忽略 key，全绑定队列</td>
+</tr>
+<tr>
+<td>Topic</td>
+<td><code>*</code> 一词 <code>#</code> 多词</td>
+</tr>
+</tbody></table>
+<ul>
+<li>面试设计题：支付成功 <code>pay.success</code>、退款 <code>pay.refund</code> 可用 Topic；全站广播用 Fanout。</li>
+<li><strong>Headers Exchange</strong>：按 header 匹配，性能与运维成本高，面试知道即可。</li>
+<li><strong>默认 Exchange</strong>：空名 direct，routing key=queue 名，适合简单点对点。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Topic 里 <code>*</code> 和 <code>#</code> 分别匹配什么？举两个 routing key 例子。（<strong>答：</strong> <code>*</code> 匹配 <strong>一个词</strong>；<code>#</code> 匹配 <strong>零或多个词</strong>；如 binding <code>order.*</code> 匹配 <code>order.created</code>；<code>order.#</code> 匹配 <code>order.created.paid</code>。）</li>
+<li>Fanout 还要 routing key 吗？Binding 怎么配？（<strong>答：</strong> <strong>忽略 routing key</strong>；Queue 绑 Exchange <strong>routing key 填空</strong> 即可，<strong>广播到所有绑定队列</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>生产环境 Exchange/Queue 命名规范 + <strong>mandatory</strong> 防路由黑洞（M24、M29）。</li>
+</ul>
+<h3 id="M24-Binding-与-Routing-Key？"><a href="#M24-Binding-与-Routing-Key？" class="headerlink" title="M24. Binding 与 Routing Key？"></a>M24. Binding 与 Routing Key？</h3><p><strong>口述版：</strong> Exchange 不存消息，消息进 Exchange 按类型和 binding 规则进 Queue；routing key 是 Direct/Topic 的匹配字段。</p>
+<h4 id="具体介绍-23"><a href="#具体介绍-23" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>一个 Exchange 绑多个 Queue 实现多消费。</li>
+<li><strong>Alternate Exchange</strong> 处理无法路由的消息（配合 mandatory 避免静默丢）。</li>
+<li><strong>排查无法消费</strong>：Management UI 看 <strong>Publish rate / Deliver rate</strong>、Binding 是否存在、routing key 是否 typo。</li>
+<li><strong>多 Binding</strong>：同一 Exchange 绑多个 Queue 实现 <strong>一条消息多下游</strong>；注意各下游 <strong>独立 ack</strong>。</li>
+<li><strong>权限</strong>：vhost 隔离、用户 tag 限制 publish/consume，防误删 Binding。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Exchange 删除时 Queue 会怎样？消息呢？（<strong>答：</strong> Queue <strong>仍存在</strong>（除非级联配置）；<strong>未路由消息</strong> 可能丢；<strong>已入队消息</strong> 仍在 Queue，直到被消费或 TTL。）</li>
+<li>routing key 大小写敏感吗？（<strong>答：</strong> <strong>敏感</strong>；<code>Order.created</code> 与 <code>order.created</code> 是 <strong>不同 key</strong>，Topic 模式按 <strong>字面匹配</strong>（除通配符规则外）。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>改 Binding 前在 <strong>影子 vhost</strong> 或低峰验证，避免生产消息进错队列。</li>
+</ul>
+<h3 id="M25-镜像队列-Mirrored-Queue？"><a href="#M25-镜像队列-Mirrored-Queue？" class="headerlink" title="M25. 镜像队列 Mirrored Queue？"></a>M25. 镜像队列 Mirrored Queue？</h3><p><strong>口述版：</strong> 普通集群队列只在一个节点，宕机队列没了；镜像队列在多个节点同步副本，policy 开启，可设 master 和 mirror 数量，提高可用性。</p>
+<h4 id="具体介绍-24"><a href="#具体介绍-24" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>开启：对队列/模式设 <strong>ha-mode、ha-params</strong>（经典镜像；新版用 <strong>Quorum Queue</strong> 了解）。</li>
+<li>与 <strong>M26</strong> 普通集群对比是 Rabbit 高可用核心。</li>
+<li><strong>Quorum Queue</strong>：基于 Raft，推荐替代经典镜像；参数 <code>x-queue-type=quorum</code>。</li>
+<li>Policy 示例（口述）：<code>ha-mode=all</code> 或 <code>ha-mode=exactly, ha-params=2</code>（经典）；生产新建优先 Quorum。</li>
+<li><strong>性能</strong>：经典镜像写放大明显；Quorum 基于 Raft，<strong>写延迟与 majority</strong> 相关，读仍走 leader。</li>
+<li><strong>迁移</strong>：经典镜像 → Quorum 需 <strong>新队列迁移</strong> 计划，非原地 flip。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>ha-mode=all 和 exactly=2 在故障时行为差在哪？（<strong>答：</strong> <code>all</code> <strong>所有 mirror</strong>；<code>exactly=2</code> <strong>限定镜像数</strong>；故障时 <strong>同步延迟、谁晋升 master</strong> 与 <strong>是否丢 unacked</strong> 不同。）</li>
+<li>Quorum Queue 是否适合 <strong>超大堆积</strong> 场景？（<strong>答：</strong> <strong>不太适合</strong>；Raft 复制与 <strong>磁盘/WAL</strong> 成本高；超大堆积更常 <strong>经典队列+镜像</strong> 或 <strong>KF 日志型</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>镜像/Quorum 解决 <strong>消息 HA</strong>，不替代 <strong>客户端重连与 LB</strong>（M28）。</li>
+</ul>
+<h3 id="M26-普通集群宕机为何仍可能丢？"><a href="#M26-普通集群宕机为何仍可能丢？" class="headerlink" title="M26. 普通集群宕机为何仍可能丢？"></a>M26. 普通集群宕机为何仍可能丢？</h3><p><strong>口述版：</strong> 队列 metadata 在集群同步，但 <strong>消息体默认只在创建队列的节点</strong>，该节点挂了队列不可用，未同步到其他节点的消息就丢了；持久化也要镜像或 quorum 才真正 HA。</p>
+<h4 id="具体介绍-25"><a href="#具体介绍-25" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>原文亲测：仅持久化、无镜像，节点故障仍可能丢。</li>
+<li>生产：<strong>镜像/quorum + 持久化 + confirm</strong>。</li>
+<li><strong>面试一句话</strong>：RB 集群 ≠ 队列 HA；<strong>消息 HA 靠 Quorum/Mirrored</strong>。</li>
+<li><strong>metadata 同步 ≠ 数据同步</strong>：队列定义全集群可见，但 <strong>消息体默认单节点</strong>。</li>
+<li><strong>恢复流程</strong>：节点重启后队列 <strong>mirror/quorum 选举</strong>，未同步副本可能 lag catch-up。</li>
+<li><strong>持久化误区</strong>：disk 上仍有未 replicate 到 mirror 的消息在旧 master 磁盘，节点永久丢失则丢。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>为什么说「Rabbit 集群」不等于「高可用」？（<strong>答：</strong> 集群只 <strong>共享元数据</strong>；Queue 默认 <strong>单节点</strong>，宕机 <strong>队列不可用</strong>；HA 需 <strong>镜像/Quorum + 负载与监控</strong>。）</li>
+<li>持久化消息在普通集群节点宕机后，重启能否自动找回？（<strong>答：</strong> 若 <strong>未镜像</strong> 且磁盘 intact <strong>可能</strong> 恢复该节点队列；<strong>已丢副本</strong> 则 <strong>不可恢复</strong>；生产必须 <strong>镜像/quorum</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>生产 checklist：<strong>Quorum/Mirror + durable + confirm</strong> 三件套写进架构评审。</li>
+<li>单节点队列故障时，客户端要 <strong>自动 failover</strong> 到存活节点（但队列需 HA 类型）。</li>
+</ul>
+<h3 id="M27-Federation-与-Shovel？"><a href="#M27-Federation-与-Shovel？" class="headerlink" title="M27. Federation 与 Shovel？"></a>M27. Federation 与 Shovel？</h3><p><strong>口述版：</strong> Federation 是 Exchange 上游下游联邦，跨机房延迟复制；Shovel 是主动从一个 broker 拉消息推到另一个，适合桥接系统。</p>
+<h4 id="具体介绍-26"><a href="#具体介绍-26" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>解决 <strong>跨地域</strong>、异构 MQ 同步。</li>
+<li>需装插件，注意顺序与重复。</li>
+<li>与 M57 双活：联邦是 <strong>异步复制</strong>，消费端必须幂等；延迟窗口内可能双发。</li>
+<li><strong>Federation</strong>：上游 Exchange 消息 <strong>异步</strong> 推到下游，适合 <strong>广域、多活读</strong>；延迟与重复要业务接受。</li>
+<li><strong>Shovel</strong>：点对点 <strong>主动搬运</strong> Queue/Exchange，适合 <strong>系统迁移、异构桥接</strong>。</li>
+<li><strong>顺序与重复</strong>：跨 DC 复制几乎必然 <strong>at-least-once</strong>，消费端幂等必备（M57）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Federation 与 Shovel 选型：谁主动、谁被动？（<strong>答：</strong> <strong>Federation</strong> 上游 <strong>主动推</strong> 到下游；<strong>Shovel</strong> 下游 <strong>主动拉</strong> 上游；跨机房 <strong>网络方向与权限</strong> 决定选型。）</li>
+<li>联邦链路中断重启后，会不会重复灌消息？（<strong>答：</strong> <strong>可能重复</strong>；取决于 <strong>ack 点与重连策略</strong>；下游需 <strong>幂等或 dedup</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>插件版本与 Erlang/OTP 匹配；联邦 <strong>带宽与 TTL</strong> 要监控，避免拖垮上游。</li>
+</ul>
+<h3 id="M28-RabbitMQ-高可用与负载均衡？"><a href="#M28-RabbitMQ-高可用与负载均衡？" class="headerlink" title="M28. RabbitMQ 高可用与负载均衡？"></a>M28. RabbitMQ 高可用与负载均衡？</h3><p><strong>口述版：</strong> 客户端连多节点或前面挂 HAProxy/Nginx/LVS+Keepalived；生产者 confirm；消费者镜像队列；监控内存磁盘 alarm。</p>
+<h4 id="具体介绍-27"><a href="#具体介绍-27" class="headerlink" title="具体介绍"></a>具体介绍</h4><ol>
+<li><strong>集群模式</strong>：提高并发，但单节点队列问题见 M26。</li>
+<li><strong>镜像队列 / Quorum</strong>：多副本，policy 或 queue 类型。</li>
+<li><strong>HA 负载均衡</strong>：haproxy+keepalived、nginx、lvs；TCP 5672，<strong>不要</strong>只 DNS 轮询无健康检查。</li>
+<li><strong>Federation/Shovel</strong>：跨机房（M27）。</li>
+<li><strong>监控</strong>：<code>rabbitmqctl list_queues name messages_ready messages_unacknowledged</code>；Prometheus plugin。</li>
+</ol>
+<ul>
+<li><strong>客户端</strong>：Java 用 <strong>address shuffle + automatic recovery</strong>；多 URI 连接串优于单 IP。</li>
+<li><strong>脑裂</strong>：网络分区时 Rabbit 可能 <strong>双主写</strong>（classic 镜像时代问题）；Quorum 依赖 Raft 多数派。</li>
+<li><strong>容量</strong>：连接数、channel 数、队列数上限要在 <strong>峰值压测</strong> 中验证。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>TCP 负载均衡为什么要 <strong>长连接</strong> 且注意 sticky 吗？（<strong>答：</strong> AMQP <strong>channel 状态在连接上</strong>；短连接 <strong>握手贵</strong>；部分场景要 <strong>同一连接落同一节点</strong>（或 <strong>客户端直连多个 broker</strong>）。）</li>
+<li>如何验证 mirror/quorum 真的在同步？（<strong>答：</strong> 看 <strong>policy/operator 状态</strong>、**<code>rabbitmqctl list_queues</code>** slave/sync 标记；压测 <strong>kill master</strong> 看 <strong>消息是否丢、晋升时间</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li><code>blocked connection</code> 告警要联动 <strong>上游发布限流</strong>，否则雪崩到应用线程池。</li>
+</ul>
+<h3 id="M29-Publisher-Confirm-与-Return？"><a href="#M29-Publisher-Confirm-与-Return？" class="headerlink" title="M29. Publisher Confirm 与 Return？"></a>M29. Publisher Confirm 与 Return？</h3><p><strong>口述版：</strong> Confirm 是 Broker 确认已接收/持久化；Return 是 mandatory 模式下消息无法路由到队列时退回生产者。</p>
+<h4 id="具体介绍-28"><a href="#具体介绍-28" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>异步 confirm 吞吐更高。</li>
+<li>不可路由要监听 return 回调打日志告警。</li>
+<li><strong>Spring AMQP</strong>：<code>CorrelationData</code> 关联 confirm；return callback 打 <strong>不可路由</strong> 告警（常见 bug：Exchange 名错、Binding 缺失）。</li>
+<li><strong>Confirm 模式</strong>：单条 confirm vs 批量 confirm；批量吞吐高但 <strong>失败定位</strong> 要 correlationId。</li>
+<li><strong>Return</strong>：<code>mandatory=false</code> 时不可路由消息 <strong>静默丢弃</strong>，生产必须 true + 监听 return。</li>
+<li><strong>事务模式</strong>：channel tx 性能差，现代用 <strong>confirm 代替 tx</strong>（除非要原子 batch 且可接受吞吐）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>nack confirm 与 return 分别表示什么失败？（<strong>答：</strong> <strong>nack confirm</strong>：broker <strong>未持久/不可路由</strong> 等；<strong>return</strong>：<strong>mandatory</strong> 消息 <strong>无队列可路由</strong> 退回 producer。）</li>
+<li>异步 confirm 回调线程里能否再 publish？有什么坑？（<strong>答：</strong> <strong>能但慎</strong>；同 channel <strong>同步 publish</strong> 可能 <strong>死锁</strong>（回调阻塞 IO 线程）；宜 <strong>另线程/ channel</strong> 或 <strong>批量 confirm</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>confirm 超时要有 <strong>补发或落本地表</strong>；不要无限阻塞业务线程等 callback。</li>
+</ul>
+<h3 id="M30-Consumer-QoS-与-prefetch？"><a href="#M30-Consumer-QoS-与-prefetch？" class="headerlink" title="M30. Consumer QoS 与 prefetch？"></a>M30. Consumer QoS 与 prefetch？</h3><p><strong>口述版：</strong> <code>basicQos(prefetchCount)</code> 限制未 ack 条数，防止一个消费者 hoard 消息；fair dispatch 配合手动 ack。</p>
+<h4 id="具体介绍-29"><a href="#具体介绍-29" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>prefetch=1：一条一条处理，最公平。</li>
+<li>批量处理可略增大 prefetch。</li>
+<li>多 consumer 同 queue：prefetch 总未 ack ≈ consumer 数 × prefetch（global=false 时 per channel）。</li>
+<li><strong>channel 与 consumer</strong>：每个 consumer 通常独占 channel；prefetch 按 channel 生效（global=false）。</li>
+<li><strong>unacked 与内存</strong>：unacked 消息仍占 Broker <strong>内存/磁盘</strong>，慢 consumer 会拖高 unacked。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>prefetch=0 在 Rabbit 里表示什么？（<strong>答：</strong> <strong>无上限</strong>（broker 尽可能推）；易 <strong>压垮慢 consumer</strong>，生产一般设 <strong>正整数</strong>。）</li>
+<li>公平调度 fair dispatch 依赖哪些开关？（<strong>答：</strong> <strong><code>basic.qos(prefetch=1)</code></strong> 等限制 unacked；<strong>多 consumer 同队列</strong>；必要时 <strong>单 active consumer</strong>（Quorum 特性）。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>批处理 consumer 可适度提高 prefetch，但要压测 <strong>最坏单条耗时</strong> 下的 unacked 峰值。</li>
+</ul>
+<h3 id="M31-TTL-DLX-延迟与死信？"><a href="#M31-TTL-DLX-延迟与死信？" class="headerlink" title="M31. TTL + DLX 延迟与死信？"></a>M31. TTL + DLX 延迟与死信？</h3><p><strong>口述版：</strong> 消息或队列设 TTL，过期进 dead-letter-exchange 绑定的队列，实现延迟消费或死信转移。</p>
+<h4 id="具体介绍-30"><a href="#具体介绍-30" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>延迟队列：TTL 队列 + DLX 指到真正消费队列。</li>
+<li>注意队列头阻塞（同队列不同 TTL 的坑）→ 解法：<strong>每条消息独立 TTL 时用 DLX + 多队列</strong> 或 <strong>Redis/DB 调度</strong>。</li>
+<li>死信原因：<code>nack requeue=false</code>、TTL、queue max-length。</li>
+<li><strong>延迟链</strong>：<code>delay queue (TTL)</code> → DLX → <code>work queue</code>；work queue 消费者 <strong>手动 ack</strong>。</li>
+<li><strong>per-message TTL</strong>：更灵活但注意 <strong>队列头阻塞</strong>（M14）；高阶方案用 <strong>插件 rabbitmq_delayed_message_exchange</strong>（了解）。</li>
+<li><strong>死信与延迟共用 DLX</strong>：routing 要区分 <strong>延迟到期</strong> vs <strong>消费失败</strong>，避免混流。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>队列 TTL 和消息 TTL 过期后都进 DLX 吗？配置点在哪？（<strong>答：</strong> 配置了 <strong>dead-letter exchange</strong> 时 <strong>通常进 DLX</strong>；在 <strong>queue arguments</strong>（<code>x-message-ttl</code>/<code>x-expires</code>）与 <strong>policy</strong> 中设置。）</li>
+<li>延迟队列本身要不要 consumer？为什么？（<strong>答：</strong> <strong>要</strong>；延迟实现多为 <strong>TTL+DLX 转投</strong> 或 <strong>插件</strong>；到期消息 <strong>需 consumer 真正处理</strong>，否则仍堆积。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>延迟队列堆积 = <strong>定时炸弹</strong>；到期瞬间流量尖峰要 <strong>限流 consumer</strong> 或预扩容。</li>
+</ul>
+<h3 id="M32-内存-磁盘告警与流控？"><a href="#M32-内存-磁盘告警与流控？" class="headerlink" title="M32. 内存/磁盘告警与流控？"></a>M32. 内存/磁盘告警与流控？</h3><p><strong>口述版：</strong> Rabbit 内存超 watermark 会 block 生产者；磁盘满同样；要监控、限流、增加消费者、换 quorum/换集群规格。</p>
+<h4 id="具体介绍-31"><a href="#具体介绍-31" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>vm_memory_high_watermark</code>（默认 0.4）；<code>disk_free_limit</code>。</li>
+<li>消息堆积 + 持久化 → 磁盘涨；<strong>流控</strong>时 publish 阻塞，表现为上游 RT 升高。</li>
+<li><strong>排查</strong>：Management → Connections blocked；降 prefetch、扩 consumer、删无消费队列、开 lazy queue（冷数据落盘）。</li>
+<li><strong>alarm 级别</strong>：memory alarm → block publishers；disk alarm 同理；Management UI 标 <strong>blocking</strong>。</li>
+<li><strong>lazy queue</strong>：消息 predominantly on disk，缓解 memory alarm，适合 <strong>大 backlog</strong>。</li>
+<li><strong>policies</strong>：TTL、max-length、overflow（reject/drop-head）防止 <strong>单队列吃光内存</strong>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>流控 block 的是 publisher 还是 consumer？（<strong>答：</strong> Rabbit <strong>内存/磁盘 alarm</strong> 主要 <strong>block connection 上的 publisher</strong>；consumer 慢间接导致 <strong>publisher 被反压</strong>。）</li>
+<li>如何在不丢消息前提下清空超大堆积？（<strong>答：</strong> <strong>扩容 consumer</strong>、<strong>临时加队列分流</strong>（若可接受乱序）、<strong>降级跳过非核心</strong>；勿 <strong>无 ack  purge</strong>；KF 可 <strong>调 retention</strong> 仅当业务允许丢历史。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>磁盘水位与 <strong>消息 retention（无消费）</strong> 联动；无 consumer 的 durable 队列是常见事故源。</li>
+</ul>
+<h3 id="M33-设计：支付成功通知-DLQ？"><a href="#M33-设计：支付成功通知-DLQ？" class="headerlink" title="M33. 设计：支付成功通知 + DLQ？"></a>M33. 设计：支付成功通知 + DLQ？</h3><p><strong>口述版：</strong> 支付成功发 Direct Exchange，routing 到 notify 队列；消费者调短信/积分，失败 nack 重试 3 次进 DLQ；DLQ 告警人工补偿；全程 messageId 幂等。</p>
+<h4 id="具体介绍-32"><a href="#具体介绍-32" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Confirm + 持久化 + 手动 ack。</li>
+<li>监控 DLQ 深度（S）。</li>
+<li><strong>落地参数</strong>：<code>x-dead-letter-exchange</code>、应用内 retry 计数或 <code>x-delivery-limit=3</code>、幂等表 <code>payment_id + notify_type</code>。</li>
+<li><strong>重试策略</strong>：应用内 retry 与 <code>x-delivery-limit</code> 二选一或组合；避免 <strong>双重重试</strong> 放大流量。</li>
+<li><strong>下游隔离</strong>：短信/积分/推送 <strong>分队列</strong> 或分 consumer，避免慢通道拖死支付通知。</li>
+<li><strong>可观测</strong>：messageId 贯穿 confirm → consume → 第三方回执。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>支付成功消息重复，积分加了两次怎么从 MQ 侧证明根因？（<strong>答：</strong> 查 <strong>messageId/offset 重复投递</strong>、<strong>consumer 日志双 ack</strong>、<strong>重平衡重复消费</strong>；对比 <strong>broker 投递次数</strong> 与 <strong>业务幂等表</strong>。）</li>
+<li>DLQ 消息如何安全 replay 到主队列？（<strong>答：</strong> <strong>修根因后</strong> 单条 <strong>人工/脚本 replay</strong>；带 <strong>幂等</strong>；<strong>限流</strong>；记录 <strong>replay audit</strong>；避免 <strong>无限循环回 DLQ</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>第三方超时 <strong>不要无限 nack requeue</strong>；超时进 DLQ + 异步补偿更可控。</li>
+</ul>
+<h3 id="M34-Rabbit-vs-Kafka-业务选型？"><a href="#M34-Rabbit-vs-Kafka-业务选型？" class="headerlink" title="M34. Rabbit vs Kafka 业务选型？"></a>M34. Rabbit vs Kafka 业务选型？</h3><p><strong>口述版：</strong> 订单、通知、任务用 Rabbit；日志、埋点、CDC、大数据管道用 Kafka；要事务消息国内常 Rocket。</p>
+<h4 id="具体介绍-33"><a href="#具体介绍-33" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>团队栈、运维能力、顺序/吞吐需求决定。</li>
+<li><strong>硬边界</strong>：要 <strong>多订阅 + 复杂路由 + 低延迟</strong> → RB；要 <strong>TB 级日志 + 重放 + 流计算</strong> → KF；要 <strong>事务消息 + 电商中间件</strong> → Rocket。</li>
+<li><strong>混合架构</strong>：业务 RB/Rocket + 日志 KF 很常见；<strong>同一事件双写</strong> 要幂等与对账。</li>
+<li><strong>团队能力</strong>：运维 Kafka 需要 partition 均衡、ZK/KRaft 经验；Rabbit 要懂 <strong>内存与 mirror</strong>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>CDC 进 Kafka 再 fan-out 给业务 consumer，和直接 RB 各优缺点？（<strong>答：</strong> CDC+KF <strong>解耦 DB、可回溯、多订阅</strong>；RB <strong>路由灵活、延迟低</strong>；CDC 要 <strong>运维 Connect/Schema</strong>，RB 适合 <strong>任务型队列</strong>。）</li>
+<li>小团队只有 Rabbit 运维经验，日志量日上亿怎么办？（<strong>答：</strong> 优先 <strong>KF/Pulsar 日志型</strong> 或 <strong>云托管 MQ</strong>；硬上 RB 会 <strong>镜像/磁盘/联邦</strong> 吃紧；或 <strong>采样+批量</strong> 降量。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>避免 <strong>用 Kafka 做复杂路由</strong> 却缺少 stream 处理团队；避免 <strong>用 Rabbit 存 TB 日志</strong>。</li>
+</ul>
+<hr>
+<h2 id="5-5-Kafka-专章"><a href="#5-5-Kafka-专章" class="headerlink" title="5.5 Kafka 专章"></a>5.5 Kafka 专章</h2><h3 id="M35-Topic、Partition、Replica？"><a href="#M35-Topic、Partition、Replica？" class="headerlink" title="M35. Topic、Partition、Replica？"></a>M35. Topic、Partition、Replica？</h3><p><strong>口述版：</strong> Topic 逻辑名；Partition 是并行与存储单元，有序日志；Replica 跨 broker 备份，leader 对外读写，follower 同步。</p>
+<h4 id="具体介绍-34"><a href="#具体介绍-34" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Partition 数 ≥ 消费者数才能满并行。</li>
+<li>增加 partition 可提高吞吐但 <strong>key 顺序范围缩小</strong>（同 key 仍进同一 partition，新 partition 只分担无 key/新 key）。</li>
+<li><strong>配置</strong>：<code>num.partitions</code> 默认、<code>replication.factor</code> 生产建议 3；<code>log.segment.bytes</code> 影响 retention 段文件。</li>
+<li><strong>Leader 分布</strong>：同一 broker 不要承载过多 partition leader，避免 <strong>热点机器</strong>。</li>
+<li><strong>副本放置</strong>：<code>replica.fetch.max.bytes</code> 与消息大小匹配；跨 AZ 复制增加 <strong>延迟与 ISR 风险</strong>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>partition 数谁决定？创建后能减吗？（<strong>答：</strong> 创建 topic 时指定；<strong>只能增不能减</strong>（减需 <strong>新 topic 迁移</strong>）；过多 partition 增 <strong>文件句柄与 rebalance 成本</strong>。）</li>
+<li>没有 key 的消息如何选 partition？（<strong>答：</strong> <strong>轮询</strong>（sticky 批次内）；或 <strong>随机</strong>；<strong>无法保证同业务 id 同分区</strong>，有顺序需求必须 <strong>设 key</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>生产 topic 创建规范：<strong>RF、min.insync、retention</strong> 默认值不能沿用集群 default 就上线。</li>
+</ul>
+<h3 id="M36-Consumer-Group-与-rebalance？"><a href="#M36-Consumer-Group-与-rebalance？" class="headerlink" title="M36. Consumer Group 与 rebalance？"></a>M36. Consumer Group 与 rebalance？</h3><p><strong>口述版：</strong> 同 Group 内一条消息只被一个 consumer 消费；成员变化、订阅变化、partition 变化会 rebalance，期间 stop the world 式暂停消费。</p>
+<h4 id="具体介绍-35"><a href="#具体介绍-35" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Group coordinator 管理 offset。</li>
+<li>不同 Group 各自独立消费全 topic。</li>
+<li><strong>rebalance 触发</strong>：member join/leave、订阅 topic 变更、partition 数变、<code>session.timeout</code> 心跳丢失。</li>
+<li><strong>排查 lag 尖刺</strong>：对照 rebalance 日志时间点与 lag 曲线。</li>
+<li><strong>static membership</strong>：<code>group.instance.id</code> 重启不变，减少 <strong>不必要的 rebalance</strong>。</li>
+<li><strong>partition assignor</strong>：range vs round-robin vs sticky；sticky 利于 <strong>局部性</strong> 与减少迁移。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Consumer Group rebalance（经典，简化）:</span><br><span class="line">  trigger: 成员 join/leave | 订阅变更 | partition 数变 | session 超时</span><br><span class="line">  coordinator → stop fetch（各 consumer）</span><br><span class="line">  assignor → 为每 member 分配 topic-partition 子集</span><br><span class="line">  consumer 更新 assignment → resume poll</span><br><span class="line">  // 期间 lag 可能尖刺；长 max.poll.interval 易触发 rebalance</span><br></pre></td></tr></table></figure>
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li>rebalance 期间 consumer 还能 poll 吗？（<strong>答：</strong> <strong>协议分版本</strong>；经典上 <strong>rebalance 会 stop fetch</strong>；新版 ** cooperative sticky** 减少 <strong>全停</strong>；仍应避免 <strong>长处理阻塞 rebalance</strong>。）</li>
+<li>一个 consumer 订阅两个 topic，rebalance 粒度是什么？（<strong>答：</strong> 以 <strong>Group 内所有 subscribed topic-partition</strong> 为 <strong>一次 rebalance 分配单元</strong>；一 topic 变化 <strong>整组重分配</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>频繁 deploy 导致 rebalance 尖刺 → 固定 <strong>group.instance.id</strong> 或 <strong>cooperative rebalance</strong>。</li>
+</ul>
+<h3 id="M37-Leader、Follower、ISR？"><a href="#M37-Leader、Follower、ISR？" class="headerlink" title="M37. Leader、Follower、ISR？"></a>M37. Leader、Follower、ISR？</h3><p><strong>口述版：</strong> 每个 partition 一个 leader；ISR 是 caught-up 的 replica 集合；<code>acks=all</code> 要求 ISR 都 ack；unclean 选举可能丢数据换可用。</p>
+<h4 id="具体介绍-36"><a href="#具体介绍-36" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>min.insync.replicas</code> 与 <code>acks</code> 配合：例如 RF=3、min.insync=2、acks=all → 至少 2 副本 ack 才成功。</li>
+<li>under-replicated 要告警（follower 落后或掉 ISR）。</li>
+<li><strong>Broker 可靠性</strong>：禁止 unclean leader election（数据完整性优先）。</li>
+<li><strong>HW/LEO</strong>（了解）：follower 落后 leader 的 offset 差影响 <strong>可见性</strong> 与 unclean 风险。</li>
+<li><strong>controller</strong>：负责 partition leader 选举；controller 迁移会有 <strong>短暂元数据不稳定</strong>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>acks=all 但 min.insync=1 和 =2 在单 broker 宕机时有何差别？（<strong>答：</strong> min=1：<strong>至少 1 副本</strong> 即可写，<strong>易丢未同步</strong>；min=2：<strong>需 2 副本 ack</strong>，单副本宕机 <strong>可能写不可用</strong> 但 <strong>更安全</strong>。）</li>
+<li>follower 掉出 ISR 后如何重新加入？（<strong>答：</strong> 追平 leader <strong>LEO</strong> 后 <strong>重新加入 ISR</strong>；取决于 <strong><code>replica.lag.time.max.ms</code></strong> 等；落后太多 <strong>持续 out of sync</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li><code>replica.lag.time.max.ms</code> 过小会导致 <strong>ISR 抖动</strong> 与发送失败；要按网络 RTT 调。</li>
+</ul>
+<h3 id="M38-Offset-提交与-at-least-once？"><a href="#M38-Offset-提交与-at-least-once？" class="headerlink" title="M38. Offset 提交与 at-least-once？"></a>M38. Offset 提交与 at-least-once？</h3><p><strong>口述版：</strong> 自动提交可能处理中宕机丢消息；手动提交在业务成功后 commitSync/Async；处理完再提交典型 at-least-once，失败不提交会重复。</p>
+<h4 id="具体介绍-37"><a href="#具体介绍-37" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>重复</strong>：提交后宕机已处理会再消费 → 幂等。</li>
+<li><strong>丢失</strong>：先提交后处理失败 → 丢业务效果。</li>
+<li><strong>推荐</strong>：<code>enable.auto.commit=false</code>；业务成功后 <code>commitSync</code>；批量消费注意 <strong>部分成功</strong> 的 offset 粒度（逐条 vs 批次）。</li>
+<li><strong>异步 commit</strong>：commitAsync 失败可能 <strong>重复消费</strong> 更大；关键链路用 commitSync 或记录 <strong>业务幂等</strong>。</li>
+<li><strong>seek</strong>：人工 reset offset 用于 <strong>补数/重放</strong>，要有 <strong>审批与幂等</strong>，防生产误操作。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">手动 offset（at-least-once）:</span><br><span class="line">  records = poll()</span><br><span class="line">  for r in records:</span><br><span class="line">    process(r)                    // 幂等</span><br><span class="line">  commitSync(lastProcessedOffset) // 整批成功再提交</span><br><span class="line">  // 宕机: 未 commit → 重复消费；先 commit 后 process 失败 → 丢业务效果</span><br></pre></td></tr></table></figure>
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li>自动提交间隔 5s，处理 2s 宕机丢还是重复？（<strong>答：</strong> 可能 <strong>重复</strong>（已 auto commit 但未处理完）或 <strong>丢</strong>（处理完未 commit）；<strong>手动 commit</strong> 在 <strong>业务成功后</strong> 更可控。）</li>
+<li>消费进度存储在 __consumer_offsets，了解即可，它丢了怎么办？（<strong>答：</strong> Group <strong>从 earliest/latest 或 reset 策略重消费</strong>；<strong>可能大量重复</strong>；需 <strong>备份 offset</strong> 与 <strong>幂等</strong>；内部 topic 多副本一般 <strong>不丢</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>消费 <strong>DB 事务与 offset 提交</strong> 无法单 ACID 跨系统，故 at-least-once + 幂等是常态。</li>
+</ul>
+<h3 id="M39-Kafka-为何高吞吐？"><a href="#M39-Kafka-为何高吞吐？" class="headerlink" title="M39. Kafka 为何高吞吐？"></a>M39. Kafka 为何高吞吐？</h3><p><strong>口述版：</strong> 顺序写磁盘+Page Cache、零拷贝 sendfile、批量压缩、partition 并行；消费也是拉批量。</p>
+<h4 id="具体介绍-38"><a href="#具体介绍-38" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>不适合 <strong>大量小消息极低延迟</strong> 且要复杂路由的场景（Rabbit 更合适）。</li>
+<li>日志 retention 可回溯重消费。</li>
+<li><strong>调优口述</strong>：<code>linger.ms</code> + <code>batch.size</code> 凑批；<code>compression.type=lz4/zstd</code>；consumer <code>fetch.min.bytes</code>。</li>
+<li><strong>Page Cache</strong>：OS 缓存 + 顺序写，消费 lag 大时 <strong>读盘</strong> 增加；要监控 <strong>磁盘 read</strong>。</li>
+<li><strong>零拷贝</strong>：sendfile 减少用户态拷贝；batch 大时 <strong>网络带宽</strong> 成瓶颈，压缩必选。</li>
+<li><strong>对比 RB</strong>：RB 内存队列 + Erlang 进程模型，<strong>大消息/大堆积</strong> 内存压力更直观。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>为什么 Kafka 顺序写磁盘还比随机写 DB 快？（<strong>答：</strong> <strong>顺序写+Page Cache</strong>、<strong>批量 append</strong>、少 <strong>随机 B+树页</strong>；DB 还有 <strong>事务/WAL/锁</strong>；KF 不做 <strong>复杂更新语义</strong>。）</li>
+<li>小消息 QPS 极高时 batch 参数怎么调？（<strong>答：</strong> 调 <strong><code>linger.ms</code>、<code>batch.size</code></strong> 提高 batch；<strong>压缩</strong>；consumer **<code>fetch.min.bytes</code>**；权衡 <strong>延迟 vs 吞吐</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li><code>linger.ms</code> 增大会 <strong>增延迟减 CPU</strong>；低延迟业务要压测平衡点。</li>
+</ul>
+<h3 id="M40-Retention-与-Compact？"><a href="#M40-Retention-与-Compact？" class="headerlink" title="M40. Retention 与 Compact？"></a>M40. Retention 与 Compact？</h3><p><strong>口述版：</strong> 按时间或大小删旧段；compact topic 保留每个 key 最新值，适合 changelog、KV 同步。</p>
+<h4 id="具体介绍-39"><a href="#具体介绍-39" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>与 Rabbit 消费即删/ack 不同，Kafka 可 <strong>重复读</strong>。</li>
+<li><code>retention.ms</code> / <code>retention.bytes</code>；compact 用于 <strong>Connect offset、schema registry</strong> 等场景。</li>
+<li><strong>delete vs compact</strong>：普通 topic 按 retention 删段；compact 保留 key 最新值，** tombstone** 删 key。</li>
+<li><strong>重放</strong>：新 consumer group 从 <code>earliest/latest</code> 开始，影响 <strong>历史洪峰</strong>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>compact topic 上同一个 key 连续两条 null value 表示什么？（<strong>答：</strong> <strong>tombstone 删除该 key</strong>；compact 后 <strong>该 key 被移除</strong>；连续 null 仍 <strong>语义为删</strong>。）</li>
+<li>retention 改小会立刻删数据吗？（<strong>答：</strong> <strong>后台异步删 segment</strong>；不是 <strong>立刻</strong>；依赖 <strong><code>log.retention.check.interval.ms</code><strong>；</strong>磁盘仍可能短期占满</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>误设 <code>retention.ms</code> 过短导致 <strong>审计/补数无法重放</strong>；变更要走审批。</li>
+</ul>
+<h3 id="M41-Rebalance-优化？"><a href="#M41-Rebalance-优化？" class="headerlink" title="M41. Rebalance 优化？"></a>M41. Rebalance 优化？</h3><p><strong>口述版：</strong> 增大 <code>session.timeout.ms</code>、<code>max.poll.interval.ms</code> 防慢消费被踢；减少不必要的订阅变更；静态成员 <code>group.instance.id</code> 减 rebalance。</p>
+<h4 id="具体介绍-40"><a href="#具体介绍-40" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>消费逻辑别超过 max.poll.interval。</li>
+<li>大 rebalance 导致 lag 尖刺。</li>
+<li><strong>Cooperative sticky assignor</strong>（增量 rebalance）减少 stop-the-world；KIP 相关名词了解即可。</li>
+<li><strong>heartbeat 与 poll 分离</strong>（现代 consumer）：<code>max.poll.interval</code> 管处理时间，<code>session.timeout</code> 管心跳。</li>
+<li><strong>incremental cooperative rebalance</strong>：减少 <strong>全 partition 撤销</strong> 的时间窗口。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>消费逻辑里调外部 HTTP 5 分钟，要改哪两个参数？（<strong>答：</strong> **<code>max.poll.interval.ms</code>**（拉长）与 **<code>max.poll.records</code>**（减小单批）；必要时 <strong>异步处理+手动 pause/resume</strong>。）</li>
+<li>rebalance listener 里适合做什么、不适合做什么？（<strong>答：</strong> 适合 <strong>提交 offset、flush 缓存、暂停拉取</strong>；不适合 <strong>长 IO、阻塞 rebalance</strong>（会 <strong>踢 consumer</strong>）。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>rebalance 期间 <strong>不要</strong> 在 listener 里做重 IO；只做 partition 缓存清理等轻量操作。</li>
+</ul>
+<h3 id="M42-Kafka-顺序与-Key？"><a href="#M42-Kafka-顺序与-Key？" class="headerlink" title="M42. Kafka 顺序与 Key？"></a>M42. Kafka 顺序与 Key？</h3><p><strong>口述版：</strong> 同一 key 进同一 partition 保证分区内有序；不同 key 并行；没 key 轮询 partition 无顺序保证。</p>
+<h4 id="具体介绍-41"><a href="#具体介绍-41" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>分区数变更多 key 可能 remap（慎用改 partition）；<strong>只增 partition 不保证历史 key 分布不变</strong>。</li>
+<li>自定义 <code>Partitioner</code>（2.4 前常见；新版本 sticky 默认）。</li>
+<li><strong>null key</strong>：轮询 partition，<strong>严格无序</strong>；适合日志但不适合订单事件。</li>
+<li><strong>key 热点</strong>：同一 key 过多 → <strong>单 partition 热点</strong>，需拆 key（如 orderId+shard）或接受热点。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>自定义 Partitioner 在 2.4+ 默认策略下还需要吗？（<strong>答：</strong> 默认 <strong>Sticky + murmur2 key</strong> 多数够用；<strong>特殊路由</strong>（按机房/租户）才自定义；注意 <strong>升级兼容</strong>。）</li>
+<li>增加 partition 后旧 key 会迁移吗？（<strong>答：</strong> <strong>会</strong>；<code>hash(key) % N</code> <strong>N 变了 bucket 变</strong>；扩容后 <strong>短期乱序/重复处理</strong>，需 <strong>幂等或 rehash 策略</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>顺序业务 <strong>禁止随意改 key 算法</strong>；变更需新 topic 双写迁移。</li>
+</ul>
+<h3 id="M43-Exactly-once-了解？"><a href="#M43-Exactly-once-了解？" class="headerlink" title="M43. Exactly-once 了解？"></a>M43. Exactly-once 了解？</h3><p><strong>口述版：</strong> 幂等生产者防重复写；事务 API 可 read-process-write 原子；端到端还要 consumer 事务或外部幂等，业务很少宣称真 exactly-once。</p>
+<h4 id="具体介绍-42"><a href="#具体介绍-42" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>enable.idempotence=true</code>（PID + sequence）。</li>
+<li>与 M4、M19 衔接：<strong>面试结论</strong> — Broker EOS ≠ 业务 EOS，表幂等仍要做。</li>
+<li><strong>事务边界</strong>：Kafka 事务保证 <strong>同一 transactional.id</strong> 的 produce 与 consume offset 提交原子性（同集群）。</li>
+<li><strong>外部系统</strong>：写 DB + 发 Kafka 仍 <strong>非原子</strong>，除非 outbox/幂等。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>幂等生产者防的是哪种重复？consumer 重复谁管？（<strong>答：</strong> 幂等 producer 防 <strong>broker 重试导致 duplicate publish</strong>；<strong>consumer 重复</strong> 靠 <strong>业务幂等/事务 outbox</strong>。）</li>
+<li>read_committed 消费者看不到什么消息？（<strong>答：</strong> 看不到 <strong>未 commit 的事务消息</strong> 与 <strong>abort 的事务</strong>；只读 <strong>已 commit 事务批次</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>开启事务 producer 有 <strong>吞吐成本</strong>；只在 <strong>读-改-写链</strong> 必需时用，别全局开。</li>
+</ul>
+<h3 id="M44-Kafka-监控指标？"><a href="#M44-Kafka-监控指标？" class="headerlink" title="M44. Kafka 监控指标？"></a>M44. Kafka 监控指标？</h3><p><strong>口述版：</strong> consumer lag、under-replicated partitions、offline partitions、请求延迟、ISR 收缩、磁盘。</p>
+<h4 id="具体介绍-43"><a href="#具体介绍-43" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Burrow、Kafka Manager、Prometheus exporter（kafka_exporter）。</li>
+<li>lag 持续涨 → M15、M55。</li>
+<li><strong>JMX 口述</strong>：<code>BytesInPerSec</code>、<code>RequestHandlerAvgIdlePercent</code>、log flush 延迟。</li>
+<li><strong>Broker 侧</strong>：RequestHandlerAvgIdlePercent 低表示 <strong>broker 忙</strong>；NetworkProcessor 瓶颈看线程配置。</li>
+<li><strong>Consumer 侧</strong>：lag 按 partition 看 <strong>热点 partition</strong>；单 partition lag 高常是 <strong>key 热点</strong>（M42）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>offline partition 和 under-replicated 哪个更紧急？（<strong>答：</strong> <strong>offline partition</strong>（<strong>不可读写</strong>）更紧急；under-replicated 是 <strong>副本落后</strong>，有 <strong>丢数据风险</strong> 但可能仍服务。）</li>
+<li>lag 为 0 是否等于没有堆积？（考虑 compact/新 group）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>告警要分 <strong>绝对 lag</strong> 与 <strong>lag 增长率</strong>；突发尖峰与慢性堆积策略不同。</li>
+</ul>
+<h3 id="M45-日志-埋点架构？"><a href="#M45-日志-埋点架构？" class="headerlink" title="M45. 日志/埋点架构？"></a>M45. 日志/埋点架构？</h3><p><strong>口述版：</strong> App→Kafka→Flink/Spark 或→Logstash→ES；或 Kafka→Hive；多 consumer group 各做实时与离线。</p>
+<h4 id="具体介绍-44"><a href="#具体介绍-44" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>高吞吐、可回溯、多订阅（S）。</li>
+<li>与 RB 对比：埋点 <strong>不怕重复</strong>（可去重）<strong>要吞吐</strong> → KF；业务命令事件 <strong>要路由+低延迟</strong> → RB/Rocket。</li>
+<li><strong>多订阅</strong>：同一 Kafka topic 多个 group：实时大屏、离线数仓、风控各读一份。</li>
+<li><strong>Schema</strong>：Avro/Protobuf + Schema Registry 防 <strong>字段漂移</strong> 打挂下游。</li>
+<li><strong>与 OLAP</strong>：Kafka → Flink → ClickHouse/Druid 是常见 <strong>实时数仓</strong> 入口。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>日志重复消费对数仓有什么影响？如何去重？（<strong>答：</strong> <strong>事实表重复行</strong>；用 <strong>messageId/offset+业务键 dedup</strong>、<strong>幂等写入</strong>、<strong>MERGE/窗口去重</strong>。）</li>
+<li>RB 能否做同样规模的埋点管道？瓶颈在哪？（<strong>答：</strong> <strong>不推荐</strong>；瓶颈在 <strong>镜像复制、队列数、内存、无分区并行</strong>；亿级应 <strong>KF/Pulsar</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>埋点 topic <strong>retention 长、磁盘大</strong>；容量规划与 <strong>compaction 不适用</strong> 大 value 日志要想清。</li>
+</ul>
+<h3 id="M46-Kafka-扩容注意？"><a href="#M46-Kafka-扩容注意？" class="headerlink" title="M46. Kafka 扩容注意？"></a>M46. Kafka 扩容注意？</h3><p><strong>口述版：</strong> 加 broker 后 partition 重分配；消费者可扩到 partition 数上限；重分配期间性能波动；跨 rack 副本分布。</p>
+<h4 id="具体介绍-45"><a href="#具体介绍-45" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>kafka-reassign-partitions.sh</code> / Cruise Control。</li>
+<li>新 partition 只影响新 key 路由策略要文档化。</li>
+<li><strong>rack.aware.assign</strong>：副本跨机架，防整机架故障丢 ISR  quorum。</li>
+<li><strong>throttle</strong>：重分配可限流 <code>leader.replication.throttled.rate</code> 避免 <strong>打满磁盘 IO</strong>。</li>
+<li><strong>新 broker</strong>：空 broker 加入后需 <strong>主动 reassign</strong> 才会均衡；不会自动均匀。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>partition 数从 6 扩到 12，老消息的 key 分布变吗？（<strong>答：</strong> <strong>已写入数据位置不变</strong>；<strong>新消息</strong> 按新 partition 数路由；<strong>消费分配</strong> 变化，<strong>不是把老消息重算</strong>。）</li>
+<li>重分配失败 halfway 如何排查？（<strong>答：</strong> 看 <strong>kafka-reassign-partitions 日志</strong>、<strong>under-replicated</strong>、<strong>磁盘/限流</strong>；用 **<code>kafka-reassign-partitions --verify</code>**；必要时 <strong>rollback 计划</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>扩 partition <strong>不可逆减</strong>；初期按 <strong>峰值 2～3 年</strong> 估 partition，避免频繁 reassignment。</li>
+</ul>
+<hr>
+<h2 id="5-6-RocketMQ-与其它"><a href="#5-6-RocketMQ-与其它" class="headerlink" title="5.6 RocketMQ 与其它"></a>5.6 RocketMQ 与其它</h2><h3 id="M47-RocketMQ-NameServer-与存储？"><a href="#M47-RocketMQ-NameServer-与存储？" class="headerlink" title="M47. RocketMQ NameServer 与存储？"></a>M47. RocketMQ NameServer 与存储？</h3><p><strong>口述版：</strong> NameServer 轻量路由，无 ZK；Broker 存 CommitLog 顺序写，ConsumeQueue 索引；类似 Kafka 但队列语义更贴近业务。</p>
+<h4 id="具体介绍-46"><a href="#具体介绍-46" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>推拉结合；延迟级别内置。</li>
+<li>国内文档、事务消息案例多。</li>
+<li><strong>与 KF 差异</strong>：CommitLog 全 topic 顺序写 + 逻辑 Queue 索引；NameServer <strong>无强一致</strong>，Broker 向 NS 心跳注册。</li>
+<li><strong>配置锚点</strong>：<code>brokerRole=ASYNC_MASTER/SYNC_MASTER</code>、<code>flushDiskType=SYNC_FLUSH/ASYNC_FLUSH</code>。</li>
+<li><strong>Broker 角色</strong>：Master/Slave、Dledger 选主；CommitLog <strong>单文件顺序写</strong> 多 topic 共享。</li>
+<li><strong>ConsumeQueue</strong>：逻辑队列索引，加速 <strong>按 queue 拉取</strong>；与 KF partition log 类似不同。</li>
+<li><strong>NameServer</strong>：无状态可水平扩；Broker 注册 <strong>Topic 路由</strong> 客户端定期拉取。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>NameServer 挂了客户端还能发消息吗？（<strong>答：</strong> 客户端 <strong>缓存路由</strong> <strong>短时间可发</strong>；<strong>无法发现新 broker/ topic 变更</strong>；NameServer <strong>集群部署</strong>，挂久 <strong>路由过期</strong> 会失败。）</li>
+<li>CommitLog 与 ConsumeQueue 不一致怎么修复（了解）？</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li><code>ASYNC_FLUSH</code> 性能高但宕机可能 <strong>丢末批消息</strong>；金融级常用 SYNC_FLUSH + 主从同步。</li>
+</ul>
+<h3 id="M48-RocketMQ-事务消息？"><a href="#M48-RocketMQ-事务消息？" class="headerlink" title="M48. RocketMQ 事务消息？"></a>M48. RocketMQ 事务消息？</h3><p><strong>口述版：</strong> 发 half 消息→执行本地事务→commit/rollback→Broker 回查未知状态；保证最终消息与本地事务一致。</p>
+<h4 id="具体介绍-47"><a href="#具体介绍-47" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>与 M22 呼应。</li>
+<li>回查接口要实现幂等。</li>
+<li><strong>排查</strong>：半消息堆积、回查失败日志、<code>checkLocalTransaction</code> 超时 → 本地事务状态不明，需对账。</li>
+<li><strong>状态回查</strong>：本地事务 UNKNOWN 时 Broker 反复 check；接口要 <strong>快速、幂等、可缓存</strong>。</li>
+<li><strong>与本地表对比</strong>：半消息减少 <strong>扫表发 MQ</strong> 但绑定 Rocket；跨 MQ 产品迁移成本高。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>commit 和 rollback 调用失败（网络）怎么处理？</li>
+<li>半消息超时未决，下游从未收到，业务如何感知？（<strong>答：</strong> 查 <strong>事务状态接口/回查日志</strong>、<strong>本地事务表</strong>；<strong>告警 half 超时</strong>；用户侧 <strong>超时未支付/关单</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>回查逻辑 <strong>禁止</strong> 开新事务写 unrelated 表，避免死锁与状态不一致。</li>
+</ul>
+<h3 id="M49-Rocket-延迟-vs-Rabbit-TTL？"><a href="#M49-Rocket-延迟-vs-Rabbit-TTL？" class="headerlink" title="M49. Rocket 延迟 vs Rabbit TTL？"></a>M49. Rocket 延迟 vs Rabbit TTL？</h3><p><strong>口述版：</strong> Rocket 固定 18 级延迟；Rabbit TTL+DLX 灵活但队列头阻塞要小心；Kafka 常外部调度。</p>
+<h4 id="具体介绍-48"><a href="#具体介绍-48" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>选型看延迟精度与运维。</li>
+<li>Rocket：<code>messageDelayLevel=1</code> 对应 1s，共 18 级；不能任意 37 分钟这种细粒度除非改配置表。</li>
+<li><strong>业务适配</strong>：订单 30 分钟超时关单，Rocket 2h 档可能 <strong>不够细</strong> → 外部调度或 RB TTL。</li>
+<li><strong>Rabbit 插件</strong>：<code>delayed_message_exchange</code> 可替代部分 TTL+DLX 头阻塞问题（运维要装插件）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Rocket 延迟级别能运行时改吗？改完对已发消息有效吗？（<strong>答：</strong> 配置在 <strong>broker</strong>；<strong>已发消息按发送时级别</strong>；改配置 <strong>只影响新发</strong>。）</li>
+<li>同一业务既要 5s 又要 30min 延迟，Rocket 怎么配？（<strong>答：</strong> 用 <strong>不同 delay level</strong> 映射或 <strong>两条 topic</strong>；Rocket <strong>固定级别</strong>， arbitrary delay 用 <strong>定时任务+MQ</strong> 更灵活。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>延迟消息 <strong>不是定时器服务</strong>；海量延迟任务考虑 <strong>时间轮 + DB/Redis</strong> 分片调度。</li>
+</ul>
+<h3 id="M50-Pulsar-云-MQ？"><a href="#M50-Pulsar-云-MQ？" class="headerlink" title="M50. Pulsar / 云 MQ？"></a>M50. Pulsar / 云 MQ？</h3><p><strong>口述版：</strong> Pulsar 存算分离、多租户；云 SQS 免运维；MQTT 物联网；超大规模或 Serverless 才常引入。</p>
+<h4 id="具体介绍-49"><a href="#具体介绍-49" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>P1 了解即可。</li>
+<li>云 MQ（SQS、阿里云 MQ）：免运维、at-least-once、DLQ 原生；与自建 RB/KF/Rocket 的 tradeoff 是成本与管控粒度。</li>
+<li><strong>Pulsar</strong>：BookKeeper 存段、Broker 无状态，<strong>扩缩容</strong> 与多租户强；运维复杂度高于 Rocket。</li>
+<li><strong>MQTT</strong>：物联网弱网、QoS0/1/2；与 AMQP 业务消息 <strong>协议不同</strong>，网关桥接常见。</li>
+<li><strong>云 MQ</strong>：SQS 可见性超时 ≈ ack 窗口；阿里云 MQ Rocket 协议兼容要注意 <strong>版本差异</strong>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Pulsar 存算分离对比 Kafka 的 broker 本地盘各适合什么规模？（<strong>答：</strong> Pulsar <strong>BookKeeper 分离</strong> 适合 <strong>云原生、多租户、弹性扩</strong>；KF <strong>本地盘</strong> 成熟 <strong>超大吞吐、生态厚</strong>。）</li>
+<li>Serverless 用 SQS 还要自己管幂等吗？（<strong>答：</strong> <strong>要</strong>；SQS <strong>at-least-once</strong>、<strong>visibility timeout</strong> 仍 <strong>重复</strong>；Lambda <strong>幂等+DLQ</strong> 必备。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>云 MQ <strong>配额、计费、区域</strong> 要在架构期评估；跨 region 复制延迟与 M57 同类问题。</li>
+</ul>
+<hr>
+<h2 id="5-7-设计与排查"><a href="#5-7-设计与排查" class="headerlink" title="5.7 设计与排查"></a>5.7 设计与排查</h2><h3 id="M51-削峰与连接池？"><a href="#M51-削峰与连接池？" class="headerlink" title="M51. 削峰与连接池？"></a>M51. 削峰与连接池？</h3><p><strong>口述版：</strong> 峰值进 MQ，消费者速率受限于线程池和 DB 连接池，消费者数×每线程连接不能超过池大小；否则消费者堵在拿连接，lag 仍涨。</p>
+<h4 id="具体介绍-50"><a href="#具体介绍-50" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>配合 <strong>限流</strong>、降级、扩容消费者与 DB 只读副本。</li>
+<li><strong>公式</strong>：有效消费 TPS ≤ min(消费者并行度 / 单条耗时, 连接池大小 / 单条持有连接时间, 下游 RPC QPS 限额)。</li>
+<li><strong>线程模型</strong>：consumer 线程数 ≠ 连接数；每线程持连接处理一条要注意 <strong>池大小 ≥ 并发</strong>。</li>
+<li><strong>批量写库</strong>：合并 insert 提高吞吐，但要权衡 <strong>延迟与失败重试粒度</strong>。</li>
+<li><strong>限流</strong>：Sentinel/RateLimiter 在 consumer 入口保护 DB。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>lag 涨但 CPU 低，可能是什么瓶颈？（<strong>答：</strong> <strong>下游 DB/HTTP 慢</strong>、<strong>锁等待</strong>、<strong>prefetch 过小</strong>、<strong>单 partition</strong>、<strong>GC/IO wait</strong>；CPU 低不代表 <strong>无瓶颈</strong>。）</li>
+<li>消费者 20 个实例，连接池 max=10，会出现什么现象？（<strong>答：</strong> <strong>连接等待/超时</strong>、<strong>lag 涨</strong>、<strong>假死</strong>；实例数应 <strong>≤ 池大小</strong> 或 <strong>池按实例扩</strong>、<strong>批量处理</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>压测要模拟 <strong>峰值 lag</strong> 下连接池等待时间，而不只是单条 happy path。</li>
+</ul>
+<h3 id="M52-同步改异步如何返回？"><a href="#M52-同步改异步如何返回？" class="headerlink" title="M52. 同步改异步如何返回？"></a>M52. 同步改异步如何返回？</h3><p><strong>口述版：</strong> 接口先返回受理单号；客户端轮询状态；或 WebSocket 推送；或回调 URL；核心是保证 <strong>状态可查</strong> 与幂等提交。</p>
+<h4 id="具体介绍-51"><a href="#具体介绍-51" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>避免用户以为失败重复下单。</li>
+<li>MQ 侧：受理单号写入 <strong>可查询状态表</strong> 再发消息；消息带 <code>requestId</code> 与 HTTP 入口一致。</li>
+<li><strong>状态机对外</strong>：<code>ACCEPTED → PROCESSING → SUCCESS/FAILED</code> 枚举清晰，API 与 MQ 消费 <strong>同键更新</strong>。</li>
+<li><strong>重复提交</strong>：入口 <code>requestId</code> 幂等 + MQ 消息带同一 id；用户重试 HTTP 不会双单。</li>
+<li><strong>超时</strong>：轮询接口要 <strong>说明处理中 vs 不存在</strong>，防前端无限轮询。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>消息已发但 DB 受理单未 commit，用户查状态显示什么？（<strong>答：</strong> 显示 <strong>处理中/未知</strong>；应用 <strong>先本地事务再发 MQ</strong> 或 <strong>Outbox</strong>；勿 <strong>先 MQ 后 DB</strong> 无补偿。）</li>
+<li>WebSocket 推送失败如何与 MQ 消费结果对齐？（<strong>答：</strong> 消费成功 <strong>写推送任务表</strong>；WS 失败 <strong>重试/离线消息</strong>；<strong>同一 bizId</strong> 关联 <strong>MQ 消费与推送状态</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li><strong>禁止</strong> 仅返回 200 而无单号；异步受理必须有 <strong>可追溯 id</strong>。</li>
+</ul>
+<h3 id="M53-MQ-与分布式事务？"><a href="#M53-MQ-与分布式事务？" class="headerlink" title="M53. MQ 与分布式事务？"></a>M53. MQ 与分布式事务？</h3><p><strong>口述版：</strong> 强一致跨服务少用 MQ 一把梭；Saga 用 MQ 发补偿事件；TCC 的 try confirm cancel；本地消息表是最常见落地。</p>
+<h4 id="具体介绍-52"><a href="#具体介绍-52" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>2PC 在 MQ 场景少直接用。</li>
+<li>与 Seata、自研对账配合（S）。</li>
+<li><strong>Rocket 事务消息</strong> 适合「本地写 + 发一条下游事件」；<strong>Saga</strong> 适合多步长流程。</li>
+<li><strong>Saga 编排</strong>： orchestrator 发 step 事件，失败发 <strong>补偿</strong>；每步 consumer 幂等。</li>
+<li><strong>TCC</strong>：Try 占资源，Confirm/Cancel；与 MQ 配合时 Cancel 消息也要 <strong>可靠投递</strong>。</li>
+<li><strong>2PC</strong>：XA 在 MQ 场景少，性能与 <strong>Broker 参与</strong> 都不友好。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>本地消息表 vs Rocket 事务消息，你会在电商订单选哪个？（<strong>答：</strong> 已用 Rocket <strong>且要半消息语义</strong> 选 Rocket；<strong>通用 DB 事务+扫表/CDC</strong> 选本地消息表；看 <strong>运维与回查成本</strong>。）</li>
+<li>Saga 补偿顺序与正向顺序相反吗？乱序到达怎么办？（<strong>答：</strong> 补偿常 <strong>逆序</strong>；乱序用 <strong>状态机+可补偿标记</strong>、<strong>幂等</strong>；MQ <strong>不保证全局序</strong> 时要 <strong>版本号</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>分布式事务文档要写清 <strong>最终一致窗口</strong> 与对账频率，避免业务误以为强一致。</li>
+</ul>
+<h3 id="M54-毒消息处理？"><a href="#M54-毒消息处理？" class="headerlink" title="M54. 毒消息处理？"></a>M54. 毒消息处理？</h3><p><strong>口述版：</strong> 重试 N 次进 DLQ；记录 payload 和 stack；告警；人工修复后 requeue 或走补偿接口；别让一条坏消息 infinite redelivery。</p>
+<h4 id="具体介绍-53"><a href="#具体介绍-53" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Rabbit：<code>x-delivery-limit</code> 或应用计数。</li>
+<li>KF：消费失败发 retry topic，次数上限进 DLT。</li>
+<li>Rocket：<code>RECONSUME_LATER</code> 默认 16 次进 DLQ。</li>
+<li>跳过要有审计（谁、何时、哪条 messageId）。</li>
+<li><strong>识别毒消息</strong>：固定 payload 必 fail、反序列化错误、下游 404 配置错误；应 <strong>快速进 DLQ</strong> 而非无限 retry。</li>
+<li><strong>告警内容</strong>：含 topic、messageId、stack 摘要、<strong>前 1KB payload</strong>（脱敏）。</li>
+<li><strong>replay 流程</strong>：修代码/修数据 → DLQ requeue → 监控 <strong>重复幂等</strong> 是否生效。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>重试指数退避在 MQ 层还是应用层做？（<strong>答：</strong> <strong>应用层更可控</strong>（业务语义）；MQ <strong>TTL/DLX/retry queue</strong> 做 <strong>粗粒度</strong>；二者可 <strong>组合</strong>。）</li>
+<li>跳过毒消息不 ack 会怎样？（<strong>答：</strong> <strong>一直 redelivery</strong>、<strong>阻塞后续消息</strong>（单 consumer 时）、<strong>lag 永降</strong>；应 <strong>nack+requeue=false 进 DLQ</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>生产 <strong>禁止</strong> <code>requeue=true</code> 无上限；与 M13、M33 统一 retry 策略文档。</li>
+</ul>
+<h3 id="M55-消费-lag-暴涨排查？"><a href="#M55-消费-lag-暴涨排查？" class="headerlink" title="M55. 消费 lag 暴涨排查？"></a>M55. 消费 lag 暴涨排查？</h3><p><strong>口述版：</strong> 看生产是否突增、消费者是否全挂、GC/STW、单条 SQL 慢、rebalance、Broker IO；再扩 consumer、优化代码、临时降级。</p>
+<h4 id="具体介绍-54"><a href="#具体介绍-54" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Kafka：<code>kafka-consumer-groups.sh --describe --group xxx</code>。</li>
+<li>Rabbit：queue depth、consumer utilisation、blocked connections。</li>
+<li>交叉 JVM 模块 GC 毛刺（M58）。</li>
+</ul>
+<p><strong>分 MQ 排查清单</strong></p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>RB</th>
+<th>KF</th>
+<th>Rocket</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. 积压量</td>
+<td>ready + unacked</td>
+<td>partition lag</td>
+<td>consume offset diff</td>
+</tr>
+<tr>
+<td>2. 生产突增</td>
+<td>publish rate</td>
+<td>BytesIn</td>
+<td>send TPS</td>
+</tr>
+<tr>
+<td>3. 消费健康</td>
+<td>consumer 数、utilisation</td>
+<td>consumer 实例、rebalance</td>
+<td>consumer 在线</td>
+</tr>
+<tr>
+<td>4. 慢处理</td>
+<td>单条 trace、DB</td>
+<td>max.poll 超时日志</td>
+<td>消费耗时监控</td>
+</tr>
+<tr>
+<td>5. Broker</td>
+<td>memory/disk alarm</td>
+<td>ISR、磁盘</td>
+<td>commitlog、磁盘</td>
+</tr>
+<tr>
+<td>6. 止血</td>
+<td>扩 consumer、lazy queue</td>
+<td>扩 consumer≤partition、降 batch</td>
+<td>扩 consumer、降 pull batch</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>时间对齐</strong>：lag 曲线与 <strong>发布变更、大促、rebalance 日志</strong> 对齐看因果。</li>
+<li><strong>JVM</strong>：Full GC 导致 <code>max.poll.interval</code> 超时 → 重复消费 + lag 假降真升。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>只扩 consumer 不优化 SQL，lag 下降缓慢说明什么？（<strong>答：</strong> 瓶颈在 <strong>单条处理耗时/DB</strong> 非 <strong>并行度</strong>；需 <strong>优化 SQL、缓存、批处理</strong> 或 <strong>限流生产</strong>。）</li>
+<li>Broker disk 100% 时 consumer lag 会怎样？（<strong>答：</strong> <strong>生产 blocked</strong>、<strong>消费变慢</strong>、<strong>可能 crash</strong>；lag <strong>暴涨</strong>；紧急 <strong>扩盘、删 segment、限流</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>止血顺序：<strong>停非核心生产 &gt; 扩消费 &gt; 优化热点 &gt; 加 partition</strong>；避免无序操作。</li>
+</ul>
+<h3 id="M56-重复扣款与-MQ？"><a href="#M56-重复扣款与-MQ？" class="headerlink" title="M56. 重复扣款与 MQ？"></a>M56. 重复扣款与 MQ？</h3><p><strong>口述版：</strong> 证明 messageId 重复投递或 consumer 重复 ack 前处理；查幂等表、支付渠道单号；根因常在 ack 顺序或重试无上限。</p>
+<h4 id="具体介绍-55"><a href="#具体介绍-55" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>支付回调 + MQ 双通道要 <strong>统一幂等键</strong>（S）。</li>
+<li><strong>排查顺序</strong>：渠道侧单号是否重复 → 幂等表是否命中 → 消息 <code>messageId</code> 是否重复 → ack/offset 是否在业务前提交。</li>
+<li><strong>双通道</strong>：支付渠道回调与 MQ 通知 <strong>同一 bizId 幂等</strong>；表 <code>uniq(channel, out_trade_no)</code>。</li>
+<li><strong>对账文件</strong>：T+1 与渠道对账发现重复扣款，回溯 messageId 与 <strong>offset 提交顺序</strong>。</li>
+<li><strong>资金类</strong>：宁可 <strong>重复处理返回成功（幂等）</strong> 不可漏 ack 导致重复 unknown 状态。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>幂等表在扣款前还是后插入？失败怎么回滚？（<strong>答：</strong> 常 <strong>先占幂等键/预插入 processing</strong>，成功 <strong>更新 done</strong>；失败 <strong>标记 fail 可重试</strong>；扣款与 <strong>本地事务</strong> 同事务或 <strong>TCC</strong>。）</li>
+<li>如何证明是 MQ 重复而非渠道重复通知？（<strong>答：</strong> 对 <strong>messageId/offset、投递时间、consumer 日志</strong> 与 <strong>渠道回调 id</strong>；MQ 重复 <strong>同 payload 多 offset</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>金融链路 <strong>audit log</strong> 保留 messageId、offset、consumer instance，便于监管排查。</li>
+</ul>
+<h3 id="M57-跨机房双活-MQ？"><a href="#M57-跨机房双活-MQ？" class="headerlink" title="M57. 跨机房双活 MQ？"></a>M57. 跨机房双活 MQ？</h3><p><strong>口述版：</strong> 异步复制有延迟，可能重复；冲突解决靠幂等与版本号；脑裂时两边都可能发，消费端要可识别来源；Federation/Shovel/Mirror 跨 DC 各有限制。</p>
+<h4 id="具体介绍-56"><a href="#具体介绍-56" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>RPO/RTO 与业务接受度。</li>
+<li>优先单活写双活读等折中（S）。</li>
+<li>RB Federation <strong>非同步双写</strong>；KF <strong>MirrorMaker</strong> 延迟复制；Rocket <strong>Dledger 多副本</strong> 通常单集群内，跨 DC 仍多异步。</li>
+<li><strong>写入策略</strong>：单活写（一个 DC publish）+ 双活读；或 <strong>分业务单元</strong> 各写各的 topic，全局聚合读。</li>
+<li><strong>冲突</strong>：同一用户双活写可能 <strong>版本冲突</strong>；用 <strong>version/时间戳</strong> 拒绝旧更新。</li>
+<li><strong>MirrorMaker / Federation 延迟</strong>：RPO&gt;0 时下游要 <strong>幂等 + 去重窗口 ≥ 复制延迟</strong>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>脑裂时两边都发订单创建消息，如何合并？（<strong>答：</strong> <strong>全局唯一 bizId</strong>、<strong>DB 唯一约束</strong>、<strong>对账合并</strong>；MQ <strong>不能防脑裂双写</strong>，靠 <strong>业务层</strong>。）</li>
+<li>RPO/RTO 1 分钟 vs 1 小时对 MQ 架构有何不同要求？（<strong>答：</strong> RPO 1min 要 <strong>多 AZ 同步复制、监控、自动 failover</strong>；RTO 1h 可 <strong>冷备+手工切换</strong>；前者 <strong>成本高</strong>。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>跨机房 <strong>同步复制</strong> MQ 延迟大，多数业务选 <strong>异步 + 幂等</strong>；宣传「双活零丢」要审技术方案。</li>
+</ul>
+<h3 id="M58-全链路-traceId-透传？"><a href="#M58-全链路-traceId-透传？" class="headerlink" title="M58. 全链路 traceId 透传？"></a>M58. 全链路 traceId 透传？</h3><p><strong>口述版：</strong> HTTP 入口生成 traceId 放 MDC；发 MQ 写到 header/properties；消费者取出写 MDC 再调下游；日志、监控同一 trace 串起来。</p>
+<h4 id="具体介绍-57"><a href="#具体介绍-57" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>Rabbit：<code>AMQP correlation_id</code> / headers <code>traceId</code>。</li>
+<li>Kafka：record headers <code>traceparent</code> / W3C Trace Context。</li>
+<li>Rocket：<code>userProperty</code> 透传。</li>
+<li>OpenTelemetry 统一标准。</li>
+<li><strong>案</strong>：结合项目 STAR 讲一次 lag/重复排查（S）— 用 traceId 关联 <strong>生产 send → Broker → 消费 → DB</strong> 四段日志，快速定位是 <strong>重复投递</strong> 还是 <strong>消费两次</strong>。</li>
+<li><strong>跨语言</strong>：header 名统一 <code>traceparent</code>（W3C）或 <code>X-Trace-Id</code>；避免各服务自定义不可串联。</li>
+<li><strong>MQ 与 RPC</strong>：consumer 取出 trace 写 MDC，<strong>Feign/gRPC metadata</strong> 继续透传。</li>
+<li><strong>lag 排查案例</strong>：用 traceId 串 <strong>Producer send → Broker 落盘 → Consumer start → DB commit</strong> 四段，区分重复投递 vs 双消费。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>MDC 在线程池切换时如何不丢 traceId？（<strong>答：</strong> <strong>TaskDecorator</strong> 传递 MDC；<strong>TTL 线程池</strong>（TransmittableThreadLocal）；消费端 <strong>从 header 注入 MDC</strong>。）</li>
+<li>批量消费一条失败，trace 如何对应到单条 message？（<strong>答：</strong> 每条 <strong>独立 span/子 traceId</strong> 或 <strong>batchId+index</strong>；日志打 <strong>partition-offset-key</strong>；失败 <strong>只重试该条</strong>（若协议支持）。）</li>
+</ul>
+<p><strong>生产注意</strong></p>
+<ul>
+<li>日志规范：<strong>入口生成 trace</strong>，禁止下游各自 random 新 id 导致链路断。</li>
+</ul>
+<blockquote>
+<p><strong>延伸阅读：</strong> 原 RabbitMQ 高可用实践已并入 <strong>M25～M28</strong>；后续若有 MQ 专题文可在此追加链接。</p>
+</blockquote>
+<p><strong>本章速记：可靠性三板斧</strong></p>
+<ol>
+<li><strong>生产</strong>：RB confirm + mandatory return；KF <code>acks=all</code> + min.insync.replicas + 幂等生产者；Rocket 同步/事务 + 本地消息表兜底。</li>
+<li><strong>Broker</strong>：RB Quorum/Mirror + durable；KF ISR + 禁 unclean election；Rocket SYNC_MASTER + SYNC_FLUSH（按 SLA 选）。</li>
+<li><strong>消费</strong>：手动 ack / 成功后 commit offset；幂等键；DLQ + 重试上限；lag/depth 告警。</li>
+</ol>
+<p><strong>堆积 / 丢消息排查入口</strong>：M15 通用五步 → M55 分 MQ 表 → M4 三板斧对号入座。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MQ/">https://zhangxin66666.github.io/2022/03/31/12.面试/面试-MQ/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95/">面试</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E9%9D%A2%E8%AF%95.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-JVM/"><img class="prev-cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">面试题·JVM</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MySQL/"><img class="next-cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">面试题·MySQL</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Dubbo/" title="面试题·Dubbo"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·Dubbo</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98/" title="面试知识点总结"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试知识点总结</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-JVM/" title="面试题·JVM"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·JVM</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MySQL/" title="面试题·MySQL"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·MySQL</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Netty/" title="面试题·Netty"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·Netty</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Spring/" title="面试题·Spring"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·Spring</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">180</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81MQ"><span class="toc-text">五、MQ</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8-MQ-%E4%B8%8E%E9%80%89%E5%9E%8B"><span class="toc-text">5.1 为什么用 MQ 与选型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#M1-%E5%BC%95%E5%85%A5-MQ-%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-text">M1. 引入 MQ 解决什么问题？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M2-MQ-vs-RPC-vs-Redis-Stream%EF%BC%9F"><span class="toc-text">M2. MQ vs RPC vs Redis Stream？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-1"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M3-%E7%82%B9%E5%AF%B9%E7%82%B9-vs-%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%EF%BC%9F"><span class="toc-text">M3. 点对点 vs 发布订阅？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-2"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M4-%E4%B8%A2%E5%A4%B1-%E9%87%8D%E5%A4%8D-%E4%B9%B1%E5%BA%8F-%E4%B8%8E%E6%8A%95%E9%80%92%E8%AF%AD%E4%B9%89%EF%BC%9F"><span class="toc-text">M4. 丢失 &#x2F; 重复 &#x2F; 乱序 与投递语义？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-3"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M5-RabbitMQ-Kafka-RocketMQ-%E5%AF%B9%E6%AF%94%EF%BC%9F"><span class="toc-text">M5. RabbitMQ &#x2F; Kafka &#x2F; RocketMQ 对比？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-4"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M6-%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF%E3%80%81%E6%9C%AC%E5%9C%B0%E6%B6%88%E6%81%AF%E8%A1%A8%E3%80%81Outbox%EF%BC%9F"><span class="toc-text">M6. 事务消息、本地消息表、Outbox？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-5"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M7-%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8D%E8%AF%A5%E7%94%A8-MQ%EF%BC%9F"><span class="toc-text">M7. 什么场景不该用 MQ？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-6"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E9%80%9A%E7%94%A8%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-text">5.2 通用核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#M8-Producer%E3%80%81Broker%E3%80%81Consumer-%E7%AD%89%E6%9C%AF%E8%AF%AD%EF%BC%9F"><span class="toc-text">M8. Producer、Broker、Consumer 等术语？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-7"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M9-Push-vs-Pull-%E6%B6%88%E8%B4%B9%EF%BC%9F"><span class="toc-text">M9. Push vs Pull 消费？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-8"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M10-ACK-%E6%9C%BA%E5%88%B6%EF%BC%9F"><span class="toc-text">M10. ACK 机制？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-9"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M11-Prefetch-%E6%89%B9%E9%87%8F%E6%8B%89%E5%8F%96%EF%BC%9F"><span class="toc-text">M11. Prefetch &#x2F; 批量拉取？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-10"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M12-%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%89%E5%A4%84%E9%85%8D%E5%90%88%EF%BC%9F"><span class="toc-text">M12. 持久化三处配合？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-11"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M13-%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97-DLQ%EF%BC%9F"><span class="toc-text">M13. 死信队列 DLQ？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-12"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M14-%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF%E5%AE%9E%E7%8E%B0%EF%BC%9F"><span class="toc-text">M14. 延迟消息实现？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-13"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M15-%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF%E6%8E%92%E6%9F%A5%EF%BC%9F"><span class="toc-text">M15. 消息堆积排查？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-14"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%8F%AF%E9%9D%A0%E6%80%A7%E4%B8%8E%E5%B9%82%E7%AD%89"><span class="toc-text">5.3 可靠性与幂等</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#M16-%E7%94%9F%E4%BA%A7%E7%AB%AF%E5%A6%82%E4%BD%95%E5%B0%BD%E9%87%8F%E4%B8%8D%E4%B8%A2%EF%BC%9F"><span class="toc-text">M16. 生产端如何尽量不丢？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-15"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M17-Broker-%E5%A6%82%E4%BD%95%E5%B0%BD%E9%87%8F%E4%B8%8D%E4%B8%A2%EF%BC%9F"><span class="toc-text">M17. Broker 如何尽量不丢？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-16"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M18-%E6%B6%88%E8%B4%B9%E7%AB%AF%E5%A6%82%E4%BD%95%E5%B0%BD%E9%87%8F%E4%B8%8D%E4%B8%A2%EF%BC%9F"><span class="toc-text">M18. 消费端如何尽量不丢？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-17"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M19-%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E4%B8%8E%E5%B9%82%E7%AD%89%EF%BC%9F"><span class="toc-text">M19. 重复消费与幂等？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-18"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M20-%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%EF%BC%9F"><span class="toc-text">M20. 顺序消息？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-19"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M21-%E6%9C%AC%E5%9C%B0%E4%BA%8B%E5%8A%A1-%E5%8F%91-MQ-%E5%A4%B1%E8%B4%A5%EF%BC%9F"><span class="toc-text">M21. 本地事务 + 发 MQ 失败？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-20"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M22-%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF%EF%BC%88%E5%8D%8A%E6%B6%88%E6%81%AF%EF%BC%89%EF%BC%9F"><span class="toc-text">M22. 事务消息（半消息）？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-21"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-RabbitMQ-%E4%B8%93%E7%AB%A0"><span class="toc-text">5.4 RabbitMQ 专章</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#M23-Exchange-%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-text">M23. Exchange 类型？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-22"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M24-Binding-%E4%B8%8E-Routing-Key%EF%BC%9F"><span class="toc-text">M24. Binding 与 Routing Key？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-23"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M25-%E9%95%9C%E5%83%8F%E9%98%9F%E5%88%97-Mirrored-Queue%EF%BC%9F"><span class="toc-text">M25. 镜像队列 Mirrored Queue？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-24"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M26-%E6%99%AE%E9%80%9A%E9%9B%86%E7%BE%A4%E5%AE%95%E6%9C%BA%E4%B8%BA%E4%BD%95%E4%BB%8D%E5%8F%AF%E8%83%BD%E4%B8%A2%EF%BC%9F"><span class="toc-text">M26. 普通集群宕机为何仍可能丢？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-25"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M27-Federation-%E4%B8%8E-Shovel%EF%BC%9F"><span class="toc-text">M27. Federation 与 Shovel？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-26"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M28-RabbitMQ-%E9%AB%98%E5%8F%AF%E7%94%A8%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%9F"><span class="toc-text">M28. RabbitMQ 高可用与负载均衡？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-27"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M29-Publisher-Confirm-%E4%B8%8E-Return%EF%BC%9F"><span class="toc-text">M29. Publisher Confirm 与 Return？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-28"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M30-Consumer-QoS-%E4%B8%8E-prefetch%EF%BC%9F"><span class="toc-text">M30. Consumer QoS 与 prefetch？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-29"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M31-TTL-DLX-%E5%BB%B6%E8%BF%9F%E4%B8%8E%E6%AD%BB%E4%BF%A1%EF%BC%9F"><span class="toc-text">M31. TTL + DLX 延迟与死信？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-30"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M32-%E5%86%85%E5%AD%98-%E7%A3%81%E7%9B%98%E5%91%8A%E8%AD%A6%E4%B8%8E%E6%B5%81%E6%8E%A7%EF%BC%9F"><span class="toc-text">M32. 内存&#x2F;磁盘告警与流控？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-31"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M33-%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%94%AF%E4%BB%98%E6%88%90%E5%8A%9F%E9%80%9A%E7%9F%A5-DLQ%EF%BC%9F"><span class="toc-text">M33. 设计：支付成功通知 + DLQ？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-32"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M34-Rabbit-vs-Kafka-%E4%B8%9A%E5%8A%A1%E9%80%89%E5%9E%8B%EF%BC%9F"><span class="toc-text">M34. Rabbit vs Kafka 业务选型？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-33"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-Kafka-%E4%B8%93%E7%AB%A0"><span class="toc-text">5.5 Kafka 专章</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#M35-Topic%E3%80%81Partition%E3%80%81Replica%EF%BC%9F"><span class="toc-text">M35. Topic、Partition、Replica？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-34"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M36-Consumer-Group-%E4%B8%8E-rebalance%EF%BC%9F"><span class="toc-text">M36. Consumer Group 与 rebalance？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-35"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M37-Leader%E3%80%81Follower%E3%80%81ISR%EF%BC%9F"><span class="toc-text">M37. Leader、Follower、ISR？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-36"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M38-Offset-%E6%8F%90%E4%BA%A4%E4%B8%8E-at-least-once%EF%BC%9F"><span class="toc-text">M38. Offset 提交与 at-least-once？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-37"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M39-Kafka-%E4%B8%BA%E4%BD%95%E9%AB%98%E5%90%9E%E5%90%90%EF%BC%9F"><span class="toc-text">M39. Kafka 为何高吞吐？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-38"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M40-Retention-%E4%B8%8E-Compact%EF%BC%9F"><span class="toc-text">M40. Retention 与 Compact？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-39"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M41-Rebalance-%E4%BC%98%E5%8C%96%EF%BC%9F"><span class="toc-text">M41. Rebalance 优化？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-40"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M42-Kafka-%E9%A1%BA%E5%BA%8F%E4%B8%8E-Key%EF%BC%9F"><span class="toc-text">M42. Kafka 顺序与 Key？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-41"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M43-Exactly-once-%E4%BA%86%E8%A7%A3%EF%BC%9F"><span class="toc-text">M43. Exactly-once 了解？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-42"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M44-Kafka-%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87%EF%BC%9F"><span class="toc-text">M44. Kafka 监控指标？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-43"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M45-%E6%97%A5%E5%BF%97-%E5%9F%8B%E7%82%B9%E6%9E%B6%E6%9E%84%EF%BC%9F"><span class="toc-text">M45. 日志&#x2F;埋点架构？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-44"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M46-Kafka-%E6%89%A9%E5%AE%B9%E6%B3%A8%E6%84%8F%EF%BC%9F"><span class="toc-text">M46. Kafka 扩容注意？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-45"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-6-RocketMQ-%E4%B8%8E%E5%85%B6%E5%AE%83"><span class="toc-text">5.6 RocketMQ 与其它</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#M47-RocketMQ-NameServer-%E4%B8%8E%E5%AD%98%E5%82%A8%EF%BC%9F"><span class="toc-text">M47. RocketMQ NameServer 与存储？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-46"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M48-RocketMQ-%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF%EF%BC%9F"><span class="toc-text">M48. RocketMQ 事务消息？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-47"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M49-Rocket-%E5%BB%B6%E8%BF%9F-vs-Rabbit-TTL%EF%BC%9F"><span class="toc-text">M49. Rocket 延迟 vs Rabbit TTL？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-48"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M50-Pulsar-%E4%BA%91-MQ%EF%BC%9F"><span class="toc-text">M50. Pulsar &#x2F; 云 MQ？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-49"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-7-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E6%8E%92%E6%9F%A5"><span class="toc-text">5.7 设计与排查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#M51-%E5%89%8A%E5%B3%B0%E4%B8%8E%E8%BF%9E%E6%8E%A5%E6%B1%A0%EF%BC%9F"><span class="toc-text">M51. 削峰与连接池？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-50"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M52-%E5%90%8C%E6%AD%A5%E6%94%B9%E5%BC%82%E6%AD%A5%E5%A6%82%E4%BD%95%E8%BF%94%E5%9B%9E%EF%BC%9F"><span class="toc-text">M52. 同步改异步如何返回？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-51"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M53-MQ-%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%EF%BC%9F"><span class="toc-text">M53. MQ 与分布式事务？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-52"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M54-%E6%AF%92%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%EF%BC%9F"><span class="toc-text">M54. 毒消息处理？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-53"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M55-%E6%B6%88%E8%B4%B9-lag-%E6%9A%B4%E6%B6%A8%E6%8E%92%E6%9F%A5%EF%BC%9F"><span class="toc-text">M55. 消费 lag 暴涨排查？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-54"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M56-%E9%87%8D%E5%A4%8D%E6%89%A3%E6%AC%BE%E4%B8%8E-MQ%EF%BC%9F"><span class="toc-text">M56. 重复扣款与 MQ？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-55"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M57-%E8%B7%A8%E6%9C%BA%E6%88%BF%E5%8F%8C%E6%B4%BB-MQ%EF%BC%9F"><span class="toc-text">M57. 跨机房双活 MQ？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-56"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#M58-%E5%85%A8%E9%93%BE%E8%B7%AF-traceId-%E9%80%8F%E4%BC%A0%EF%BC%9F"><span class="toc-text">M58. 全链路 traceId 透传？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-57"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E9%9D%A2%E8%AF%95.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

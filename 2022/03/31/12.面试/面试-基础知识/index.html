@@ -1,0 +1,1220 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>面试题·基础知识 | 金子爸爸の家</title><meta name="keywords" content="面试"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="HashMap、ConcurrentHashMap、集合、String 与 Java 基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题·基础知识">
+<meta property="og:url" content="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="HashMap、ConcurrentHashMap、集合、String 与 Java 基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E9%9D%A2%E8%AF%95.png">
+<meta property="article:published_time" content="2022-03-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-15T06:07:35.772Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E9%9D%A2%E8%AF%95.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '面试题·基础知识',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-15 14:07:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">180</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E9%9D%A2%E8%AF%95.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">面试题·基础知识</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-30T16:00:00.000Z" title="发表于 2022-03-31 00:00:00">2022-03-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-15T06:07:35.772Z" title="更新于 2026-10-15 14:07:35">2026-10-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">12.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>45分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="面试题·基础知识"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p><strong>总目录：</strong> <a href="../常见面试题/" target="_blank">常见面试题索引</a></p>
+</blockquote>
+<h1 id="一、基础知识"><a href="#一、基础知识" class="headerlink" title="一、基础知识"></a>一、基础知识</h1><blockquote>
+<p>格式说明：每题先 <strong>口述版</strong>（面试现场 30～60 秒），下方 <strong>具体介绍</strong> 便于复习展开。</p>
+</blockquote>
+<h2 id="1-1-HashMap-结构与原理"><a href="#1-1-HashMap-结构与原理" class="headerlink" title="1.1 HashMap 结构与原理"></a>1.1 HashMap 结构与原理</h2><h3 id="1-HashMap-底层结构在-JDK-1-7-和-1-8-分别是什么？演进动机是什么？"><a href="#1-HashMap-底层结构在-JDK-1-7-和-1-8-分别是什么？演进动机是什么？" class="headerlink" title="1. HashMap 底层结构在 JDK 1.7 和 1.8 分别是什么？演进动机是什么？"></a>1. HashMap 底层结构在 JDK 1.7 和 1.8 分别是什么？演进动机是什么？</h3><p><strong>口述版：</strong> 1.7 是数组加链表，冲突用头插；1.8 在链表过长时引入红黑树，冲突改尾插。演进主要是降低哈希冲突严重时的查询复杂度，从 O(n) 拉到 O(log n)，同时 1.8 的扩容迁移也更省事。</p>
+<h4 id="具体介绍"><a href="#具体介绍" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>1.7</strong>：<code>Node[] table</code>，桶内单向链表，插入采用<strong>头插法</strong>。</li>
+<li><strong>1.8</strong>：数组 + 链表 + <strong>红黑树</strong>（<code>TreeNode</code>），链表插入为<strong>尾插</strong>。</li>
+<li><strong>动机</strong>：极端冲突下链表过长；树化后查询更稳定；尾插与并发讨论相关（1.7 头插在扩容 transfer 时易出问题）。</li>
+</ul>
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202201/11/ky3qW7.png" alt="HashMap 桶与链表结构示意" />
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>JDK 8 核心类：<code>java.util.HashMap</code>，桶节点 <code>Node&lt;K,V&gt;</code>，树节点 <code>TreeNode</code> 继承 <code>LinkedHashMap.Entry</code> 链能力。</li>
+<li>默认 <code>DEFAULT_INITIAL_CAPACITY = 16</code>，<code>MAXIMUM_CAPACITY = 1 &lt;&lt; 30</code>。</li>
+<li>1.7 <code>Entry</code> 数组 + 单链表；扩容 <code>rehash</code> 对全表重新定位。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>1.7 头插为何在并发扩容时危险？（transfer 时多线程可能交叉改 <code>next</code>）</li>
+<li>红黑树何时退化为链表？（删除后 <code>binCount &lt;= 6</code>）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>误以为 1.8 线程安全；TreeNode 只在单桶内平衡，全局仍非同步。</li>
+<li>自定义 key 未稳定 <code>hashCode</code> 会导致「丢在树上/链上找不到」。</li>
+</ul>
+<h3 id="2-为什么-HashMap-容量必须是-2-的-n-次方？"><a href="#2-为什么-HashMap-容量必须是-2-的-n-次方？" class="headerlink" title="2. 为什么 HashMap 容量必须是 2 的 n 次方？"></a>2. 为什么 HashMap 容量必须是 2 的 n 次方？</h3><p><strong>口述版：</strong> 两个原因：一是算下标用 <code>(n-1)&amp;hash</code>，只有 n 是 2 幂才等价于取模且更快；二是扩容时看 hash 多出来的那一位就能决定留在原桶还是原下标加 oldCap，迁移不用重新算一遍模。</p>
+<h4 id="具体介绍-1"><a href="#具体介绍-1" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>下标：<code>index = (n - 1) &amp; hash</code>，当 <code>n = 2^k</code> 时等价于 <code>hash % n</code>。</li>
+<li>初始化：<code>tableSizeFor(cap)</code> 将期望容量向上取整到 2 幂。</li>
+<li>扩容：<code>hash &amp; oldCap</code> 为 0 留原索引，为 1 则 <code>index + oldCap</code>（见第 11 题）。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>tableSizeFor(int cap)</code>：<code>n - 1 | n &gt;&gt;&gt; 1 | n &gt;&gt;&gt; 2 | ...</code> 向上取 2 幂。</li>
+<li>构造传入 <code>initialCapacity</code> 时先规整，再算 <code>threshold = capacity * loadFactor</code>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>若强行用非 2 幂容量会怎样？（JDK 会规整；老代码手写数组长度则 <code>(n-1)&amp;hash</code> 失效）</li>
+<li>为什么不用 <code>hash % n</code>？（取模慢；2 幂位运算等价且利于扩容位 trick）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>认为 <code>HashMap(100)</code> 容量就是 100（实际是 ≥100 的最小 2 幂，如 128）。</li>
+</ul>
+<h3 id="3-负载因子-0-75-的含义与权衡？"><a href="#3-负载因子-0-75-的含义与权衡？" class="headerlink" title="3. 负载因子 0.75 的含义与权衡？"></a>3. 负载因子 0.75 的含义与权衡？</h3><p><strong>口述版：</strong> threshold 等于容量乘 0.75，元素个数超过就扩容。0.75 是经典折中：太大冲突多变慢，太小扩容太勤浪费内存，也和泊松分布下冲突长度统计有关。</p>
+<h4 id="具体介绍-2"><a href="#具体介绍-2" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>threshold = capacity × loadFactor</code>，<code>size &gt; threshold</code> 触发 <code>resize</code>。</li>
+<li>默认 16 容量时，第 13 个元素（严格说是超过 12）会扩容。</li>
+<li>0.75 在 JDK 文档与实现中作为<strong>时间与空间</strong>的通用平衡点；与树化阈值 8 的泊松解释同一套统计假设。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>字段 <code>loadFactor</code>，构造可传；<code>threshold = (cap == 0 ? DEFAULT : cap) * loadFactor</code>。</li>
+<li>树化阈值 <code>TREEIFY_THRESHOLD = 8</code> 文档引用泊松：λ=0.5 时单桶长度≥8 概率约 0.00000006。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>能否把 loadFactor 设为 1.0？（可以，冲突多、链表/树化概率升，空间换时间）</li>
+<li><code>size &gt; threshold</code> 还是 <code>&gt;=</code>？（严格大于才 resize）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>只记「0.75 经验值」说不出与 threshold、树化统计的关联。</li>
+</ul>
+<h3 id="4-hash-扰动函数做什么？为什么要让高位参与运算？"><a href="#4-hash-扰动函数做什么？为什么要让高位参与运算？" class="headerlink" title="4. hash 扰动函数做什么？为什么要让高位参与运算？"></a>4. hash 扰动函数做什么？为什么要让高位参与运算？</h3><p><strong>口述版：</strong> 1.8 里把 hashCode 高 16 位和低 16 位异或，因为数组不大时参与下标的只有低位，高位不参与就容易碰撞，扰动是把高位信息混进来。</p>
+<h4 id="具体介绍-3"><a href="#具体介绍-3" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>HashMap</code>：<code>hash = h ^ (h &gt;&gt;&gt; 16)</code>，再 <code>(n-1) &amp; hash</code>。</li>
+<li><code>ConcurrentHashMap</code>：<code>spread()</code> 同样思路。</li>
+<li>目的：降低<strong>仅低位不同、高位不同</strong>的 key 落到同一桶的概率。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>static final int hash(Object key)</code>：<code>h = key.hashCode(); return h ^ (h &gt;&gt;&gt; 16)</code>。</li>
+<li>1.7 曾 4 次扰动（高/中/低混合），1.8 简化为一次异或，性能更好且实践足够。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>String 的 hashCode 如何算？（31 多项式，缓存 <code>hash</code> 字段）</li>
+<li>为何 spread 后还要 <code>HASH_BITS &amp; hash</code>？（CHM 用高位存特殊节点类型）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>可变 key 修改参与 hash 的字段后，Map 中「消失」——定位桶错误。</li>
+</ul>
+<h3 id="5-链表树化阈值为什么是-8？退化为什么是-6？"><a href="#5-链表树化阈值为什么是-8？退化为什么是-6？" class="headerlink" title="5. 链表树化阈值为什么是 8？退化为什么是 6？"></a>5. 链表树化阈值为什么是 8？退化为什么是 6？</h3><p><strong>口述版：</strong> 8 来自泊松分布，正常 hash 下单桶到 8 的概率极低，到了就值得树化；退化用 6 而不是 8，是为了留缓冲，避免在 7、8 附近反复树化拆树抖动。</p>
+<h4 id="具体介绍-4"><a href="#具体介绍-4" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>树化：<code>binCount &gt;= 8</code> 且 <code>table.length &gt;= 64</code> 才 <code>treeifyBin</code>。</li>
+<li>退化：<code>UNTREEIFY_THRESHOLD = 6</code>，拆树更保守。</li>
+<li><strong>不对称</strong>：迟滞区间 6～8，减少结构频繁切换的开销。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>UNTREEIFY_THRESHOLD = 6</code>，<code>MIN_TREEIFY_CAPACITY = 64</code>。</li>
+<li>泊松解释：理想 hash 下链表长度 k 的概率约 <code>e^-0.5 * 0.5^k / k!</code>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>为何不是 10 才树化？（更长链表才树化，查询更慢；8 是统计与实现折中）</li>
+<li>退化 7 个节点时结构？（仍为树，直到 ≤6）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>认为「链长 8 必树化」——还需 <code>table.length &gt;= 64</code>。</li>
+</ul>
+<h3 id="6-树化前为什么要求-table-length-gt-64？"><a href="#6-树化前为什么要求-table-length-gt-64？" class="headerlink" title="6. 树化前为什么要求 table.length &gt;= 64？"></a>6. 树化前为什么要求 table.length &gt;= 64？</h3><p><strong>口述版：</strong> 表太小时就算链长也先扩容，因为扩容能打散冲突，比在小表上挂红黑树更划算。</p>
+<h4 id="具体介绍-5"><a href="#具体介绍-5" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>源码逻辑：链表 ≥ 8 但 <code>n &lt; 64</code> 时优先 <code>resize()</code>，而非立刻树化。</li>
+<li>小表冲突往往因容量不足，扩一倍比树化更能治本。</li>
+<li><code>MIN_TREEIFY_CAPACITY = 64</code>：默认从 16 起可能经历 16→32→64 多次扩容，多数冲突在扩表阶段已被打散，不必过早树化。</li>
+<li><strong>TreeNode 成本</strong>：红黑树节点比 <code>Node</code> 大得多（颜色、父/子/左右指针、双向链表链入 <code>LinkedHashMap</code> 能力），小表上树化「局部优化、全局更费内存」。</li>
+<li><strong>面试追问</strong>：为何不是「链长 8 立刻树化」？——表长不足时扩容的摊还成本往往低于维护多棵小树；树化还需 <code>Comparable</code>/<code>Comparator</code>，小表上直接扩更通用。</li>
+<li><strong>常见坑</strong>：压测用 <code>new HashMap(8)</code> + 恶意 hash 强测树化，与生产默认 16 + 正常 hash 路径不一致；面试应先说「优先 resize，再谈 treeifyBin」。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>treeifyBin</code> 入口判断：<code>if (tab.length &lt; MIN_TREEIFY_CAPACITY) resize()</code> 优先于 <code>TreeBin</code>。</li>
+<li>小表 + 高冲突 → 扩容分散比局部树化更省内存（树节点开销大）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>64 与默认初始 16 的关系？（可能经历 16→32→64 多次扩容才树化）</li>
+<li>树化对 <code>compareTo/comparator</code> 的要求？（TreeNode 需可比较，否则 ClassCastException）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>压测时用极小 initialCapacity + 恶意 hash 测树化，与生产默认路径不一致。</li>
+</ul>
+<h3 id="7-HashMap-和-Hashtable-的区别？"><a href="#7-HashMap-和-Hashtable-的区别？" class="headerlink" title="7. HashMap 和 Hashtable 的区别？"></a>7. HashMap 和 Hashtable 的区别？</h3><p><strong>口述版：</strong> HashMap 非线程安全，允许一个 null key；Hashtable 方法全表 synchronized，不允许 null。线上并发 Map 用 ConcurrentHashMap，不用 Hashtable。</p>
+<h4 id="具体介绍-6"><a href="#具体介绍-6" class="headerlink" title="具体介绍"></a>具体介绍</h4><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>HashMap</th>
+<th>Hashtable</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>线程安全</td>
+<td>否</td>
+<td>是（方法级 synchronized）</td>
+</tr>
+<tr>
+<td>null</td>
+<td>允许 null key/value</td>
+<td>不允许</td>
+</tr>
+<tr>
+<td>扩容</td>
+<td>2 幂、高低位迁移</td>
+<td>2n+1 等旧策略</td>
+</tr>
+<tr>
+<td>推荐</td>
+<td>单线程 / 外部锁</td>
+<td>已过时</td>
+</tr>
+</tbody></table>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>Collections.synchronizedMap(new HashMap())</code> 与 Hashtable 差异？（前者锁对象可自选，后者锁 this）</li>
+<li>Vector 与 ArrayList 对比是否同一类题？（是，都是早期同步 vs 非同步）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>面试说「Hashtable 已删除」——类仍在 JDK，只是不推荐。</li>
+<li>HashMap 允许一个 null key 多个 null value；Hashtable 全禁止 null。</li>
+</ul>
+<h3 id="8-HashSet-底层用什么实现？如何保证元素不重复？"><a href="#8-HashSet-底层用什么实现？如何保证元素不重复？" class="headerlink" title="8. HashSet 底层用什么实现？如何保证元素不重复？"></a>8. HashSet 底层用什么实现？如何保证元素不重复？</h3><p><strong>口述版：</strong> HashSet 底层就是 HashMap，元素放在 key 上，value 是一个固定占位对象；不重复靠 key 的 hash 和 equals 契约。</p>
+<h4 id="具体介绍-7"><a href="#具体介绍-7" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>内部 <code>HashMap&lt;E,Object&gt;</code>，<code>PRESENT</code> 作为 value。</li>
+<li>依赖 <code>hashCode</code> + <code>equals</code>；自定义类型必须正确重写两者。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>private static final Object PRESENT = new Object();</code>，<code>add(e)</code> → <code>map.put(e, PRESENT)</code>。</li>
+<li><code>LinkedHashSet</code> 底层 <code>LinkedHashMap</code>（插入序/访问序）；<code>TreeSet</code> 底层 <code>TreeMap</code>（红黑树）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>Set</code> 去重依赖 equals 还是 ==？（equals + hashCode 契约）</li>
+<li><code>add</code> 返回 false 表示什么？（元素已存在）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>只重写 equals 不重写 hashCode，<code>HashSet</code> 可能出现「逻辑相等但 add 两次都成功」。</li>
+</ul>
+<hr>
+<h2 id="1-2-HashMap-核心方法流程"><a href="#1-2-HashMap-核心方法流程" class="headerlink" title="1.2 HashMap 核心方法流程"></a>1.2 HashMap 核心方法流程</h2><h3 id="9-描述-HashMap-put-全链路"><a href="#9-描述-HashMap-put-全链路" class="headerlink" title="9. 描述 HashMap put 全链路"></a>9. 描述 HashMap put 全链路</h3><p><strong>口述版：</strong> 先算 hash，表空就 resize；用下标找桶，空桶直接放；否则比 key，相同就覆盖；是树就走树插入；否则链表尾插，链长到了 8 且表够 64 就树化，表不够 64 先扩容；最后 size 加一，超 threshold 再扩容。</p>
+<h4 id="具体介绍-8"><a href="#具体介绍-8" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">put(key, value) -&gt; putVal(hash, key, value, ...):</span><br><span class="line">  hash = hash(key)                       // (h ^ (h &gt;&gt;&gt; 16)) &amp; 掩码</span><br><span class="line">  tab = table</span><br><span class="line">  if tab == null or tab.length == 0:</span><br><span class="line">    tab = resize()                       // 懒初始化或扩容</span><br><span class="line"></span><br><span class="line">  i = (tab.length - 1) &amp; hash</span><br><span class="line">  p = tab[i]</span><br><span class="line"></span><br><span class="line">  if p == null:</span><br><span class="line">    tab[i] = new Node(hash, key, value)  // 空桶直接挂</span><br><span class="line">  else:</span><br><span class="line">    if p 首节点 key 相同:</span><br><span class="line">      覆盖 value; return oldVal</span><br><span class="line">    else if p 是 TreeNode:</span><br><span class="line">      putTreeVal(...)                    // 红黑树插入/覆盖</span><br><span class="line">    else:</span><br><span class="line">      链表尾插新 Node; binCount++</span><br><span class="line">      if binCount &gt;= 8:</span><br><span class="line">        if tab.length &lt; 64: resize()     // 先扩表</span><br><span class="line">        else: treeifyBin(tab, i)         // 再树化</span><br><span class="line"></span><br><span class="line">  modCount++</span><br><span class="line">  if ++size &gt; threshold:</span><br><span class="line">    resize()</span><br><span class="line">  return null 或 oldVal</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>核心 <code>final V putVal(int hash, K key, V value, boolean onlyIfAbsent, boolean evict)</code>。</li>
+<li>树化分支：<code>if (binCount &gt;= TREEIFY_THRESHOLD - 1) treeifyBin(tab, i)</code>（注意 -1 与尾插计数配合）。</li>
+<li><code>modCount++</code> 供 fail-fast；<code>afterNodeInsertion</code> 钩子（LinkedHashMap 用）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>putIfAbsent</code> / <code>putAll</code> 最终是否都走 putVal？（是）</li>
+<li>覆盖 value 是否增加 size？（否，仅替换）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>并发 put 丢数据：两线程同时认为桶空，后写覆盖先写无合并。</li>
+</ul>
+<h3 id="10-描述-HashMap-get-流程"><a href="#10-描述-HashMap-get-流程" class="headerlink" title="10. 描述 HashMap get 流程"></a>10. 描述 HashMap get 流程</h3><p><strong>口述版：</strong> 算 hash 定位桶，首节点命中就返回；否则沿链表比 hash 和 equals，或在红黑树里 find；找不到返回 null。</p>
+<h4 id="具体介绍-9"><a href="#具体介绍-9" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">get(key) -&gt; getNode(tab, hash, key):</span><br><span class="line">  tab = table</span><br><span class="line">  if tab == null: return null</span><br><span class="line"></span><br><span class="line">  i = (tab.length - 1) &amp; hash</span><br><span class="line">  e = tab[i]</span><br><span class="line">  if e == null: return null</span><br><span class="line"></span><br><span class="line">  if e.hash == hash and key.equals(e.key):</span><br><span class="line">    return e.val                           // 桶头命中</span><br><span class="line"></span><br><span class="line">  if e 是 TreeNode:</span><br><span class="line">    return getTreeNode(hash, key)</span><br><span class="line"></span><br><span class="line">  e = e.next</span><br><span class="line">  while e != null:</span><br><span class="line">    if e.hash == hash and key.equals(e.key):</span><br><span class="line">      return e.val</span><br><span class="line">    e = e.next</span><br><span class="line"></span><br><span class="line">  return null</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>getNode</code> 与 <code>get</code> 相同逻辑，找不到返回 null（注意 null value 与「无 key」在 HashMap 中可区分：含 null key）。</li>
+<li>树查找：<code>TreeNode.getTreeNode(hash, key)</code>，比较顺序 hash → compareTo/comparator → tieBreak。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>resize 期间 get 能否读到？（可能读到旧表或 ForwardingNode 场景在 CHM；HashMap 可能不完整）</li>
+<li>时间复杂度？（平均 O(1)，冲突链 O(n)，树 O(log n)）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>用 <code>get</code> 判断 key 是否存在时，应用 <code>containsKey</code>，避免 value 为 null 误判。</li>
+</ul>
+<h3 id="11-描述-HashMap-resize-与高低位-rehash"><a href="#11-描述-HashMap-resize-与高低位-rehash" class="headerlink" title="11. 描述 HashMap resize 与高低位 rehash"></a>11. 描述 HashMap resize 与高低位 rehash</h3><p><strong>口述版：</strong> 容量翻倍，新 threshold 重算；每个旧桶节点看 hash 与 oldCap 按位与，为 0 留原下标，为 1 加 oldCap；1.8 把同一桶拆成 lo 和 hi 两条链一次性挂到新表。</p>
+<h4 id="具体介绍-10"><a href="#具体介绍-10" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">resize():</span><br><span class="line">  oldTab = table</span><br><span class="line">  if oldTab == null:</span><br><span class="line">    newCap = DEFAULT_INITIAL_CAPACITY      // 16，或构造时规整后的 2 幂</span><br><span class="line">    newThr = newCap * loadFactor</span><br><span class="line">  else if oldTab.length &gt;= MAX_CAPACITY:</span><br><span class="line">    threshold = MAX_VALUE; return oldTab</span><br><span class="line">  else:</span><br><span class="line">    newCap = oldTab.length &lt;&lt; 1            // 容量翻倍</span><br><span class="line">    newThr = newCap * loadFactor</span><br><span class="line"></span><br><span class="line">  newTab = new Node[newCap]</span><br><span class="line">  if oldTab != null:</span><br><span class="line">    for each 桶 i in oldTab:</span><br><span class="line">      e = oldTab[i]</span><br><span class="line">      if e == null: continue</span><br><span class="line">      lo = hi = null</span><br><span class="line">      while e != null:</span><br><span class="line">        next = e.next</span><br><span class="line">        if (e.hash &amp; oldCap) == 0:</span><br><span class="line">          e.next = lo; lo = e              // 留原下标 i</span><br><span class="line">        else:</span><br><span class="line">          e.next = hi; hi = e              // 新下标 i + oldCap</span><br><span class="line">        e = next</span><br><span class="line">      if lo != null: newTab[i] = lo</span><br><span class="line">      if hi != null: newTab[i + oldCap] = hi</span><br><span class="line"></span><br><span class="line">  table = newTab</span><br><span class="line">  threshold = newThr</span><br><span class="line">  return newTab</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>1.7 头插 transfer 与多线程成环相关；1.8 尾插 + <strong>lo/hi 链</strong>拆分避免环，但仍非线程安全。</li>
+</ul>
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202201/11/0UPxr0.png" alt="扩容下标与 hash 位运算" />
+
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202201/11/vNlWfH.png" alt="高低位链迁移结果" />
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>resize()</code>：新 cap 为 old 的 2 倍或首次初始化；<code>newThr = newCap * loadFactor</code>。</li>
+<li>1.8 迁移：<code>Node lo = null, hi = null</code>，按 <code>e.hash &amp; oldCap</code> 拆链一次挂接。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>1.7 transfer 索引 <code>(e.hash &amp; oldCap) == 0 ? index : index + oldCap</code> 与 1.8 等价性？（<strong>答：</strong> <strong>是</strong>；1.8 <code>resize</code> 用同一高位 bit 规则把节点拆到原索引或 <code>i+oldCap</code>，与 1.7 单线程 transfer 语义一致，只是 1.8 尾插 + 树化实现不同。）</li>
+<li>扩容是否线程安全？（否）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>认为扩容会缩容——HashMap 无自动缩容，只增不减。</li>
+</ul>
+<h3 id="12-HashMap-何时分配数组？懒初始化？"><a href="#12-HashMap-何时分配数组？懒初始化？" class="headerlink" title="12. HashMap 何时分配数组？懒初始化？"></a>12. HashMap 何时分配数组？懒初始化？</h3><p><strong>口述版：</strong> 构造 HashMap 不会立刻建表，第一次 put 时发现 table 为空才 resize 做初始化，这是懒加载，省内存。</p>
+<h4 id="具体介绍-11"><a href="#具体介绍-11" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">new HashMap():           // 无参 / 仅 capacity / capacity+loadFactor</span><br><span class="line">  table = null           // 不分配数组</span><br><span class="line">  loadFactor = 0.75</span><br><span class="line">  threshold = 0 或 由 initialCapacity 算出的阈值（仍无 table）</span><br><span class="line"></span><br><span class="line">首次 putVal(...):</span><br><span class="line">  if table == null or table.length == 0:</span><br><span class="line">    resize()             // 内部 new Node[cap]，cap 默认 16 或 tableSizeFor(initialCapacity)</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>带参构造 <code>HashMap(int initialCapacity, float loadFactor)</code> 仅保存参数，不分配 <code>table</code>。</li>
+<li>例外：<code>new HashMap&lt;&gt;(otherMap)</code> 会 <code>putMapEntries</code> 立即建表复制。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>new HashMap&lt;&gt;(map)</code> 是否会立即复制？（会分配并 putMapEntries，非懒）</li>
+<li><code>table</code> 为 null 时 <code>size</code> 仍为 0 吗？（是）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>大量 <code>new HashMap()</code> 但不 put 不占数组内存——这是懒加载优点；误用于「预分配极大表」应传 capacity。</li>
+</ul>
+<h3 id="13-remove-replace-是否触发扩容或树化？"><a href="#13-remove-replace-是否触发扩容或树化？" class="headerlink" title="13. remove / replace 是否触发扩容或树化？"></a>13. remove / replace 是否触发扩容或树化？</h3><p><strong>口述版：</strong> remove 只会减 size，可能触发<strong>拆树</strong>（树节点过少变链表），一般不会因删而扩容；replace 只改 value，不动结构。</p>
+<h4 id="具体介绍-12"><a href="#具体介绍-12" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">remove(key) -&gt; removeNode(hash, key, value, matchValue, movable):</span><br><span class="line">  tab = table; i = (n-1) &amp; hash; p = tab[i]</span><br><span class="line">  if p == null: return null</span><br><span class="line">  if p 首节点匹配:</span><br><span class="line">    摘链; modCount++; size--; 可能 untreeify; return oldVal</span><br><span class="line">  else if p 是 TreeNode:</span><br><span class="line">    树内删除; 树过矮则 untreeifyBin</span><br><span class="line">  else:</span><br><span class="line">    遍历链表找匹配节点，前驱 unlink</span><br><span class="line">  // 不触发 resize 缩容；树节点过少 -&gt; binCount &lt;= 6 拆回链表</span><br><span class="line"></span><br><span class="line">replace(key, oldVal, newVal):</span><br><span class="line">  仅 getNode 命中且 value.equals(oldVal) 时改 val，不改结构</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>removeNode</code>：删树节点后 <code>if (root == null || root.right == null ...) untreeify(tab, index)</code>。</li>
+<li><code>replace(K key, V old, V new)</code> 仅 value 匹配时替换，不改结构。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>clear 是否触发缩容？（否，只置 null 数组元素，table 长度不变）</li>
+<li>删除触发 modCount 吗？（是，迭代器 fail-fast）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>删元素后期望内存下降——数组槽位仍在，只有 GC 回收 Node 对象。</li>
+</ul>
+<hr>
+<h2 id="1-3-HashMap-并发与选型"><a href="#1-3-HashMap-并发与选型" class="headerlink" title="1.3 HashMap 并发与选型"></a>1.3 HashMap 并发与选型</h2><h3 id="14-JDK-1-7-多线程-HashMap-为何可能死循环？"><a href="#14-JDK-1-7-多线程-HashMap-为何可能死循环？" class="headerlink" title="14. JDK 1.7 多线程 HashMap 为何可能死循环？"></a>14. JDK 1.7 多线程 HashMap 为何可能死循环？</h3><p><strong>口述版：</strong> 1.7 扩容 transfer 用头插法重排链表，多线程同时扩容可能把 next 指针搞成环，get 遍历链表就死循环了。</p>
+<h4 id="具体介绍-13"><a href="#具体介绍-13" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>场景：两线程同时 <code>resize</code>，对同一桶链表并发头插。</li>
+<li>结果：某节点 <code>next</code> 指向前驱，形成环。</li>
+<li>1.8 改为尾插 + 新表 lo/hi，<strong>避免典型成环</strong>，但不代表线程安全。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>如何复现 1.7 死循环？（多线程 put 触发 resize，需特定 JDK 版本与负载）</li>
+<li>1.8 还有哪些并发问题？（数据覆盖、size 不准）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>答「1.8 完全解决 HashMap 并发问题」——错误，仅避免典型链表环。</li>
+</ul>
+<h3 id="15-JDK-1-8-为何仍线程不安全？"><a href="#15-JDK-1-8-为何仍线程不安全？" class="headerlink" title="15. JDK 1.8 为何仍线程不安全？"></a>15. JDK 1.8 为何仍线程不安全？</h3><p><strong>口述版：</strong> 1.8 解决了成环，但没有同步，多线程 put 仍可能覆盖丢数据，size 也不准，所以不能当并发 Map 用。</p>
+<h4 id="具体介绍-14"><a href="#具体介绍-14" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>竞态：<code>put</code>、扩容、<code>size++</code> 非原子组合。</li>
+<li>表现：两个 key 映射到同一桶的覆盖顺序不确定；扩容期间读可能看不到完整数据。</li>
+<li>结论：需要 <code>ConcurrentHashMap</code> 或 <code>Collections.synchronizedMap</code>（后者性能差）。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>size</code> 字段非 volatile，多线程读写无 happens-before 保证。</li>
+<li>扩容 + put 竞态：可能丢失插入或读到迁移中间状态（非 CHM 的 Forwarding 语义）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>用 <code>ConcurrentHashMap</code> 还是 <code>Collections.synchronizedMap</code>？（高并发读多写多选 CHM）</li>
+<li><code>Hashtable</code> 为何慢？（方法级锁整表）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>在 <code>@Transactional</code> 单线程误以为 Map 成员变量安全——跨请求/异步仍共享则不安全。</li>
+</ul>
+<h3 id="16-高并发场景如何选型-Map？"><a href="#16-高并发场景如何选型-Map？" class="headerlink" title="16. 高并发场景如何选型 Map？"></a>16. 高并发场景如何选型 Map？</h3><p><strong>口述版：</strong> 读多写多默认 ConcurrentHashMap；要全局一把锁才 synchronizedMap；单线程或线程内局部用 HashMap；Hashtable 不用。</p>
+<h4 id="具体介绍-15"><a href="#具体介绍-15" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>CHM</strong>：分段/桶级锁，吞吐高。</li>
+<li><strong>synchronizedMap</strong>：每个方法 synchronized，简单但锁整个 map。</li>
+<li><strong>HashMap + 外部锁</strong>：仅当锁粒度自定义且明确时使用。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>ConcurrentSkipListMap</code> 何时用？（需要并发 + 有序 key）</li>
+<li>Guava <code>Cache</code> 与 CHM？（Cache 有过期/加载语义，不是通用 Map）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li><code>synchronizedMap</code> 迭代时需手动 <code>synchronized(map)</code> 包住整个迭代，否则仍 CME。</li>
+<li>分段锁 1.7 CHM 与 1.8 桶锁选型表述过时——应强调 JDK8+ 桶锁 + CAS。</li>
+</ul>
+<hr>
+<h2 id="1-4-ConcurrentHashMap-结构与锁"><a href="#1-4-ConcurrentHashMap-结构与锁" class="headerlink" title="1.4 ConcurrentHashMap 结构与锁"></a>1.4 ConcurrentHashMap 结构与锁</h2><h3 id="17-CHM-1-7-分段锁如何工作？"><a href="#17-CHM-1-7-分段锁如何工作？" class="headerlink" title="17. CHM 1.7 分段锁如何工作？"></a>17. CHM 1.7 分段锁如何工作？</h3><p><strong>口述版：</strong> 1.7 是 Segment 数组，每个 Segment 继承 ReentrantLock，里面一个小 HashMap；定位时先找 Segment 再找桶，锁的是段，不是整个表。</p>
+<h4 id="具体介绍-16"><a href="#具体介绍-16" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>Segment[]</code>，默认并发度 16（可配置）。</li>
+<li><code>hash &gt;&gt;&gt; segmentShift &amp; segmentMask</code> 选段。</li>
+<li>段内与 HashMap 1.7 类似（数组+链表）。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CHM 1.7 put(key):</span><br><span class="line">  h = hash(key)</span><br><span class="line">  seg = segments[(h &gt;&gt;&gt; segmentShift) &amp; segmentMask]</span><br><span class="line">  seg.lock()                    // ReentrantLock</span><br><span class="line">    seg.put(h, key, value)      // 段内 HashMap 1.7</span><br><span class="line">  seg.unlock()</span><br><span class="line">// get 不加段锁，volatile + 可见性读</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>1.7 <code>Segment extends ReentrantLock</code>，<code>Segment[] segments</code>，默认 <code>concurrencyLevel = 16</code>。</li>
+<li>两次 hash：定位 Segment，再定位桶；详见 <a href="../../1.基础知识/ConcurrentHashMap" target="_blank">ConcurrentHashMap 源码解读</a>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>concurrencyLevel 设很大有何影响？（Segment 数多，内存开销，1.7 专属）</li>
+<li>1.7 CHM get 要加锁吗？（不加，volatile 读 + happens-before）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>把 1.7 分段锁答案套在 1.8 上——1.8 已取消 Segment。</li>
+</ul>
+<h3 id="18-CHM-1-8-如何保证并发写？"><a href="#18-CHM-1-8-如何保证并发写？" class="headerlink" title="18. CHM 1.8 如何保证并发写？"></a>18. CHM 1.8 如何保证并发写？</h3><p><strong>口述版：</strong> 空桶用 CAS 抢第一个节点；桶里已有数据就 synchronized 锁头节点；正在扩容的桶是 ForwardingNode，别的线程来 put 会帮忙迁移。</p>
+<h4 id="具体介绍-17"><a href="#具体介绍-17" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>空桶：<code>casTabAt(tab, i, null, newNode)</code>。</li>
+<li>非空：<code>synchronized (f)</code>，<code>f</code> 为头节点。</li>
+<li>与 1.7 比：锁粒度从 <strong>Segment</strong> 细化到 <strong>单个桶</strong>。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>tabAt</code> / <code>casTabAt</code> / <code>setTabAt</code>：Unsafe 保证数组元素的 volatile 语义。</li>
+<li>锁对象：桶头节点 <code>Node</code>，不是 key 也不是整个 table。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>为何空桶 CAS、非空 synchronized？（减少锁竞争，首节点作锁锚）</li>
+<li>与 StripedLock 思想对比？（类似按桶分段）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>认为 CHM 完全无锁——写路径有 synchronized 或 CAS 争用。</li>
+</ul>
+<h3 id="19-为什么-1-8-桶内用-synchronized-而不是-ReentrantLock？"><a href="#19-为什么-1-8-桶内用-synchronized-而不是-ReentrantLock？" class="headerlink" title="19. 为什么 1.8 桶内用 synchronized 而不是 ReentrantLock？"></a>19. 为什么 1.8 桶内用 synchronized 而不是 ReentrantLock？</h3><p><strong>口述版：</strong> 争用多半在同一桶内，synchronized 由 JVM 优化且不用每个桶 new 一把 ReentrantLock，内存和实现都更轻；配合 CAS 够用了。</p>
+<h4 id="具体介绍-18"><a href="#具体介绍-18" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>官方设计：桶争用通常不激烈；<code>synchronized</code> 偏向/轻量锁优化成熟。</li>
+<li>避免 <code>Segment</code> 或 per-bucket <code>ReentrantLock</code> 的大量对象开销。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>synchronized 锁升级（偏向/轻量/重量）对 CHM 桶锁的影响？</li>
+<li>1.7 用 ReentrantLock 能否 fair？（Segment 可选，1.8 桶锁非 ReentrantLock）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>「synchronized 比 ReentrantLock 慢」在短临界区 + JVM 优化下不一定成立。</li>
+</ul>
+<h3 id="20-CHM-是否允许-null-key-value？"><a href="#20-CHM-是否允许-null-key-value？" class="headerlink" title="20. CHM 是否允许 null key/value？"></a>20. CHM 是否允许 null key/value？</h3><p><strong>口述版：</strong> 不允许，和 HashMap 不同。原因是并发下 null 有歧义：是「没值」还是「就是 null」，多线程语义说不清。</p>
+<h4 id="具体介绍-19"><a href="#具体介绍-19" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>putVal</code> 对 key/value 做 null 检查抛 NPE。</li>
+<li><code>Hashtable</code> 同样禁止 null，但锁粒度粗。</li>
+<li><strong>设计动机（Doug Lea）</strong>：并发下 <code>get(key)</code> 返回 <code>null</code> 无法区分「键不存在」与「值为 null」；若允许 null value，多线程下语义与缓存穿透判断都会混乱。</li>
+<li><strong>与 HashMap 对比</strong>：单线程 Map 可用 <code>containsKey</code> 消歧；CHM 强调无锁读，禁止 null 让 <code>get</code>/<code>putIfAbsent</code> 契约更简单。</li>
+<li><strong>API 影响</strong>：<code>merge</code>/<code>compute</code> 等不能把 null 当作有效映射值；集合视图迭代也不会出现「值为 null 的 entry」。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Map 实现</th>
+<th>null key</th>
+<th>null value</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HashMap</td>
+<td>允许 1 个</td>
+<td>允许</td>
+<td>单线程 / 外部同步</td>
+</tr>
+<tr>
+<td>Hashtable</td>
+<td>禁止</td>
+<td>禁止</td>
+<td>遗留，不推荐</td>
+</tr>
+<tr>
+<td>ConcurrentHashMap</td>
+<td>禁止</td>
+<td>禁止</td>
+<td>高并发共享</td>
+</tr>
+</tbody></table>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>ConcurrentHashMap.get(key)</code> 若 key 不存在返回 null，如何与「值为 null」区分？（CHM 不允许 null value，无歧义）</li>
+<li><code>Hashtable</code> 同样禁止 null 的原因是否相同？（类似并发语义）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>把 HashMap 的 <code>containsKey</code> 模式套 CHM——null 检查在 put 即失败。</li>
+</ul>
+<h3 id="21-CHM-迭代器是-fail-fast-还是弱一致？"><a href="#21-CHM-迭代器是-fail-fast-还是弱一致？" class="headerlink" title="21. CHM 迭代器是 fail-fast 还是弱一致？"></a>21. CHM 迭代器是 fail-fast 还是弱一致？</h3><p><strong>口述版：</strong> 弱一致，迭代过程中可以反映部分写入，一般不抛 ConcurrentModificationException，也不保证遍历到每一刻的最新全量。</p>
+<h4 id="具体介绍-20"><a href="#具体介绍-20" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>Iterator</code> 无 <code>expectedModCount</code> 强校验。</li>
+<li>适合并发读；若需要快照考虑复制或 <code>size</code> 等方法的语义说明。</li>
+<li><strong>弱一致含义</strong>：遍历开始后的写入<strong>可能</strong>被看到，也可能看不到；不保证「某一时刻的全局快照」，也<strong>不</strong>保证 <code>ConcurrentModificationException</code>。</li>
+<li><strong>与 HashMap fail-fast 对比</strong>：HashMap 迭代器校验 <code>modCount</code>，结构被改就抛 CME；CHM 桶级锁 + CAS，全局 modCount 不足以定义「非法并发修改」。</li>
+<li><strong>size / mappingCount</strong>：并发下是估计值，与迭代器看到的元素个数可能不一致——面试别当成精确计数。</li>
+<li><strong>面试追问</strong>：<code>keySet().iterator().remove()</code> 在 CHM 是否安全？——支持弱一致 remove，但仍可能与其他线程写入交错；需要强一致快照应 <code>new HashMap&lt;&gt;(chm)</code> 或加业务锁。</li>
+<li><strong>常见坑</strong>：用增强 for 遍历 CHM 同时在另一线程 bulk put，以为「要么全看到要么全看不到」——实际介于两者之间。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>forEach</code> 与 <code>Iterator</code> 在 CHM 的语义？（弱一致，反映遍历起点快照后的部分更新）</li>
+<li>需要强一致快照怎么办？（<code>size</code> 也不精确；复制或使用锁/GUAVA snapshot）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>在迭代中 <code>remove</code> 普通 HashMap 应用 Iterator.remove；CHM 支持部分并发 remove 但仍弱一致。</li>
+</ul>
+<hr>
+<h2 id="1-5-ConcurrentHashMap-核心方法流程"><a href="#1-5-ConcurrentHashMap-核心方法流程" class="headerlink" title="1.5 ConcurrentHashMap 核心方法流程"></a>1.5 ConcurrentHashMap 核心方法流程</h2><h3 id="22-描述-CHM-putVal-全链路"><a href="#22-描述-CHM-putVal-全链路" class="headerlink" title="22. 描述 CHM putVal 全链路"></a>22. 描述 CHM putVal 全链路</h3><p><strong>口述版：</strong> spread 算 hash，表空就 initTable；桶空 CAS 插入；看到 ForwardingNode 就 helpTransfer 再试；否则锁头节点，在链表或树里增改，最后 addCount，必要时扩容。</p>
+<h4 id="具体介绍-21"><a href="#具体介绍-21" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">putVal(key, value):</span><br><span class="line">  if key == null or value == null: throw NPE</span><br><span class="line">  hash = spread(key.hashCode())</span><br><span class="line"></span><br><span class="line">  loop forever:                          // 自旋直到插入/更新完成</span><br><span class="line">    tab = table</span><br><span class="line">    if tab == null or tab.length == 0:</span><br><span class="line">      tab = initTable()                  // sizeCtl CAS，失败者 yield 等待</span><br><span class="line">      continue</span><br><span class="line"></span><br><span class="line">    i = (tab.length - 1) &amp; hash</span><br><span class="line">    f = tabAt(tab, i)                    // 桶头</span><br><span class="line"></span><br><span class="line">    if f == null:</span><br><span class="line">      if casTabAt(tab, i, null, new Node(...)):</span><br><span class="line">        break                            // CASE2：空桶 CAS 成功</span><br><span class="line">      continue                           // CAS 失败，重试</span><br><span class="line"></span><br><span class="line">    if f.hash == MOVED:                  // CASE3：ForwardingNode</span><br><span class="line">      tab = helpTransfer(tab, f)</span><br><span class="line">      continue</span><br><span class="line"></span><br><span class="line">    synchronized (f):                    // CASE4：锁桶头，不是锁 map</span><br><span class="line">      if tabAt(tab, i) != f: continue   // 头结点被换，放弃本次锁</span><br><span class="line">      if f 是普通链表:</span><br><span class="line">        遍历：key 相同则覆盖；否则尾插；记录 binCount</span><br><span class="line">      else if f 是 TreeBin:</span><br><span class="line">        putTreeVal(...)                  // 树内增/改</span><br><span class="line">      if binCount &gt;= 树化阈值: treeifyBin(tab, i)</span><br><span class="line"></span><br><span class="line">  addCount(1, binCount)                  // 计数 + 判断是否 transfer 扩容</span><br><span class="line">  return oldVal 或 null</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>putVal</code> 与 HashMap 类似但含 <code>initTable</code>、<code>helpTransfer</code>、<code>addCount</code>。</li>
+<li><code>ONLY_IF_ABSENT</code> 分支用于 <code>putIfAbsent</code> 族。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>扩容时 put 走哪条路径？（发现 MOVED → helpTransfer → 重试）</li>
+<li>树化在 CHM 中？（<code>binCount &gt;= TREEIFY_THRESHOLD</code> 且 <code>tab.length &gt;= MIN_TREEIFY_CAPACITY</code>）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li><code>addCount</code> 失败或竞争导致 size 与真实元素短暂不一致——<code>size()</code> 是估计值。</li>
+</ul>
+<h3 id="23-描述-CHM-get-流程"><a href="#23-描述-CHM-get-流程" class="headerlink" title="23. 描述 CHM get 流程"></a>23. 描述 CHM get 流程</h3><p><strong>口述版：</strong> 读 table，算下标；如果头节点是 ForwardingNode，按新表地址继续查；否则和 HashMap 一样比链表或树，全程不加锁。</p>
+<h4 id="具体介绍-22"><a href="#具体介绍-22" class="headerlink" title="具体介绍"></a>具体介绍</h4><p><strong>get(key) — 无锁读（绝大多数路径）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">get(key):</span><br><span class="line">  h = spread(key.hashCode())</span><br><span class="line">  tab = table</span><br><span class="line">  if tab == null: return null</span><br><span class="line"></span><br><span class="line">  n = tab.length</span><br><span class="line">  if n == 0: return null</span><br><span class="line"></span><br><span class="line">  i = (n - 1) &amp; h</span><br><span class="line">  e = tabAt(tab, i)                      // 读桶头，volatile 可见</span><br><span class="line">  if e == null: return null</span><br><span class="line"></span><br><span class="line">  if e.hash == h and key.equals(e.key):</span><br><span class="line">    return e.val                           // 桶头命中</span><br><span class="line"></span><br><span class="line">  if e.hash &lt; 0:                          // 特殊节点</span><br><span class="line">    if e is ForwardingNode (MOVED):</span><br><span class="line">      return newTable.get(key)             // 或 e.find(h, key) 到新表</span><br><span class="line">    if e is TreeBin:</span><br><span class="line">      return treeBin.find(h, key)</span><br><span class="line"></span><br><span class="line">  e = e.next</span><br><span class="line">  while e != null:</span><br><span class="line">    if e.hash == h and key.equals(e.key):</span><br><span class="line">      return e.val</span><br><span class="line">    e = e.next</span><br><span class="line"></span><br><span class="line">  return null</span><br></pre></td></tr></table></figure>
+
+<p><strong>要点</strong></p>
+<ul>
+<li><strong>不加锁桶</strong>，依赖 <strong>volatile 可见性</strong> + <strong>Node.next 的发布顺序</strong>。</li>
+<li>扩容已迁走的桶上是 <strong>ForwardingNode</strong>，<strong>委托 newTable 查找</strong>，避免读到半迁移状态。</li>
+</ul>
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202201/11/LOQBWm.png" alt="tabAt 与 table 可见性" />
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li>get 为何不需要锁？（Node 值 volatile/next 可见性 + ForwardingNode 转发）</li>
+<li>读到 ForwardingNode 怎么办？（<code>find</code> 到新表）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>认为 get 绝对读到最新 write——弱一致，无全局线性化保证。</li>
+</ul>
+<h3 id="24-sizeCtl-在初始化与扩容中的作用？"><a href="#24-sizeCtl-在初始化与扩容中的作用？" class="headerlink" title="24. sizeCtl 在初始化与扩容中的作用？"></a>24. sizeCtl 在初始化与扩容中的作用？</h3><p><strong>口述版：</strong> 负数表示有线程在初始化或扩容；0 是默认阈值占位；正数是下次扩容阈值或初始化容量提示，是 CHM 里协调多线程建表和扩容的核心字段。</p>
+<h4 id="具体介绍-23"><a href="#具体介绍-23" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// sizeCtl 语义（控制字）</span><br><span class="line">//   0        : 默认占位</span><br><span class="line">//   &gt; 0      : 未初始化 -&gt; 初始容量；已初始化 -&gt; 下次扩容 threshold</span><br><span class="line">//   -1       : 正在 initTable</span><br><span class="line">//   &lt; -1     : 正在扩容（高 16 位 stamp + 低 16 位参与线程数）</span><br><span class="line"></span><br><span class="line">initTable():</span><br><span class="line">  loop while table == null or table.length == 0:</span><br><span class="line">    sc = sizeCtl</span><br><span class="line">    if sc &lt; 0:</span><br><span class="line">      Thread.yield()                     // 别的线程在初始化</span><br><span class="line">    else if CAS(sizeCtl, sc, -1):        // 抢初始化权</span><br><span class="line">      n = sc &gt; 0 ? sc : DEFAULT_CAPACITY</span><br><span class="line">      table = new Node[n]</span><br><span class="line">      sizeCtl = n - (n &gt;&gt;&gt; 2)            // 0.75 * n，作为 threshold</span><br><span class="line">      break</span><br><span class="line">  return table</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>sizeCtl</code>：0 默认；-1 初始化中；<code>&lt; -1</code> 扩容 stamp + 参与线程计数；<code>&gt; 0</code> 下次扩容阈值。</li>
+<li>扩容入口会将 <code>sizeCtl</code> 置为负的 stamp 编码，协助线程 <code>CAS(sc, sc+1)</code> 后进入 <code>transfer</code>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>谁设置 sizeCtl 为负数？（initTable、transfer 入口）</li>
+<li>初始化失败线程做什么？（自旋或 yield 等待）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>混淆 <code>size()</code> 与 <code>mappingCount()</code>（Java 8+ 后者不含正在删除）。</li>
+</ul>
+<h3 id="25-多线程协助扩容（helpTransfer）如何分工？"><a href="#25-多线程协助扩容（helpTransfer）如何分工？" class="headerlink" title="25. 多线程协助扩容（helpTransfer）如何分工？"></a>25. 多线程协助扩容（helpTransfer）如何分工？</h3><p><strong>口述版：</strong> 扩容时在旧桶放 ForwardingNode，其他线程 put/get 发现 MOVED 就领一段桶区间帮忙迁移，stride 控制每段大小，迁完计数减一，全部完成才切换 table。</p>
+<h4 id="具体介绍-24"><a href="#具体介绍-24" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">helpTransfer(tab, fwd):                  // put/get 发现桶头 hash == MOVED</span><br><span class="line">  nextTab = fwd.nextTable</span><br><span class="line">  if 扩容已结束: return table</span><br><span class="line">  loop while 同一批次扩容进行中:</span><br><span class="line">    if transferIndex &lt;= 0: break          // 无任务可分</span><br><span class="line">    if CAS(sizeCtl, sc, sc + 1):         // 登记协助线程</span><br><span class="line">      transfer(tab, nextTab)             // 迁移一段 stride 桶</span><br><span class="line">      break</span><br><span class="line">  return nextTab</span><br><span class="line"></span><br><span class="line">transfer(tab, nextTab):</span><br><span class="line">  stride = max(MIN_TRANSFER_STRIDE, n/并发度)</span><br><span class="line">  从 transferIndex 高位划分 [bound, i) 桶区间</span><br><span class="line">  for i down to bound:</span><br><span class="line">    if tab[i] 已 ForwardingNode: continue</span><br><span class="line">    synchronized (tab[i] 头结点):         // 迁该桶</span><br><span class="line">      拆 lo/hi 链挂到 nextTab（同 HashMap 1.8）</span><br><span class="line">      tab[i] = new ForwardingNode(nextTab) // 旧槽占位，find 到新表</span><br><span class="line">  最后一个线程: table = nextTab; sizeCtl = 新 threshold</span><br></pre></td></tr></table></figure>
+
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202201/11/rmZ04d.png" alt="ConcurrentHashMap 多线程协助扩容" />
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>transferIndex</code> 从高位划分桶区间；<code>MIN_TRANSFER_STRIDE = 16</code>。</li>
+<li><code>ForwardingNode.hash = MOVED (-1)</code>，<code>find</code> 委托 <code>nextTable</code>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>单线程扩容 vs 多线程协助谁更快？（多核下协助可缩短 wall time）</li>
+<li>扩容期间 get 性能？（可能多一次转发查找）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>误以为 helpTransfer 会重复迁移同一桶——ForwardingNode 占位防重。</li>
+</ul>
+<h3 id="26-CHM-扩容高低位链与-HashMap-1-8-是否同一思路？"><a href="#26-CHM-扩容高低位链与-HashMap-1-8-是否同一思路？" class="headerlink" title="26. CHM 扩容高低位链与 HashMap 1.8 是否同一思路？"></a>26. CHM 扩容高低位链与 HashMap 1.8 是否同一思路？</h3><p><strong>口述版：</strong> 是，同一套 hash 与 oldCap 按位与拆 lo/hi 链，减少 rehash 计算；CHM 在此基础上加了多线程分段迁移和 ForwardingNode。</p>
+<h4 id="具体介绍-25"><a href="#具体介绍-25" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 单桶迁移（HashMap 1.8 / CHM transfer 共用思想）</span><br><span class="line">migrateBucket(oldIndex, oldCap, nextTab):</span><br><span class="line">  lo = hi = null</span><br><span class="line">  for e in 桶链表（或 TreeBin 先 untreeify）:</span><br><span class="line">    if (e.hash &amp; oldCap) == 0:</span><br><span class="line">      挂到 lo 链                                 // 新下标 = oldIndex</span><br><span class="line">    else:</span><br><span class="line">      挂到 hi 链                                 // 新下标 = oldIndex + oldCap</span><br><span class="line">  // lastRun：链尾连续同去向的一段可整段移动，少改指针</span><br><span class="line">  nextTab[oldIndex] = lo</span><br><span class="line">  nextTab[oldIndex + oldCap] = hi</span><br><span class="line">  oldTab[oldIndex] = ForwardingNode(nextTab)   // CHM 专有</span><br></pre></td></tr></table></figure>
+
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202201/11/8iLYmL.png" alt="链表高低位划分" />
+
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202201/11/Z4wQG3.png" alt="ln 链与 hn 链" />
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>lastRun</code> 优化减少了什么？（同链相同目标索引的一段只移动尾指针）</li>
+<li>TreeBin 迁移为何复杂？（需 untreeify 或拆成两棵树）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>HashMap 与 CHM transfer 代码高度相似——面试可答「同源算法 + 并发包装」。</li>
+</ul>
+<h3 id="27-baseCount-CounterCell-如何统计-size？"><a href="#27-baseCount-CounterCell-如何统计-size？" class="headerlink" title="27. baseCount + CounterCell 如何统计 size？"></a>27. baseCount + CounterCell 如何统计 size？</h3><p><strong>口述版：</strong> 低并发直接改 baseCount；高并发时用 CounterCell 数组把不同线程散到不同 cell 累加，最后求和，避免一个原子变量被打爆。</p>
+<h4 id="具体介绍-26"><a href="#具体介绍-26" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">addCount(x, check):</span><br><span class="line">  if casBaseCount(baseCount, baseCount + x):</span><br><span class="line">    done</span><br><span class="line">  else:</span><br><span class="line">    按线程 hash 选 CounterCell[i]，cell CAS 累加</span><br><span class="line">    若 cells 未初始化: cellsBusy 锁下 lazy init CounterCell[]</span><br><span class="line"></span><br><span class="line">size() / mappingCount():</span><br><span class="line">  return sumCount()                      // baseCount + Σ cells[i].value</span><br><span class="line">  // 弱一致快照，非全局精确时刻</span><br><span class="line"></span><br><span class="line">putVal 末尾: addCount(1, binCount)       // +1 并检查 sizeCtl 是否触发 transfer</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>类似 <code>LongAdder</code>：<code>CounterCell</code> 数组、<code>cellsBusy</code>  spinlock 初始化 cells。</li>
+<li><code>baseCount</code> 无竞争时 CAS 累加。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>size()</code> 准确吗？（弱一致求和，并发下仅近似）</li>
+<li>为何不用 AtomicInteger 一个变量？（高并发 CAS 热点）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>用 size 做严格容量控制（如限流 1000 条）——应自己计数或用其他结构。</li>
+</ul>
+<h3 id="28-computeIfAbsent-merge-使用注意点"><a href="#28-computeIfAbsent-merge-使用注意点" class="headerlink" title="28. computeIfAbsent / merge 使用注意点"></a>28. computeIfAbsent / merge 使用注意点</h3><p><strong>口述版：</strong> 它们能保证「同一个 key 只算一次」的语义在桶锁内完成，适合缓存加载；但要注意 mappingFunction 别太慢、别在函数里再改同 map 导致死锁，以及返回值 null 的处理规则。</p>
+<h4 id="具体介绍-27"><a href="#具体介绍-27" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">computeIfAbsent(key, mappingFunction):</span><br><span class="line">  // 内部仍走 putVal 自旋框架；在 CASE4 synchronized(桶头) 内:</span><br><span class="line">  if key 不存在:</span><br><span class="line">    v = mappingFunction(key)</span><br><span class="line">    if v != null: 插入</span><br><span class="line">  return 当前 value</span><br><span class="line"></span><br><span class="line">merge(key, value, remappingFunction):</span><br><span class="line">  synchronized(桶头) 内:</span><br><span class="line">    if key 不存在: put value</span><br><span class="line">    else: newVal = remappingFunction(old, value); 更新或删除</span><br><span class="line"></span><br><span class="line">remove(key) / replaceNode(...):</span><br><span class="line">  // 与 putVal 相同的 CASE1~3；CASE4 内 unlink / 树删 / untreeify</span><br><span class="line">  addCount(-1, ...); 遇 MOVED 则 helpTransfer</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>mapping/remapping 在<strong>桶锁内</strong>执行，原子性仅保证<strong>单个 key</strong>；函数勿阻塞、勿嵌套锁其它桶。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>computeIfAbsent</code>：mapping 函数在桶锁内执行，对同一 key 串行。</li>
+<li>JDK 9+ 对 null mapping 结果语义有文档说明（不插入）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>与 <code>LoadingCache.get</code> 区别？（Guava 有整体 cache 策略与统计）</li>
+<li>函数内再 <code>put</code> 其他 key 会死锁吗？（可能锁顺序问题，避免嵌套 map 操作）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>mapping 里慢 SQL/远程调用阻塞桶锁——拖死同桶其他操作。</li>
+</ul>
+<h2 id="1-6-红黑树（桶内）"><a href="#1-6-红黑树（桶内）" class="headerlink" title="1.6 红黑树（桶内）"></a>1.6 红黑树（桶内）</h2><h3 id="29-HashMap-桶内为什么选红黑树？"><a href="#29-HashMap-桶内为什么选红黑树？" class="headerlink" title="29. HashMap 桶内为什么选红黑树？"></a>29. HashMap 桶内为什么选红黑树？</h3><p><strong>口述版：</strong> 冲突链太长查询慢，红黑树是平衡性和插入代价的折中，比 AVL 松一点，比链表快，适合读多、桶内插入相对少的 HashMap 场景。</p>
+<h4 id="具体介绍-28"><a href="#具体介绍-28" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>链表 O(n) → 树 O(log n)。</li>
+<li>红黑树：最长路径不超过最短路径 2 倍，插入旋转次数相对 AVL 少。</li>
+<li>仅在<strong>单桶冲突极端</strong>时启用，全局仍是数组寻址 O(1)。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>为何不用 AVL？（插入删除旋转更频繁）</li>
+<li>为何不用跳表？（JDK HashMap 选型红黑树，TreeMap 也是 RB）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>恶意 hash 全落一桶仍 O(log n) 但常数大——应用层防 hash 攻击或换结构。</li>
+</ul>
+<h2 id="1-7-List-Set-Map-与线程安全集合"><a href="#1-7-List-Set-Map-与线程安全集合" class="headerlink" title="1.7 List / Set / Map 与线程安全集合"></a>1.7 List / Set / Map 与线程安全集合</h2><h3 id="30-Set、List、Map-在结构、顺序、重复性上的区别？"><a href="#30-Set、List、Map-在结构、顺序、重复性上的区别？" class="headerlink" title="30. Set、List、Map 在结构、顺序、重复性上的区别？"></a>30. Set、List、Map 在结构、顺序、重复性上的区别？</h3><p><strong>口述版：</strong> List 有序可重复单列；Set 不重复，HashSet 无序、LinkedHashSet 插入序、TreeSet 排序；Map 是键值对，key 不重复。选哪个看要不要顺序、要不要键。</p>
+<h4 id="具体介绍-29"><a href="#具体介绍-29" class="headerlink" title="具体介绍"></a>具体介绍</h4><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202203/31/abkwex.png" alt="image-20220331111150319"></p>
+<ul>
+<li><strong>List</strong>：有索引/顺序，元素可重复。</li>
+<li><strong>Set</strong>：元素唯一，实现决定顺序（hash 序、链序、比较器序）。</li>
+<li><strong>Map</strong>：key 唯一，value 可重复；本身不是 Collection 子接口。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>Map</code> 的 <code>keySet</code>/<code>values</code>/<code>entrySet</code> 视图是否独立集合？（视图，改 map 反映到视图）</li>
+<li><code>EnumSet</code>/<code>EnumMap</code> 特殊性？（位向量/数组，高效）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>TreeSet 元素需 Comparable 或构造传 Comparator，否则运行时错误。</li>
+</ul>
+<h3 id="31-ArrayList-底层与扩容策略？"><a href="#31-ArrayList-底层与扩容策略？" class="headerlink" title="31. ArrayList 底层与扩容策略？"></a>31. ArrayList 底层与扩容策略？</h3><p><strong>口述版：</strong> 动态数组 Object[]，默认空或 10，满了就 grow，新容量大约是旧的 1.5 倍，把元素拷贝过去，均摊插入还是 O(1)。</p>
+<h4 id="具体介绍-30"><a href="#具体介绍-30" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>字段：<code>elementData</code>、<code>size</code>。</li>
+<li>扩容：<code>newCapacity = old + (old &gt;&gt; 1)</code>，不够则 <code>Arrays.copyOf</code>。</li>
+<li>中间插入/删除要 <code>System.arraycopy</code>，O(n)。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add(e):</span><br><span class="line">  if size == elementData.length:</span><br><span class="line">    newCap = oldCap + (oldCap &gt;&gt; 1)   // ≈1.5 倍</span><br><span class="line">    elementData = Arrays.copyOf(elementData, newCap)</span><br><span class="line">  elementData[size++] = e</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>DEFAULT_CAPACITY = 10</code>（首次 grow 从空数组到 10）；<code>MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8</code>。</li>
+<li><code>trimToSize</code> 可缩数组到 size（不常用）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>subList</code> 结构？（视图，父 list 改可能 CME）</li>
+<li>为何 1.5 倍不是 2 倍？（空间与时间折中）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li><code>Arrays.asList</code> 返回固定大小 list，add/remove 抛异常——与 ArrayList 不同。</li>
+</ul>
+<h3 id="32-LinkedList-底层与和-ArrayList-的对比？"><a href="#32-LinkedList-底层与和-ArrayList-的对比？" class="headerlink" title="32. LinkedList 底层与和 ArrayList 的对比？"></a>32. LinkedList 底层与和 ArrayList 的对比？</h3><p><strong>口述版：</strong> 双向链表，随机访问慢，头尾插删快；ArrayList 查快、尾插快、中间慢。业务里列表若大量 get(i) 用 ArrayList。</p>
+<h4 id="具体介绍-31"><a href="#具体介绍-31" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>节点：<code>Node&#123; prev, item, next &#125;</code>。</li>
+<li>实现了 <code>Deque</code>，可作队列/栈。</li>
+<li>内存：链表每个元素额外两个指针，缓存局部性不如数组。</li>
+<li><strong>复杂度对照</strong>：<code>get(i)</code>/<code>set(i)</code> 为 O(n)（需从头或尾走一半）；<code>addFirst</code>/<code>addLast</code>/<code>removeFirst</code>/<code>removeLast</code> 为 O(1)；<code>ArrayList</code> 随机读 O(1)、尾插均摊 O(1)、中间插删 O(n)。</li>
+<li><strong>选型</strong>：元素量大且以索引遍历为主 → <code>ArrayList</code>；频繁头尾进出、或需要 <code>Deque</code> API → <code>ArrayDeque</code>（一般优于 <code>LinkedList</code>，连续内存更 cache-friendly）。</li>
+<li><strong>面试追问</strong>：JDK 里哪些结构仍用链表？——<code>LinkedHashMap</code> 维护顺序链、<code>HashMap</code> 桶内链/树；业务 List 很少选 <code>LinkedList</code> 除非明确双端队列且历史代码。</li>
+<li><strong>常见坑</strong>：<code>for (int i=0;i&lt;list.size();i++) list.get(i)</code> 在 <code>LinkedList</code> 上接近 O(n²)；应用迭代器或增强 for。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>LinkedList</code> 作队列：<code>offer</code>/<code>poll</code> 复杂度？（O(1) 头尾）</li>
+<li><code>ArrayDeque</code> 与 LinkedList 作栈/队列？（一般更推荐 ArrayDeque，无 Node 开销）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li><code>list.get(i)</code> 在 LinkedList 上 O(n)——循环里用索引访问性能灾难。</li>
+</ul>
+<h3 id="33-fail-fast-与-modCount？"><a href="#33-fail-fast-与-modCount？" class="headerlink" title="33. fail-fast 与 modCount？"></a>33. fail-fast 与 modCount？</h3><p><strong>口述版：</strong> 迭代器记着一开始的 modCount，遍历过程中集合被别的操作改了结构，modCount 对不上就抛 ConcurrentModificationException，这就是 fail-fast。</p>
+<h4 id="具体介绍-32"><a href="#具体介绍-32" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>ArrayList.Itr</code>：<code>expectedModCount != modCount</code> → CME。</li>
+<li>用迭代器自己的 <code>remove</code> 会同步 modCount；直接 <code>list.remove</code> 不会。</li>
+<li><code>HashMap</code> 迭代同样依赖 modCount。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>modCount</code> 结构变更 +1；<code>Itr.checkForComodification()</code> 每步校验。</li>
+<li>增强 for 底层仍是 Iterator。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>多线程并发改 list 一定 CME 吗？（不保证立刻抛，但行为未定义）</li>
+<li><code>ConcurrentModificationException</code> 是 Error 吗？（RuntimeException）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>子 list 迭代时改父 list 也会 CME。</li>
+</ul>
+<h3 id="34-fail-safe-典型实现与场景？"><a href="#34-fail-safe-典型实现与场景？" class="headerlink" title="34. fail-safe 典型实现与场景？"></a>34. fail-safe 典型实现与场景？</h3><p><strong>口述版：</strong> 像 CopyOnWriteArrayList 迭代的是复制出来的数组快照，写时复制，迭代不抛 CME，适合读极多、写很少的配置列表。</p>
+<h4 id="具体介绍-33"><a href="#具体介绍-33" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>COW</strong>：<code>add</code> 时复制新数组，迭代器持有旧数组引用。</li>
+<li>代价：写放大、内存；读无锁。</li>
+<li><code>ConcurrentHashMap</code> 迭代属弱一致，非严格 fail-safe 但目标类似。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>ConcurrentHashMap.keySet</code> 迭代属哪类？（弱一致，非 COW）</li>
+<li><code>Vector</code> 迭代器是 fail-fast 吗？（是，但方法 synchronized）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>COW 迭代器读到旧数据——读多写少场景可接受；写后立刻读最新需额外同步。</li>
+</ul>
+<h3 id="35-RandomAccess-标记接口的含义？"><a href="#35-RandomAccess-标记接口的含义？" class="headerlink" title="35. RandomAccess 标记接口的含义？"></a>35. RandomAccess 标记接口的含义？</h3><p><strong>口述版：</strong> 没方法，只是告诉调用方：我随机访问快，比如 ArrayList 实现了它，Collections 二分查找会走索引而不是迭代器。</p>
+<h4 id="具体介绍-34"><a href="#具体介绍-34" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>ArrayList</code> 实现；<code>LinkedList</code> 不实现。</li>
+<li><code>Collections.binarySearch</code>、<code>shuffle</code> 等会 <code>instanceof RandomAccess</code> 选算法。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>自定义 List 是否应实现 RandomAccess？（随机访问 O(1) 才实现）</li>
+<li><code>LinkedList</code> 实现 Deque 但未 RandomAccess——算法如何选择？（<strong>答：</strong> 需要 <strong>随机下标访问</strong> 用 <code>ArrayList</code>；只 <strong>头尾增删/队列</strong> 用 <code>LinkedList</code>/<code>ArrayDeque</code>；大列表遍历优先 <code>ArrayList</code>（缓存友好）。）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>仅实现 List 未 RandomAccess，Collections 算法走迭代路径，大列表 sort 变慢。</li>
+</ul>
+<h3 id="36-Collections-unmodifiableList-与不可变列表的区别？"><a href="#36-Collections-unmodifiableList-与不可变列表的区别？" class="headerlink" title="36. Collections.unmodifiableList 与不可变列表的区别？"></a>36. Collections.unmodifiableList 与不可变列表的区别？</h3><p><strong>口述版：</strong> unmodifiableList 是只读包装，底层 list 还能被别人改，视图跟着变；List.of 或 Guava immutable 是真不可变，更安全。</p>
+<h4 id="具体介绍-35"><a href="#具体介绍-35" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>包装器：增删改抛 <code>UnsupportedOperationException</code>。</li>
+<li>非拷贝：共享 backing list。</li>
+<li>API 设计：对外暴露用不可变或拷贝，避免调用方误改内部状态。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>List.of()</code> / <code>List.copyOf()</code> JDK 9+ 与 unmodifiable 区别？（真不可变）</li>
+<li>Guava <code>ImmutableList</code> 拷贝时机？（构建时拷贝 defensive copy）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>对外返回内部 <code>unmodifiableList(inner)</code>，调用方仍可通过其他引用改 inner。</li>
+</ul>
+<h3 id="37-CopyOnWriteArrayList-原理与场景？"><a href="#37-CopyOnWriteArrayList-原理与场景？" class="headerlink" title="37. CopyOnWriteArrayList 原理与场景？"></a>37. CopyOnWriteArrayList 原理与场景？</h3><p><strong>口述版：</strong> 写时复制整个数组，读无锁读旧或新数组；适合监听器、白名单这种读多写极少，写可以慢一点。</p>
+<h4 id="具体介绍-36"><a href="#具体介绍-36" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>写：<code>lock</code> + 复制 + 替换 <code>array</code> 引用。</li>
+<li>读：<code>get</code> 无锁，可能读到略旧数据。</li>
+<li>不适合：写频繁、大列表。</li>
+<li><strong>可见性</strong>：<code>volatile Object[] array</code> 保证替换后新读能看到新数组；旧迭代器仍持有复制时的数组引用，即 <strong>快照迭代</strong>。</li>
+<li><strong>写放大</strong>：每次 mutating 操作复制整表，时间/空间 O(n)；n 很大或写 QPS 高时 CPU 与 GC 压力明显。</li>
+<li><strong>典型场景</strong>：监听器列表、黑白名单、路由表——读远多于写，短暂读到旧版本可接受。</li>
+<li><strong>面试追问</strong>：与 <code>Collections.synchronizedList</code> 比？——COW 读无锁、写贵；同步 List 读写都锁，写少读多 COW 更优。</li>
+<li><strong>常见坑</strong>：在 COW 上 <code>iterator.remove()</code> 不支持；大列表上频繁 <code>add</code> 导致连续 full array copy。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>内部 <code>transient volatile Object[] array</code>；写操作 <code>ReentrantLock lock</code>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>iterator</code> 是否抛 CME？（不抛）</li>
+<li>适用监听器列表的原因？（读远多于写，短暂不一致可接受）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>大数组频繁 add——每次复制 O(n) 内存，写放大严重。</li>
+</ul>
+<hr>
+<h2 id="1-8-String、equals、包装类"><a href="#1-8-String、equals、包装类" class="headerlink" title="1.8 String、equals、包装类"></a>1.8 String、equals、包装类</h2><h3 id="38-String-为什么不可变？"><a href="#38-String-为什么不可变？" class="headerlink" title="38. String 为什么不可变？"></a>38. String 为什么不可变？</h3><p><strong>口述版：</strong> 底层 char/byte 数组 final，没有对外修改接口；好处是线程安全、能安全做常量池缓存、当 HashMap 的 key 时 hash 不会变。</p>
+<h4 id="具体介绍-37"><a href="#具体介绍-37" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>final class</code>，内部数组不可变（JDK 9+ compact strings）。</li>
+<li>常量池：<code>&quot;abc&quot;</code> 复用，节省内存。</li>
+<li>安全：传参、缓存 key 不会被悄悄改掉。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>JDK 9+ <code>byte[] coder</code> + compact strings（Latin1/UTF16）。</li>
+<li><code>intern()</code> 入常量池；native 实现与 GC 交互。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>StringBuilder</code> 线程安全吗？（否；多线程用 StringBuffer 或局部 Builder）</li>
+<li>大量拼接为何用 Builder 不用 <code>+</code>？（编译期 + 可能优化，循环内 + 产生大量中间 String）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li><code>new String(&quot;a&quot;)</code> 与 <code>&quot;a&quot;</code> 不一定 ==（堆上新对象 vs 常量池）。</li>
+</ul>
+<h3 id="39-、equals、hashCode-契约？"><a href="#39-、equals、hashCode-契约？" class="headerlink" title="39. ==、equals、hashCode 契约？"></a>39. ==、equals、hashCode 契约？</h3><p><strong>口述版：</strong> == 比引用；equals 比语义相等，重写 equals 必须重写 hashCode，否则 HashMap 里相等对象可能进不同桶；约定是对称、传递、一致。</p>
+<h4 id="具体介绍-38"><a href="#具体介绍-38" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>契约：equal 对象 hashCode 必须相同；hash 相同不必 equal。</li>
+<li>自定义实体作 Map key：字段不可变或逻辑不可变最稳。</li>
+<li>Lombok <code>@EqualsAndHashCode</code> 注意父类、exclude 字段。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>只重写 hashCode 不重写 equals 的后果？（破坏 Object 契约，集合行为异常）</li>
+<li>两个 unequal 对象 hash 相同叫？（hash 碰撞，正常，靠 equals 链上比对）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>Lombok <code>@Data</code> 在继承链上 equals/hashCode 默认不含 super——子类字段参与需 <code>@EqualsAndHashCode(callSuper=true)</code>。</li>
+</ul>
+<h3 id="40-Integer-缓存与装箱踩坑？"><a href="#40-Integer-缓存与装箱踩坑？" class="headerlink" title="40. Integer 缓存与装箱踩坑？"></a>40. Integer 缓存与装箱踩坑？</h3><p><strong>口述版：</strong> -128 到 127 的 Integer 缓存了，用 == 比较在这个范围内有时碰巧对，范围外 == 比的是引用一定错，比较值用 equals。</p>
+<h4 id="具体介绍-39"><a href="#具体介绍-39" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><code>Integer.valueOf</code> 默认缓存 -128～127（可 JVM 参数扩展上限）。</li>
+<li>自动装箱走 <code>valueOf</code>。</li>
+<li>金额用 <code>BigDecimal</code>，不用 <code>double</code>。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>IntegerCache.high</code> 默认 127，<code>-XX:AutoBoxCacheMax=200</code> 可调上限（≥127）。</li>
+<li><code>==</code> 比较两个 Integer 对象前应先 unbox 或 equals。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>Long</code> 有缓存吗？（无默认小缓存 like Integer）</li>
+<li><code>int</code> 与 <code>Integer</code> 在 <code>==</code> 中如何比较？（拆箱）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li><code>Map&lt;Integer, ...&gt;</code> 用 <code>==</code> 比较 key；金额 <code>double</code> 精度——用 BigDecimal。</li>
+</ul>
+<hr>
+<h2 id="1-9-面向对象与-Java-8"><a href="#1-9-面向对象与-Java-8" class="headerlink" title="1.9 面向对象与 Java 8"></a>1.9 面向对象与 Java 8</h2><h3 id="41-封装、继承、多态、抽象？"><a href="#41-封装、继承、多态、抽象？" class="headerlink" title="41. 封装、继承、多态、抽象？"></a>41. 封装、继承、多态、抽象？</h3><p><strong>口述版：</strong> 封装隐藏细节只暴露接口；继承复用和扩展；多态同一引用不同子类不同行为；抽象抽共性，接口和抽象类都是手段。</p>
+<h4 id="具体介绍-40"><a href="#具体介绍-40" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>封装</strong>：private 字段 + getter/setter 或行为方法。</li>
+<li><strong>继承</strong>：is-a，注意组合优于继承。</li>
+<li><strong>多态</strong>：编译看引用，运行看对象，虚方法表。</li>
+<li><strong>抽象</strong>：abstract class / interface 定义契约。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>组合优于继承的典型例子？（Has-A 持有策略对象）</li>
+<li>里氏替换原则与多态关系？（<strong>答：</strong> 子类对象应能 <strong>替换父类</strong> 而不破坏程序正确性；多态是 <strong>编译看父类、运行看子类</strong> 的调用机制，LSP 是多态能安全使用的前提。）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>过深继承树导致 fragile base class——改父类破坏子类。</li>
+</ul>
+<h3 id="42-重载与重写？静态方法能重写吗？"><a href="#42-重载与重写？静态方法能重写吗？" class="headerlink" title="42. 重载与重写？静态方法能重写吗？"></a>42. 重载与重写？静态方法能重写吗？</h3><p><strong>口述版：</strong> 重载同名不同参，编译期绑定；重写子类改父类实例方法，运行期绑定。静态方法是隐藏不是重写，看引用类型。</p>
+<h4 id="具体介绍-41"><a href="#具体介绍-41" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>重写：<code>@Override</code>，访问权限不能更严，返回类型协变。</li>
+<li>静态：<code>类方法</code> 不参与多态 override。</li>
+<li>private/final 不可重写。</li>
+<li><strong>重载（Overload）</strong>：同名不同参列表（个数/类型/顺序），编译期静态绑定；与返回值无关（仅返回值不同不能构成合法重载）。</li>
+<li><strong>重写（Override）</strong>：子类实例方法覆盖父类，运行期虚方法分派；异常不能抛出更广的 checked exception。</li>
+<li><strong>静态隐藏（Hide）</strong>：子类定义同名 static 方法时，调用看<strong>引用类型</strong>，易与子类实例方法「看起来像重写」混淆。</li>
+<li><strong>面试追问</strong>：<code>Object.equals(Object)</code> 参数类型与 <code>equals(String)</code> 是重载还是重写？——后者是重载；重写必须参数列表与父类一致。</li>
+<li><strong>常见坑</strong>：父类 <code>void foo()</code>、子类 <code>int foo()</code> 不是重写而是编译错误（返回类型+签名都不匹配重载规则）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>@Override</code> 写错签名是重载还是编译错误？（编译通过则为重载，易隐藏 bug）</li>
+<li>静态方法能否被 <code>@Override</code>？（不能）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>子类「重写」父类 static 方法——隐藏，运行期看引用类型。</li>
+</ul>
+<h3 id="43-接口与抽象类如何选？"><a href="#43-接口与抽象类如何选？" class="headerlink" title="43. 接口与抽象类如何选？"></a>43. 接口与抽象类如何选？</h3><p><strong>口述版：</strong> 接口定义能力组合，Java 8 可以有 default；抽象类适合有共享状态和模板方法。对外 API 多用接口，内部骨架可用抽象类。</p>
+<h4 id="具体介绍-42"><a href="#具体介绍-42" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>接口：多实现、解耦、default 提供演进。</li>
+<li>抽象类：单继承、可含字段与构造器。</li>
+<li>领域建模：能力用接口，模板流程用抽象类。</li>
+<li><strong>选接口</strong>：需要多种能力组合（<code>Serializable</code> + <code>Comparable</code>）、对外 SDK、测试替身（Mock）、Java 8+ default 做非破坏演进。</li>
+<li><strong>选抽象类</strong>：多个子类共享状态/工具方法、<strong>模板方法</strong>固定骨架（如 <code>AbstractList</code>）、需要 protected 钩子给子类。</li>
+<li><strong>Java 8 之后</strong>：接口可有 <code>static</code>/<code>default</code> 方法，与抽象类差距缩小——仍无实例字段（除 static）、不能单继承类 + 多接口时抽象类占掉唯一 extends 位。</li>
+<li><strong>面试追问</strong>：<code>abstract class</code> 能否不声明 abstract 方法？——可以，用于禁止实例化 + 共享代码；接口从 Java 8 起也可有 default 实现。</li>
+<li><strong>常见坑</strong>：为「省写代码」把接口当抽象类用大量 default 塞实现——破坏实现类可读性，且 default 冲突需显式解决。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Java 8 接口多 default 方法冲突怎么解？（类优先、子接口优先、需显式 override）</li>
+<li>函数式接口（<code>@FunctionalInterface</code>）与接口关系？</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>接口加 default 破坏实现类——API 演进需谨慎，非 default 方法仍 breaking。</li>
+</ul>
+<h3 id="44-Java-8-常用新特性？"><a href="#44-Java-8-常用新特性？" class="headerlink" title="44. Java 8 常用新特性？"></a>44. Java 8 常用新特性？</h3><p><strong>口述版：</strong> Lambda 和 Stream 做集合处理，Optional 减少 NPE，新日期 API 替代 Date，接口 default 方法；线上 Stream 并行要谨慎。</p>
+<h4 id="具体介绍-43"><a href="#具体介绍-43" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>Stream</strong>：中间/终端操作，惰性求值。</li>
+<li><strong>Optional</strong>：表达可能缺失，勿滥用为字段。</li>
+<li><strong>时间</strong>：<code>Instant</code>、<code>LocalDateTime</code>、<code>ZoneId</code>。</li>
+<li><strong>接口</strong>：<code>default</code>、<code>static</code> 方法。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li>Stream 不存储数据，管道 lazy，terminal 才执行。</li>
+<li><code>Optional.orElse</code> vs <code>orElseGet</code>（后者 supplier  lazy）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>parallelStream</code> 用哪个 ForkJoinPool？（common pool，注意阻塞任务饿死）</li>
+<li><code>Instant</code> 与 <code>LocalDateTime</code> 区别？（绝对时间 vs 无时区本地时间）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>Stream 里改外部变量非线程安全；<code>peek</code> 调 IO 副作用难维护。</li>
+</ul>
+<h3 id="45-深拷贝与浅拷贝？"><a href="#45-深拷贝与浅拷贝？" class="headerlink" title="45. 深拷贝与浅拷贝？"></a>45. 深拷贝与浅拷贝？</h3><p><strong>口述版：</strong> 浅拷贝只复制引用，嵌套对象还是同一份；深拷贝递归复制或序列化。Bean 拷贝工具多数是浅拷贝，要深拷贝得自己写或 JSON 往返。</p>
+<h4 id="具体介绍-44"><a href="#具体介绍-44" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>浅：<code>Object.clone</code> 默认、BeanUtils.copyProperties。</li>
+<li>深：手动 clone 嵌套、序列化、Immutable 结构。</li>
+<li>业务：DTO 与 Entity 分离时常拷贝 DTO。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>序列化深拷贝需类 <code>Serializable</code>，transient 字段呢？（不拷贝，需自定义 readObject）</li>
+<li>不可变对象是否还需深拷贝？（共享安全，引用拷贝即可）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>JSON 序列化深拷贝丢失类型信息/精度；循环引用需处理。</li>
+</ul>
+<hr>
+<h2 id="1-10-异常"><a href="#1-10-异常" class="headerlink" title="1.10 异常"></a>1.10 异常</h2><h3 id="46-Exception-与-Error？Checked-与-Unchecked？"><a href="#46-Exception-与-Error？Checked-与-Unchecked？" class="headerlink" title="46. Exception 与 Error？Checked 与 Unchecked？"></a>46. Exception 与 Error？Checked 与 Unchecked？</h3><p><strong>口述版：</strong> Error 是 JVM 级严重问题一般不捕；Exception 可处理。Checked 必须声明或 catch，Unchecked 是 RuntimeException，编译器不强制。</p>
+<h4 id="具体介绍-45"><a href="#具体介绍-45" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>Error</strong>：<code>OutOfMemoryError</code>、<code>StackOverflowError</code>。</li>
+<li><strong>Checked</strong>：<code>IOException</code>、<code>SQLException</code>。</li>
+<li><strong>Unchecked</strong>：<code>NPE</code>、<code>IllegalArgumentException</code> 等。</li>
+<li>业务异常通常继承 RuntimeException。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>Throwable</code> → <code>Error</code> / <code>Exception</code> 层次？（<strong>答：</strong> <code>Throwable</code> 下分 **<code>Error</code>**（一般不 catch，如 OOM）与 **<code>Exception</code>**（可处理）；<code>Exception</code> 又分 <strong>受检</strong>（必须声明/捕获）与 <strong>运行时</strong>（<code>RuntimeException</code>）。）</li>
+<li>try-with-resources 对 <code>AutoCloseable</code> 要求？（<strong>答：</strong> 资源类实现 **<code>AutoCloseable.close()</code>**；编译器生成 <strong>finally 中 close</strong>，若 close 也抛异常会 <strong>addSuppressed</strong> 到主异常；<code>close</code> 应幂等。）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>catch <code>Exception</code> 吞掉 Error 以外所有——不应 catch <code>Throwable</code> 除非框架入口。</li>
+</ul>
+<h3 id="47-业务异常如何设计？"><a href="#47-业务异常如何设计？" class="headerlink" title="47. 业务异常如何设计？"></a>47. 业务异常如何设计？</h3><p><strong>口述版：</strong> 分错误码和可读消息，是否打栈看是业务预期还是系统故障；ControllerAdvice 统一转 HTTP 和 JSON，别在业务里到处 try-catch 吞异常。</p>
+<h4 id="具体介绍-46"><a href="#具体介绍-46" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>错误码：枚举或常量，便于监控聚合。</li>
+<li>预期内失败（库存不足）：info/warn，少打栈。</li>
+<li>非预期：error + 栈，链路 id。</li>
+<li>与 HTTP 状态：4xx 客户端，5xx 服务端。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>错误码与 HTTP status 如何映射？（业务 200 + code≠0 vs 4xx/5xx）</li>
+<li>国际化 message 放哪一层？（<strong>答：</strong> 文案 key 在 <strong>资源 bundle</strong>（<code>messages_zh_CN.properties</code>）；业务层只抛 <strong>错误码 + 参数</strong>，由 <strong>Web/全局异常处理</strong> 或前端按 locale 渲染 message。）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>用异常做正常流程控制（如找不到当 Exception）——性能与可读性差。</li>
+</ul>
+<h3 id="48-try-catch-finally-与-finally-里-return？"><a href="#48-try-catch-finally-与-finally-里-return？" class="headerlink" title="48. try-catch-finally 与 finally 里 return？"></a>48. try-catch-finally 与 finally 里 return？</h3><p><strong>口述版：</strong> finally 几乎总会执行，除非 System.exit；finally 里 return 会覆盖 try 或 catch 里的 return，所以不要在 finally 写 return。</p>
+<h4 id="具体介绍-47"><a href="#具体介绍-47" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>执行顺序：try → catch → finally。</li>
+<li>try 有 return：先算返回值副本，再 finally，finally 若 return 则覆盖。</li>
+<li>try-with-resources 自动 close，close 异常可能 suppressed。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>try-with-resources 中多个资源 close 顺序？（逆序声明顺序）</li>
+<li><code>Thread.interrupt</code> 与 InterruptedException？（<strong>答：</strong> <code>interrupt()</code> 设 <strong>中断标志</strong>；阻塞方法（sleep/wait/join）可能抛 <strong><code>InterruptedException</code> 并清标志</strong>；业务应在 catch 后 <strong>恢复中断</strong> 或退出。）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>catch 后不再 throw 也不 log——「吞异常」线上难查。</li>
+</ul>
+<hr>
+<h2 id="1-11-引用、ThreadLocal、泄漏"><a href="#1-11-引用、ThreadLocal、泄漏" class="headerlink" title="1.11 引用、ThreadLocal、泄漏"></a>1.11 引用、ThreadLocal、泄漏</h2><h3 id="49-强、软、弱、虚引用？"><a href="#49-强、软、弱、虚引用？" class="headerlink" title="49. 强、软、弱、虚引用？"></a>49. 强、软、弱、虚引用？</h3><p><strong>口述版：</strong> 强引用平常 new；软引用内存紧时回收，适合缓存；弱引用 GC 就收，WeakHashMap 用；虚引用跟踪对象回收，几乎业务不用。</p>
+<h4 id="具体介绍-48"><a href="#具体介绍-48" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>强</strong>：<code>Object o = new Object()</code>。</li>
+<li><strong>软</strong>：<code>SoftReference</code>，OOM 前回收。</li>
+<li><strong>弱</strong>：<code>WeakReference</code>，一次 GC 可能清。</li>
+<li><strong>虚</strong>：<code>PhantomReference</code> + ReferenceQueue，堆外资源清理。</li>
+</ul>
+<img src="https://zhangxin66666.github.io/imageCenter/uPic/202204/08/21K01T.jpeg" alt="四种引用级别" />
+
+<p><strong>面试追问</strong></p>
+<ul>
+<li><code>SoftReference</code> 适合做图片缓存吗？（内存紧张回收，可能抖动）</li>
+<li><code>WeakHashMap</code> 的 key 何时被清？（下次 GC 无强引用）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>虚引用不能单独 get 对象——<code>get()</code> 总 null，需 ReferenceQueue 线程处理。</li>
+</ul>
+<h3 id="50-ThreadLocal-原理与线程池泄漏？"><a href="#50-ThreadLocal-原理与线程池泄漏？" class="headerlink" title="50. ThreadLocal 原理与线程池泄漏？"></a>50. ThreadLocal 原理与线程池泄漏？</h3><p><strong>口述版：</strong> 每个 Thread 有个 ThreadLocalMap，key 是弱引用 ThreadLocal，value 是副本；线程池线程不销毁，value 不 remove 就泄漏，用完必须 remove。</p>
+<h4 id="具体介绍-49"><a href="#具体介绍-49" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>结构：<code>Thread.threadLocals</code> → <code>ThreadLocalMap</code>。</li>
+<li>弱引用 key：ThreadLocal 回收后 key 变 null，value 仍强引用直到清理。</li>
+<li>规范：<code>try/finally &#123; threadLocal.remove(); &#125;</code>。</li>
+<li>跨线程：TransmittableThreadLocal（TTL）传递上下文。</li>
+</ul>
+<p><strong>源码/参数</strong></p>
+<ul>
+<li><code>ThreadLocalMap</code> 开放寻址，key 为 WeakReference<ThreadLocal>。</li>
+<li>线程池 worker 线程长期存活 → 必须 <code>remove()</code>。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>父子线程如何传 ThreadLocal？（InheritableThreadLocal 或 TTL）</li>
+<li>为何 key 弱引用仍可能泄漏？（value 强引用直到线程结束或 remove）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>线程池任务结束未 remove，下一个任务读到脏上下文（如 userId）。</li>
+</ul>
+<hr>
+<h2 id="1-12-序列化与分层"><a href="#1-12-序列化与分层" class="headerlink" title="1.12 序列化与分层"></a>1.12 序列化与分层</h2><h3 id="51-serialVersionUID-与-RPC-少用-Java-序列化？"><a href="#51-serialVersionUID-与-RPC-少用-Java-序列化？" class="headerlink" title="51. serialVersionUID 与 RPC 少用 Java 序列化？"></a>51. serialVersionUID 与 RPC 少用 Java 序列化？</h3><p><strong>口述版：</strong> UID 是版本号，类改了不匹配就 InvalidClassException；Java 原生序列化慢、体积大、还挑类结构，RPC 一般用 JSON、Protobuf、Hessian。</p>
+<h4 id="具体介绍-50"><a href="#具体介绍-50" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>显式 <code>serialVersionUID</code> 避免自动算版本漂移。</li>
+<li>缺点：反射、全类元数据、安全（反序列化漏洞）。</li>
+<li>替代：Protobuf、Kryo（需注意兼容性）。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>不加 serialVersionUID 改字段会怎样？（自动算 UID 变化，反序列化失败）</li>
+<li>Kotlin/data class 与 Java 序列化？（<strong>答：</strong> data class **默认不实现 <code>Serializable</code>**；与 Java 互通常用 <strong>Jackson/Gson</strong> 或手写 <code>@JvmField</code> + 实现 <code>Serializable</code>，注意 <strong>默认构造/字段可见性</strong>。）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>反序列化 gadget 链（Commons Collections）——生产禁用不可信字节流。</li>
+</ul>
+<h3 id="52-JSON-序列化常见坑？"><a href="#52-JSON-序列化常见坑？" class="headerlink" title="52. JSON 序列化常见坑？"></a>52. JSON 序列化常见坑？</h3><p><strong>口述版：</strong> Long 超过 JS 精度要转 String；日期统一时区和格式；枚举用 name 或 code 要约定；反序列化忽略未知字段要开开关，否则上线加字段就炸。</p>
+<h4 id="具体介绍-51"><a href="#具体介绍-51" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>Long</strong>：前端 Number 精度 2^53-1。</li>
+<li><strong>日期</strong>：ISO-8601 或时间戳 + 时区。</li>
+<li><strong>循环引用</strong>：Jackson <code>@JsonIgnore</code>、DTO 切断环。</li>
+<li><strong>空值</strong>：<code>null</code> vs 缺字段 vs <code>&quot;&quot;</code> 语义。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>Jackson <code>FAIL_ON_UNKNOWN_PROPERTIES</code> 与上线兼容？（<strong>答：</strong> 老客户端 <strong>加字段</strong> 时服务端若 <code>true</code> 会反序列化失败；上线兼容常 <strong>false</strong> 或 <code>@JsonIgnoreProperties(ignoreUnknown=true)</code>，配合 <strong>版本化 DTO</strong>。）</li>
+<li>Fastjson <code>AutoType</code> 安全风险？（<strong>答：</strong> 开启 <strong>AutoType</strong> 可指定任意类反序列化，历史上多起 <strong>RCE</strong>；生产应 <strong>关闭 AutoType</strong>、用 <strong>白名单</strong>，优先换 Jackson 并禁 default typing。）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>枚举改名导致历史 JSON 反序列化失败——用 code 字段稳定映射。</li>
+</ul>
+<h3 id="53-DTO-DO-Entity-分层？"><a href="#53-DTO-DO-Entity-分层？" class="headerlink" title="53. DTO / DO / Entity 分层？"></a>53. DTO / DO / Entity 分层？</h3><p><strong>口述版：</strong> Entity 跟表结构，DO 有时同义；DTO 对 API 或跨层传输，别把数据库字段和内部字段直接暴露给前端，方便演进和隐藏敏感信息。</p>
+<h4 id="具体介绍-52"><a href="#具体介绍-52" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li><strong>Entity/DO</strong>：持久化层，跟 ORM 映射。</li>
+<li><strong>DTO/VO</strong>：入参出参，字段可裁剪、脱敏。</li>
+<li><strong>转换</strong>：MapStruct、Assembler，避免 Controller 里手写大段 set。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>VO 与 DTO 是否必须两个类？（小项目可合并，大项目分离清晰）</li>
+<li>Entity 带 lazy 关联直接返前端？（N+1 与 JSON 循环）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>Controller 直接返 Entity 暴露密码字段——必须 DTO 脱敏。</li>
+</ul>
+<hr>
+<h2 id="1-13-手写-小代码"><a href="#1-13-手写-小代码" class="headerlink" title="1.13 手写 / 小代码"></a>1.13 手写 / 小代码</h2><h3 id="54-线程安全的单例写法？"><a href="#54-线程安全的单例写法？" class="headerlink" title="54. 线程安全的单例写法？"></a>54. 线程安全的单例写法？</h3><p><strong>口述版：</strong> 枚举最简单；静态内部类懒加载；双重检查锁要 volatile 防指令重排；别只用 synchronized 方法那种低效写法除非面试要求简单版。</p>
+<h4 id="具体介绍-53"><a href="#具体介绍-53" class="headerlink" title="具体介绍"></a>具体介绍</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 静态内部类</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> Singleton INSTANCE = <span class="keyword">new</span> Singleton();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Holder.INSTANCE; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// DCL</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton inst;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (inst == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">            <span class="keyword">if</span> (inst == <span class="keyword">null</span>) inst = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> inst;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>枚举</strong>：防反射、防反序列化多实例。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>反射能否破坏枚举单例？（不能，JVM 禁止）</li>
+<li>懒汉 synchronized 方法瓶颈？（每次 get 加锁）</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>DCL 未 volatile 可能看到半初始化对象（指令重排）。</li>
+</ul>
+<h3 id="55-正确实现-equals-和-hashCode？"><a href="#55-正确实现-equals-和-hashCode？" class="headerlink" title="55. 正确实现 equals 和 hashCode？"></a>55. 正确实现 equals 和 hashCode？</h3><p><strong>口述版：</strong> equals 先 == 再 null 和类型，再比关键字段；hashCode 用相同字段，保证 equal 则 hash 同；IDE 或 Lombok 生成，别只重写一个。</p>
+<h4 id="具体介绍-54"><a href="#具体介绍-54" class="headerlink" title="具体介绍"></a>具体介绍</h4><ul>
+<li>契约： reflexive、symmetric、transitive、consistent。</li>
+<li><code>hashCode</code>：常用 <code>Objects.hash(f1, f2)</code>。</li>
+<li>可变对象作 key：不推荐；必须则不要改参与 equals 的字段。</li>
+</ul>
+<p><strong>面试追问</strong></p>
+<ul>
+<li>只重写 equals 时 hashCode 默认 Object.identityHashCode——两个 equal 对象 hash 不同</li>
+<li>参与 equals 的字段变了，Map 查找失败——应用不可变 key 或禁止改字段</li>
+</ul>
+<p><strong>常见坑</strong></p>
+<ul>
+<li>子类 equals 未检查 <code>getClass()</code> 对称性——与 Lombok <code>@EqualsAndHashCode</code> 配置相关。</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>延伸阅读：</strong> ConcurrentHashMap 源码细节见 <a href="../../1.基础知识/ConcurrentHashMap" target="_blank">ConcurrentHashMap 源码解读</a>。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">https://zhangxin66666.github.io/2022/03/31/12.面试/面试-基础知识/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95/">面试</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E9%9D%A2%E8%AF%95.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-ZooKeeper/"><img class="prev-cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">面试题·ZooKeeper</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-%E5%A4%9A%E7%BA%BF%E7%A8%8B/"><img class="next-cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">面试题·多线程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Dubbo/" title="面试题·Dubbo"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·Dubbo</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98/" title="面试知识点总结"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试知识点总结</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-JVM/" title="面试题·JVM"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·JVM</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MQ/" title="面试题·MQ"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·MQ</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-MySQL/" title="面试题·MySQL"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·MySQL</div></div></a></div><div><a href="/2022/03/31/12.%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%95-Netty/" title="面试题·Netty"><img class="cover" src="/images/cover/%E9%9D%A2%E8%AF%95.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">面试题·Netty</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">180</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-text">一、基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-HashMap-%E7%BB%93%E6%9E%84%E4%B8%8E%E5%8E%9F%E7%90%86"><span class="toc-text">1.1 HashMap 结构与原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-HashMap-%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84%E5%9C%A8-JDK-1-7-%E5%92%8C-1-8-%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%BC%94%E8%BF%9B%E5%8A%A8%E6%9C%BA%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">1. HashMap 底层结构在 JDK 1.7 和 1.8 分别是什么？演进动机是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88-HashMap-%E5%AE%B9%E9%87%8F%E5%BF%85%E9%A1%BB%E6%98%AF-2-%E7%9A%84-n-%E6%AC%A1%E6%96%B9%EF%BC%9F"><span class="toc-text">2. 为什么 HashMap 容量必须是 2 的 n 次方？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-1"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%B4%9F%E8%BD%BD%E5%9B%A0%E5%AD%90-0-75-%E7%9A%84%E5%90%AB%E4%B9%89%E4%B8%8E%E6%9D%83%E8%A1%A1%EF%BC%9F"><span class="toc-text">3. 负载因子 0.75 的含义与权衡？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-2"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-hash-%E6%89%B0%E5%8A%A8%E5%87%BD%E6%95%B0%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%AE%A9%E9%AB%98%E4%BD%8D%E5%8F%82%E4%B8%8E%E8%BF%90%E7%AE%97%EF%BC%9F"><span class="toc-text">4. hash 扰动函数做什么？为什么要让高位参与运算？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-3"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%93%BE%E8%A1%A8%E6%A0%91%E5%8C%96%E9%98%88%E5%80%BC%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF-8%EF%BC%9F%E9%80%80%E5%8C%96%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF-6%EF%BC%9F"><span class="toc-text">5. 链表树化阈值为什么是 8？退化为什么是 6？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-4"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%A0%91%E5%8C%96%E5%89%8D%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%B1%82-table-length-gt-64%EF%BC%9F"><span class="toc-text">6. 树化前为什么要求 table.length &gt;&#x3D; 64？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-5"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-HashMap-%E5%92%8C-Hashtable-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">7. HashMap 和 Hashtable 的区别？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-6"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-HashSet-%E5%BA%95%E5%B1%82%E7%94%A8%E4%BB%80%E4%B9%88%E5%AE%9E%E7%8E%B0%EF%BC%9F%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%85%83%E7%B4%A0%E4%B8%8D%E9%87%8D%E5%A4%8D%EF%BC%9F"><span class="toc-text">8. HashSet 底层用什么实现？如何保证元素不重复？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-7"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-HashMap-%E6%A0%B8%E5%BF%83%E6%96%B9%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-text">1.2 HashMap 核心方法流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E6%8F%8F%E8%BF%B0-HashMap-put-%E5%85%A8%E9%93%BE%E8%B7%AF"><span class="toc-text">9. 描述 HashMap put 全链路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-8"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E6%8F%8F%E8%BF%B0-HashMap-get-%E6%B5%81%E7%A8%8B"><span class="toc-text">10. 描述 HashMap get 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-9"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E6%8F%8F%E8%BF%B0-HashMap-resize-%E4%B8%8E%E9%AB%98%E4%BD%8E%E4%BD%8D-rehash"><span class="toc-text">11. 描述 HashMap resize 与高低位 rehash</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-10"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-HashMap-%E4%BD%95%E6%97%B6%E5%88%86%E9%85%8D%E6%95%B0%E7%BB%84%EF%BC%9F%E6%87%92%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%9F"><span class="toc-text">12. HashMap 何时分配数组？懒初始化？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-11"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-remove-replace-%E6%98%AF%E5%90%A6%E8%A7%A6%E5%8F%91%E6%89%A9%E5%AE%B9%E6%88%96%E6%A0%91%E5%8C%96%EF%BC%9F"><span class="toc-text">13. remove &#x2F; replace 是否触发扩容或树化？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-12"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-HashMap-%E5%B9%B6%E5%8F%91%E4%B8%8E%E9%80%89%E5%9E%8B"><span class="toc-text">1.3 HashMap 并发与选型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#14-JDK-1-7-%E5%A4%9A%E7%BA%BF%E7%A8%8B-HashMap-%E4%B8%BA%E4%BD%95%E5%8F%AF%E8%83%BD%E6%AD%BB%E5%BE%AA%E7%8E%AF%EF%BC%9F"><span class="toc-text">14. JDK 1.7 多线程 HashMap 为何可能死循环？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-13"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-JDK-1-8-%E4%B8%BA%E4%BD%95%E4%BB%8D%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%EF%BC%9F"><span class="toc-text">15. JDK 1.8 为何仍线程不安全？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-14"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-%E9%AB%98%E5%B9%B6%E5%8F%91%E5%9C%BA%E6%99%AF%E5%A6%82%E4%BD%95%E9%80%89%E5%9E%8B-Map%EF%BC%9F"><span class="toc-text">16. 高并发场景如何选型 Map？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-15"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-ConcurrentHashMap-%E7%BB%93%E6%9E%84%E4%B8%8E%E9%94%81"><span class="toc-text">1.4 ConcurrentHashMap 结构与锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#17-CHM-1-7-%E5%88%86%E6%AE%B5%E9%94%81%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F"><span class="toc-text">17. CHM 1.7 分段锁如何工作？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-16"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#18-CHM-1-8-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%B9%B6%E5%8F%91%E5%86%99%EF%BC%9F"><span class="toc-text">18. CHM 1.8 如何保证并发写？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-17"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#19-%E4%B8%BA%E4%BB%80%E4%B9%88-1-8-%E6%A1%B6%E5%86%85%E7%94%A8-synchronized-%E8%80%8C%E4%B8%8D%E6%98%AF-ReentrantLock%EF%BC%9F"><span class="toc-text">19. 为什么 1.8 桶内用 synchronized 而不是 ReentrantLock？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-18"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#20-CHM-%E6%98%AF%E5%90%A6%E5%85%81%E8%AE%B8-null-key-value%EF%BC%9F"><span class="toc-text">20. CHM 是否允许 null key&#x2F;value？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-19"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#21-CHM-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%98%AF-fail-fast-%E8%BF%98%E6%98%AF%E5%BC%B1%E4%B8%80%E8%87%B4%EF%BC%9F"><span class="toc-text">21. CHM 迭代器是 fail-fast 还是弱一致？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-20"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-ConcurrentHashMap-%E6%A0%B8%E5%BF%83%E6%96%B9%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-text">1.5 ConcurrentHashMap 核心方法流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E6%8F%8F%E8%BF%B0-CHM-putVal-%E5%85%A8%E9%93%BE%E8%B7%AF"><span class="toc-text">22. 描述 CHM putVal 全链路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-21"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E6%8F%8F%E8%BF%B0-CHM-get-%E6%B5%81%E7%A8%8B"><span class="toc-text">23. 描述 CHM get 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-22"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-sizeCtl-%E5%9C%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E6%89%A9%E5%AE%B9%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-text">24. sizeCtl 在初始化与扩容中的作用？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-23"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%8D%8F%E5%8A%A9%E6%89%A9%E5%AE%B9%EF%BC%88helpTransfer%EF%BC%89%E5%A6%82%E4%BD%95%E5%88%86%E5%B7%A5%EF%BC%9F"><span class="toc-text">25. 多线程协助扩容（helpTransfer）如何分工？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-24"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-CHM-%E6%89%A9%E5%AE%B9%E9%AB%98%E4%BD%8E%E4%BD%8D%E9%93%BE%E4%B8%8E-HashMap-1-8-%E6%98%AF%E5%90%A6%E5%90%8C%E4%B8%80%E6%80%9D%E8%B7%AF%EF%BC%9F"><span class="toc-text">26. CHM 扩容高低位链与 HashMap 1.8 是否同一思路？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-25"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#27-baseCount-CounterCell-%E5%A6%82%E4%BD%95%E7%BB%9F%E8%AE%A1-size%EF%BC%9F"><span class="toc-text">27. baseCount + CounterCell 如何统计 size？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-26"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#28-computeIfAbsent-merge-%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">28. computeIfAbsent &#x2F; merge 使用注意点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-27"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E7%BA%A2%E9%BB%91%E6%A0%91%EF%BC%88%E6%A1%B6%E5%86%85%EF%BC%89"><span class="toc-text">1.6 红黑树（桶内）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#29-HashMap-%E6%A1%B6%E5%86%85%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E7%BA%A2%E9%BB%91%E6%A0%91%EF%BC%9F"><span class="toc-text">29. HashMap 桶内为什么选红黑树？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-28"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-List-Set-Map-%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%9B%86%E5%90%88"><span class="toc-text">1.7 List &#x2F; Set &#x2F; Map 与线程安全集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#30-Set%E3%80%81List%E3%80%81Map-%E5%9C%A8%E7%BB%93%E6%9E%84%E3%80%81%E9%A1%BA%E5%BA%8F%E3%80%81%E9%87%8D%E5%A4%8D%E6%80%A7%E4%B8%8A%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">30. Set、List、Map 在结构、顺序、重复性上的区别？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-29"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#31-ArrayList-%E5%BA%95%E5%B1%82%E4%B8%8E%E6%89%A9%E5%AE%B9%E7%AD%96%E7%95%A5%EF%BC%9F"><span class="toc-text">31. ArrayList 底层与扩容策略？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-30"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-LinkedList-%E5%BA%95%E5%B1%82%E4%B8%8E%E5%92%8C-ArrayList-%E7%9A%84%E5%AF%B9%E6%AF%94%EF%BC%9F"><span class="toc-text">32. LinkedList 底层与和 ArrayList 的对比？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-31"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-fail-fast-%E4%B8%8E-modCount%EF%BC%9F"><span class="toc-text">33. fail-fast 与 modCount？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-32"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-fail-safe-%E5%85%B8%E5%9E%8B%E5%AE%9E%E7%8E%B0%E4%B8%8E%E5%9C%BA%E6%99%AF%EF%BC%9F"><span class="toc-text">34. fail-safe 典型实现与场景？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-33"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#35-RandomAccess-%E6%A0%87%E8%AE%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%90%AB%E4%B9%89%EF%BC%9F"><span class="toc-text">35. RandomAccess 标记接口的含义？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-34"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#36-Collections-unmodifiableList-%E4%B8%8E%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%88%97%E8%A1%A8%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">36. Collections.unmodifiableList 与不可变列表的区别？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-35"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#37-CopyOnWriteArrayList-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9C%BA%E6%99%AF%EF%BC%9F"><span class="toc-text">37. CopyOnWriteArrayList 原理与场景？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-36"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-String%E3%80%81equals%E3%80%81%E5%8C%85%E8%A3%85%E7%B1%BB"><span class="toc-text">1.8 String、equals、包装类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#38-String-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%8F%AF%E5%8F%98%EF%BC%9F"><span class="toc-text">38. String 为什么不可变？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-37"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#39-%E3%80%81equals%E3%80%81hashCode-%E5%A5%91%E7%BA%A6%EF%BC%9F"><span class="toc-text">39. &#x3D;&#x3D;、equals、hashCode 契约？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-38"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#40-Integer-%E7%BC%93%E5%AD%98%E4%B8%8E%E8%A3%85%E7%AE%B1%E8%B8%A9%E5%9D%91%EF%BC%9F"><span class="toc-text">40. Integer 缓存与装箱踩坑？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-39"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-9-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E-Java-8"><span class="toc-text">1.9 面向对象与 Java 8</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%B0%81%E8%A3%85%E3%80%81%E7%BB%A7%E6%89%BF%E3%80%81%E5%A4%9A%E6%80%81%E3%80%81%E6%8A%BD%E8%B1%A1%EF%BC%9F"><span class="toc-text">41. 封装、继承、多态、抽象？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-40"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E9%87%8D%E8%BD%BD%E4%B8%8E%E9%87%8D%E5%86%99%EF%BC%9F%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E8%83%BD%E9%87%8D%E5%86%99%E5%90%97%EF%BC%9F"><span class="toc-text">42. 重载与重写？静态方法能重写吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-41"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%A6%82%E4%BD%95%E9%80%89%EF%BC%9F"><span class="toc-text">43. 接口与抽象类如何选？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-42"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-Java-8-%E5%B8%B8%E7%94%A8%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9F"><span class="toc-text">44. Java 8 常用新特性？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-43"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D%EF%BC%9F"><span class="toc-text">45. 深拷贝与浅拷贝？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-44"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-10-%E5%BC%82%E5%B8%B8"><span class="toc-text">1.10 异常</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#46-Exception-%E4%B8%8E-Error%EF%BC%9FChecked-%E4%B8%8E-Unchecked%EF%BC%9F"><span class="toc-text">46. Exception 与 Error？Checked 与 Unchecked？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-45"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#47-%E4%B8%9A%E5%8A%A1%E5%BC%82%E5%B8%B8%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%EF%BC%9F"><span class="toc-text">47. 业务异常如何设计？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-46"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#48-try-catch-finally-%E4%B8%8E-finally-%E9%87%8C-return%EF%BC%9F"><span class="toc-text">48. try-catch-finally 与 finally 里 return？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-47"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-11-%E5%BC%95%E7%94%A8%E3%80%81ThreadLocal%E3%80%81%E6%B3%84%E6%BC%8F"><span class="toc-text">1.11 引用、ThreadLocal、泄漏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#49-%E5%BC%BA%E3%80%81%E8%BD%AF%E3%80%81%E5%BC%B1%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8%EF%BC%9F"><span class="toc-text">49. 强、软、弱、虚引用？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-48"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#50-ThreadLocal-%E5%8E%9F%E7%90%86%E4%B8%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%B3%84%E6%BC%8F%EF%BC%9F"><span class="toc-text">50. ThreadLocal 原理与线程池泄漏？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-49"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-12-%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%88%86%E5%B1%82"><span class="toc-text">1.12 序列化与分层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-serialVersionUID-%E4%B8%8E-RPC-%E5%B0%91%E7%94%A8-Java-%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%9F"><span class="toc-text">51. serialVersionUID 与 RPC 少用 Java 序列化？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-50"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-JSON-%E5%BA%8F%E5%88%97%E5%8C%96%E5%B8%B8%E8%A7%81%E5%9D%91%EF%BC%9F"><span class="toc-text">52. JSON 序列化常见坑？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-51"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-DTO-DO-Entity-%E5%88%86%E5%B1%82%EF%BC%9F"><span class="toc-text">53. DTO &#x2F; DO &#x2F; Entity 分层？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-52"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-13-%E6%89%8B%E5%86%99-%E5%B0%8F%E4%BB%A3%E7%A0%81"><span class="toc-text">1.13 手写 &#x2F; 小代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#54-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%8D%95%E4%BE%8B%E5%86%99%E6%B3%95%EF%BC%9F"><span class="toc-text">54. 线程安全的单例写法？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-53"><span class="toc-text">具体介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#55-%E6%AD%A3%E7%A1%AE%E5%AE%9E%E7%8E%B0-equals-%E5%92%8C-hashCode%EF%BC%9F"><span class="toc-text">55. 正确实现 equals 和 hashCode？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D-54"><span class="toc-text">具体介绍</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E9%9D%A2%E8%AF%95.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
