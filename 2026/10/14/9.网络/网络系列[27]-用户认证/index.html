@@ -1,0 +1,678 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>网络系列[27]-用户认证 | 金子爸爸の家</title><meta name="keywords" content="网络"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="用户认证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络系列[27]-用户认证">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[27]-%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="用户认证">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:23.505Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[27]-%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络系列[27]-用户认证',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">网络系列[27]-用户认证</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:23.505Z" title="更新于 2026-10-14 16:48:23">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/9-%E7%BD%91%E7%BB%9C/">9.网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网络系列[27]-用户认证"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="计算机网络中的认证"><a href="#计算机网络中的认证" class="headerlink" title="计算机网络中的认证"></a><strong>计算机网络中的认证</strong></h1><p>在计算机网络中，<strong>认证（Authentication）</strong> 是一个安全机制，用于：</p>
+<p><strong>验证通信双方的身份是否真实可信，防止伪装或中间人攻击。</strong></p>
+<p><strong>🔒</strong>** 网络中常见的认证对象：**</p>
+<p><strong>对象</strong></p>
+<p><strong>认证目标</strong></p>
+<p><strong>举例</strong></p>
+<p><strong>用户认证</strong></p>
+<p>验证用户身份</p>
+<p>登录系统时输入账号密码</p>
+<p><strong>主机认证</strong></p>
+<p>验证服务器或客户端主机的合法性</p>
+<p>HTTPS 中的服务器证书</p>
+<p><strong>服务认证</strong></p>
+<p>验证某个服务的合法性</p>
+<p>微服务之间用 token 验证</p>
+<p><strong>双向认证</strong></p>
+<p>客户端与服务器互相验证</p>
+<p>TLS 双向认证（mTLS）</p>
+<p>认证可以出现在网络通信的不同层次上：</p>
+<p><strong>层次</strong></p>
+<p><strong>协议/机制</strong></p>
+<p><strong>说明</strong></p>
+<p>应用层</p>
+<p>HTTP、FTP、SMTP、SSH 等</p>
+<p>用户名/密码、OAuth、API Key 等</p>
+<p>传输层</p>
+<p>TLS、SSL</p>
+<p>基于证书的加密认证</p>
+<p>网络层</p>
+<p>IPsec</p>
+<p>使用安全关联（SA）认证通信双方</p>
+<p>数据链路层</p>
+<p>802.1X</p>
+<p>局域网接入认证（如企业 WiFi 登录）</p>
+<p>HTTP/2.0 使用的主要认证方式：</p>
+<p><strong>类别</strong></p>
+<p><strong>认证方式</strong></p>
+<p><strong>简要说明</strong></p>
+<p><strong>① 基于 TLS 层</strong></p>
+<p>TLS 服务器认证（最常见）</p>
+<p>服务器通过 X.509 证书（HTTPS）让客户端验证身份；这是浏览器信任 HTTPS 网站的根基。</p>
+<p>TLS 客户端认证（mTLS）</p>
+<p>客户端也持有证书，服务器验证其身份；常用于企业内网或 API 安全调用。</p>
+<p><strong>② 基于 HTTP 头部的应用层认证</strong></p>
+<p>Basic Authentication</p>
+<p>通过 Authorization: Basic base64(username:password) 头传递凭证；不安全，需配合 HTTPS 使用。</p>
+<p><strong>Digest Authentication</strong></p>
+<p>基于摘要算法（MD5/SHA）计算的挑战响应机制；比 Basic 安全，但较复杂且使用较少。</p>
+<p>Bearer Token / OAuth 2.0</p>
+<p>现代 Web/API 常用方式，通过携带访问令牌（Access Token）进行身份验证。</p>
+<p>API Key</p>
+<p>以请求头或 URL 参数形式携带密钥，常用于简易服务调用。</p>
+<p><strong>③ 其他机制</strong></p>
+<p>Cookie + Session</p>
+<p>浏览器登录后以 Cookie 标识身份；依赖服务器端 Session 管理。</p>
+<p>JWT (JSON Web Token)</p>
+<p>无状态认证方式，在 HTTP Header 中传递签名 Token，用于分布式系统。</p>
+<hr>
+<h1 id="认证方式"><a href="#认证方式" class="headerlink" title="认证方式"></a>认证方式</h1><h2 id="BASIC认证"><a href="#BASIC认证" class="headerlink" title="BASIC认证"></a>BASIC认证</h2><p><strong>Basic 认证</strong> 是 HTTP 协议中最早、最简单的 <strong>用户身份验证机制</strong>。</p>
+<p>它的原理是：</p>
+<p>客户端在请求时，把“用户名:密码”用 <strong>Base64 编码</strong> 后放入请求头（Authorization）中，服务器接收后解码并验证是否正确。</p>
+<p>📘 关键点：</p>
+<ul>
+<li>Base64 不是加密，只是编码！</li>
+<li>因此必须搭配 <strong>HTTPS</strong> 使用，否则容易被窃听。</li>
+<li>想二次认证时，一般的浏览器无法实现认证注销操作。</li>
+</ul>
+<hr>
+<h2 id="DIGEST认证"><a href="#DIGEST认证" class="headerlink" title="DIGEST认证"></a>DIGEST认证</h2><p><strong>Digest Authentication（摘要认证）</strong> 是为了解决 <strong>Basic 认证明文暴露密码</strong> 的问题而提出的更安全的机制。</p>
+<p>它的核心思想是：</p>
+<p>客户端和服务器之间<strong>不直接传输密码</strong>，而是通过 <strong>哈希摘要（MD5 等）</strong> 验证身份。</p>
+<p><strong>Digest Authentication 的主要缺点是：算法过时、实现复杂、兼容性差、无法满足现代安全需求。</strong></p>
+<p>认证过程基于 <strong>挑战-响应（Challenge–Response）机制</strong>：</p>
+<ol>
+<li>客户端请求受保护资源（无凭证）</li>
+<li>服务器返回 401 和质询（challenge）：</li>
+</ol>
+<ul>
+<li>包含随机字符串 nonce（防止重放攻击）</li>
+<li>告诉客户端需要使用 Digest 认证</li>
+</ul>
+<ol>
+<li>客户端计算摘要响应（response）：</li>
+</ol>
+<ul>
+<li>用 username、password、realm、nonce、URI 等生成哈希值</li>
+<li>示例：MD5(MD5(username:realm:password):nonce:MD5(method:uri))</li>
+</ul>
+<ol>
+<li>客户端带上摘要信息发送请求</li>
+<li>服务器验证摘要是否匹配，通过则返回资源，否则返回 401。</li>
+</ol>
+<hr>
+<h2 id="SSL客户端认证"><a href="#SSL客户端认证" class="headerlink" title="SSL客户端认证"></a>SSL客户端认证</h2><p>SSL客户端认证也就是双向TLS了，服务端同样验证客户端的身份。常用的是单向认证（HTTPS），安全性更高的场景使用双向认证（mTLS）。</p>
+<hr>
+<h2 id="表单认证"><a href="#表单认证" class="headerlink" title="表单认证"></a>表单认证</h2><p><strong>表单认证</strong> 是一种基于 <strong>用户名和密码表单提交</strong> 的认证方式，用户通过网页登录表单输入凭据，服务器验证后建立会话。</p>
+<p>常见于：</p>
+<ul>
+<li>各类网站登录页面（如邮箱、论坛、后台系统等）</li>
+<li>Spring Security、Django、Flask、Express 等 Web 框架默认支持</li>
+</ul>
+<p><strong>表单认证流程如下：</strong></p>
+<ol>
+<li>用户访问受保护资源</li>
+</ol>
+<ul>
+<li>服务器发现用户未登录，返回一个 登录页面（login.html）。</li>
+</ul>
+<ol>
+<li>用户提交登录表单</li>
+</ol>
+<ul>
+<li>用户在表单中输入用户名和密码；</li>
+<li>浏览器通过 HTTP POST 请求把凭据发送给服务器（例如 /login 接口）。</li>
+</ul>
+<ol>
+<li>服务器验证凭据</li>
+</ol>
+<ul>
+<li>服务器验证用户名和密码是否正确；</li>
+<li>若正确，创建一个 Session（会话），并生成一个唯一的 Session ID；</li>
+<li>Session ID 通常通过 Cookie 返回给客户端。</li>
+</ul>
+<ol>
+<li>客户端保存 Session ID（Cookie）</li>
+</ol>
+<ul>
+<li>浏览器自动保存 Set-Cookie；</li>
+<li>之后的请求都会自动携带该 Cookie。</li>
+</ul>
+<ol>
+<li>服务器通过 Session 验证登录状态</li>
+</ol>
+<ul>
+<li>每次请求，服务器根据 Session ID 查找用户信息；</li>
+<li>验证通过后才允许访问受保护的资源。</li>
+</ul>
+<p><strong>优点</strong></p>
+<p><strong>缺点</strong></p>
+<p>实现简单、通用性强</p>
+<p>需要服务器端维护 Session 状态</p>
+<p>可与前端 UI 集成</p>
+<p>不适合 RESTful API（推荐 JWT/OAuth）</p>
+<p>支持多种验证源（数据库、LDAP 等）</p>
+<p>Cookie 容易被劫持（需配合 HTTPS）</p>
+<p>表单认证是通过网页表单提交用户名和密码，服务器验证后通过 Cookie+Session 维持登录状态的最常见 Web 认证机制。</p>
+<hr>
+<h2 id="OAuth2-0"><a href="#OAuth2-0" class="headerlink" title="OAuth2.0"></a>OAuth2.0</h2><p>在现代 Web / API 体系中，<strong>OAuth 2.0 通常发放 Bearer 类型的 Access Token</strong>，而 <strong>该 Token 的格式往往是 JWT</strong>。</p>
+<hr>
+<h3 id="三者的层级关系"><a href="#三者的层级关系" class="headerlink" title="****三者的层级关系"></a>****<strong>三者的层级关系</strong></h3><p><strong>概念</strong></p>
+<p><strong>类型</strong></p>
+<p><strong>说明</strong></p>
+<p><strong>OAuth 2.0</strong></p>
+<p><strong>协议 / 标准</strong></p>
+<p>一套标准化的<strong>授权协议</strong>，定义了如何让第三方应用安全地访问资源（不暴露密码）。</p>
+<p><strong>Bearer Token</strong></p>
+<p><strong>令牌类型</strong></p>
+<p>OAuth 2.0 协议定义的<strong>访问令牌类型之一</strong>，表示“持有者令牌”，只要拿到它就有访问权限。</p>
+<p><strong>JWT (JSON Web Token)</strong></p>
+<p><strong>令牌格式</strong></p>
+<p>一种<strong>具体的令牌实现格式</strong>（JSON + 签名），可被 OAuth 2.0 用作 Access Token。</p>
+<hr>
+<h3 id="它们各自是什么"><a href="#它们各自是什么" class="headerlink" title="它们各自是什么"></a><strong>它们各自是什么</strong></h3><h4 id="OAuth-2-0：授权框架"><a href="#OAuth-2-0：授权框架" class="headerlink" title="OAuth 2.0：授权框架"></a><strong>OAuth 2.0：授权框架</strong></h4><ul>
+<li>是一个<strong>标准协议</strong>，用于让用户授权第三方应用访问受保护的资源（比如个人信息、照片、文件等），而<strong>不暴露密码</strong>。</li>
+<li>它规定了几个核心角色：</li>
+</ul>
+<p><strong>角色</strong></p>
+<p><strong>说明</strong></p>
+<p><strong>举例</strong></p>
+<p>Resource Owner</p>
+<p>资源所有者</p>
+<p>用户</p>
+<p>Client</p>
+<p>请求访问资源的应用</p>
+<p>第三方应用</p>
+<p>Authorization Server</p>
+<p>授权服务器</p>
+<p>Google / GitHub / 自建 OAuth 服务</p>
+<p>Resource Server</p>
+<p>资源服务器</p>
+<p>API 服务（如 /api/userinfo）</p>
+<p>🧭 举例：</p>
+<p>当用户用 “Google 登录某个网站” 时，就是 OAuth 2.0 在起作用。</p>
+<p>Google 是授权服务器，网站是客户端。</p>
+<p>🔄 OAuth 2.0 流程的产物是：</p>
+<p>👉 <strong>Access Token（访问令牌）</strong></p>
+<hr>
+<h4 id="Bearer-Token：令牌的类型"><a href="#Bearer-Token：令牌的类型" class="headerlink" title="Bearer Token：令牌的类型"></a><strong>Bearer Token：令牌的类型</strong></h4><ul>
+<li>在 OAuth 2.0 规范（RFC 6750）中，Bearer 是一种<strong>访问令牌的使用方式</strong>。</li>
+<li>它的语义是：“<strong>谁持有这个令牌（Bearer），谁就被视为授权用户。</strong>”</li>
+</ul>
+<p>📘 使用方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /api/userinfo</span><br><span class="line">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span><br></pre></td></tr></table></figure>
+
+<p>🔐 特点：</p>
+<ul>
+<li>服务端不会验证“谁”在用它，只验证令牌是否有效。</li>
+<li>因此必须<strong>配合 HTTPS</strong>，防止中间人截获。</li>
+</ul>
+<hr>
+<h4 id="JWT-JSON-Web-Token-：令牌格式"><a href="#JWT-JSON-Web-Token-：令牌格式" class="headerlink" title="JWT (JSON Web Token)：令牌格式"></a><strong>JWT (JSON Web Token)：令牌格式</strong></h4><ul>
+<li>JWT 是一种<strong>令牌的数据结构和签名标准（RFC 7519）</strong>。</li>
+<li>它不是协议，而是一种<strong>可自验证的 Token 格式</strong>。</li>
+</ul>
+<p>结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xxxxx.yyyyy.zzzzz</span><br><span class="line">│      │      │</span><br><span class="line">│      │      └─ Signature (签名)</span><br><span class="line">│      └──────── Payload (载荷，存放用户信息)</span><br><span class="line">└──────────────── Header (算法与类型)</span><br></pre></td></tr></table></figure>
+
+<p>📘 示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Header:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;alg&quot;: &quot;HS256&quot;,</span><br><span class="line">  &quot;typ&quot;: &quot;JWT&quot;</span><br><span class="line">&#125;</span><br><span class="line">Payload:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;sub&quot;: &quot;user123&quot;,</span><br><span class="line">  &quot;role&quot;: &quot;admin&quot;,</span><br><span class="line">  &quot;exp&quot;: 1730052800</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>签名部分使用密钥生成（防篡改），因此<strong>无需数据库查询即可验证合法性</strong>。</p>
+<hr>
+<h3 id="完整的流程"><a href="#完整的流程" class="headerlink" title="完整的流程"></a><strong>完整的流程</strong></h3><p>假设登录一个网站，使用 OAuth 2.0 授权登录流程：</p>
+<ol>
+<li>点击「使用 GitHub 登录」；</li>
+<li>GitHub（授权服务器）验证身份；</li>
+<li>授权成功后，GitHub 向网站发一个 <strong>Access Token</strong>；</li>
+<li>这个 Access Token 是一个 <strong>Bearer Token</strong>；</li>
+<li>它的格式是一个 <strong>JWT 字符串</strong>；</li>
+<li>网站之后访问 API 时会带上：<code>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></li>
+<li>服务器验证 JWT 的签名和过期时间，即可确认请求合法。</li>
+</ol>
+<hr>
+<h1 id="非对称JWT鉴权"><a href="#非对称JWT鉴权" class="headerlink" title="非对称JWT鉴权"></a>非对称JWT鉴权</h1><p>总体思路：</p>
+<ul>
+<li>用 <strong>服务 A（Issuer）</strong> 用自己的 <strong>私钥</strong> 签发 JWT（含 issuer/aud/exp/iat/jti 等），通过 HTTPS 调用时把 JWT 放在 Authorization: Bearer <token> 头；</li>
+<li><strong>服务 B（Relying Party / Resource）</strong> 接收请求后，<strong>用 A 的公钥验证 JWT 的签名并校验声明</strong>（issuer/aud/exp/nbf/clock skew/jti 等），校验通过则认为调用方合法并执行授权逻辑。</li>
+</ul>
+<hr>
+<h2 id="端到端流程（步骤化）"><a href="#端到端流程（步骤化）" class="headerlink" title="端到端流程（步骤化）"></a><strong>端到端流程（步骤化）</strong></h2><ol>
+<li><strong>密钥对生成与分发</strong></li>
+</ol>
+<ul>
+<li>在 KMS（或 HSM）里生成非对称密钥对（RSA 或 ECC）。</li>
+<li>私钥仅存放在签发方安全环境（Issuer、KMS）中，不外泄。</li>
+<li>将公钥以 JWKS（JSON Web Key Set）或静态 PEM 暴露给被鉴权方（Resource）用于验证。建议托管一个 /jwks.json 或用配置中心分发并缓存。</li>
+</ul>
+<ol>
+<li><strong>签发 JWT（Issuer）</strong></li>
+</ol>
+<ul>
+<li><p>构造 JWT header，比如 {“alg”:”RS256”,”typ”:”JWT”,”kid”:”key-id-1”}。kid 用于公钥轮换/选择。</p>
+</li>
+<li><p>构造 payload（claims），常见：</p>
+</li>
+<li><p>iss：签发者标识（比如 auth.myservice.internal）</p>
+</li>
+<li><p>sub：主体（client id 或 service id）</p>
+</li>
+<li><p>aud：目标服务或 API（保证只给目标消费）</p>
+</li>
+<li><p>exp：过期时间（短，建议几分钟到几小时）</p>
+</li>
+<li><p>iat：签发时间</p>
+</li>
+<li><p>jti：唯一 id（用于可选的撤销/防重放）</p>
+</li>
+<li><p>scp / roles / claims：权限信息</p>
+</li>
+<li><p>使用私钥签名（RS256/ES256 等），返回 compact JWT 字符串。</p>
+</li>
+</ul>
+<ol>
+<li><strong>调用方把 JWT 放入请求头</strong></li>
+</ol>
+<ul>
+<li>Authorization: Bearer <JWT>，通过 HTTPS 发送到 Resource。</li>
+</ul>
+<ol>
+<li><strong>接收方验证 JWT（Resource）</strong></li>
+</ol>
+<ul>
+<li><p>提取并解析 JWT header 找到 kid（若有）。</p>
+</li>
+<li><p>从本地缓存或从 /jwks.json 获取对应公钥（按 kid 取），缓存并设置合理的过期。</p>
+</li>
+<li><p>验证签名（用公钥 + 指定 alg），并严格拒绝 alg=none。</p>
+</li>
+<li><p>校验标准声明：</p>
+</li>
+<li><p>exp（过期）</p>
+</li>
+<li><p>nbf（生效时间，如果有）</p>
+</li>
+<li><p>iss（是否来自可信 issuer）</p>
+</li>
+<li><p>aud（是否面向本服务）</p>
+</li>
+<li><p>时钟偏差（常用 ±30s）</p>
+</li>
+<li><p>可选：校验 jti 是否在黑名单（用于撤销），或检查 sub 是否在允许列表等。</p>
+</li>
+<li><p>通过后根据 scp/roles 做授权决策。</p>
+</li>
+</ul>
+<hr>
+<h2 id="为什么公钥泄露不会导致伪造-JWT？"><a href="#为什么公钥泄露不会导致伪造-JWT？" class="headerlink" title="为什么公钥泄露不会导致伪造 JWT？"></a>为什么公钥泄露不会导致伪造 JWT？</h2><p>原因在于：</p>
+<ul>
+<li><p><strong>非对称签名的本质</strong></p>
+</li>
+<li><p>签名：用 <strong>私钥</strong> 生成。</p>
+</li>
+<li><p>验证：用 <strong>公钥</strong> 校验。</p>
+</li>
+<li><p>任何人（包括第三方服务 C）即使拿到了公钥，也只能验证别人签的 JWT，而<strong>无法用公钥去生成一个合法签名</strong>。</p>
+</li>
+<li><p><strong>伪造 JWT 需要私钥</strong></p>
+</li>
+<li><p>只有持有私钥的一方才能产生有效的签名。</p>
+</li>
+<li><p>公钥暴露给全世界都没关系，它就是拿来校验的。很多开放的 OAuth2 / OpenID Connect 平台（比如 Google、Auth0）都会把 JWKS（公钥集合）公开在 /.well-known/jwks.json，这是正常做法。</p>
+</li>
+<li><p><strong>真正的风险</strong></p>
+</li>
+<li><p>如果私钥泄露，那才是真的危险：任何人都能伪造合法 JWT。</p>
+</li>
+<li><p>所以保护私钥（放在 KMS/HSM，限制权限，定期轮换）才是重中之重。</p>
+</li>
+<li><p><strong>一个额外的注意点</strong></p>
+</li>
+<li><p>即便公钥是公开的，你也要在验证时检查 JWT 的 iss（issuer）、aud（audience）等声明。</p>
+</li>
+<li><p>否则，有人可能用其它系统签的合法 JWT 直接拿来访问你的服务（签名对得上，但不是你信任的 issuer）。</p>
+</li>
+</ul>
+<hr>
+<p>所以总结：</p>
+<ul>
+<li>公钥公开是安全的，不会导致伪造。</li>
+<li>只有私钥泄露才会有伪造风险。</li>
+<li>服务 B 验证时要 <strong>不仅看签名对不对，还要校验 iss/aud/exp 等声明</strong>，否则容易被“合法但不属于你系统的 token”误用。</li>
+</ul>
+<hr>
+<h2 id="JWT被截获（重放攻击）？"><a href="#JWT被截获（重放攻击）？" class="headerlink" title="JWT被截获（重放攻击）？"></a>JWT被截获（<strong>重放攻击</strong>）？</h2><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a><strong>场景</strong></h3><ul>
+<li><strong>A</strong> = 签发方（Issuer，Auth Service）</li>
+<li><strong>B</strong> = 资源服务（Resource，Service B）</li>
+<li><strong>C</strong> = 攻击者（或第三方系统）</li>
+<li>A 给调用方签发了一个有效的 <strong>JWT</strong>，原本是给 <strong>B</strong> 用的。</li>
+<li>如果这个 token 被截获，C 拿着它直接请求 B，看起来就能“冒充”调用方。</li>
+</ul>
+<hr>
+<h3 id="为什么会这样？"><a href="#为什么会这样？" class="headerlink" title="为什么会这样？"></a><strong>为什么会这样？</strong></h3><p>JWT 本身 <strong>不是防窃听机制</strong>，它只解决了：</p>
+<ul>
+<li><strong>签发者可验证</strong>：B 确认 token 来自 A</li>
+<li><strong>不可篡改</strong>：签名确保内容不能改</li>
+</ul>
+<p>但是：</p>
+<ul>
+<li>JWT 只要被窃取（无论是网络截获还是日志泄露），<strong>在未过期之前就是一张有效的“门票”</strong>。</li>
+<li>这叫 <strong>Replay Attack（重放攻击）</strong>。</li>
+</ul>
+<hr>
+<h3 id="如何防止？"><a href="#如何防止？" class="headerlink" title="如何防止？"></a><strong>如何防止？</strong></h3><p>要避免“截获即复用”，常见的手段有：</p>
+<ol>
+<li><strong>HTTPS 必须全程传输</strong></li>
+</ol>
+<ul>
+<li>防止 token 在传输过程中被窃听。</li>
+<li>这是 JWT 安全的第一道防线。</li>
+</ul>
+<ol>
+<li><strong>设置较短的过期时间 (exp)</strong></li>
+</ol>
+<ul>
+<li>token 有效期不要太长（几分钟到几十分钟）。</li>
+<li>减少被窃取后可利用的时间窗口。</li>
+</ul>
+<ol>
+<li><strong>使用 aud（Audience）字段</strong></li>
+</ol>
+<ul>
+<li>在 token 中声明目标服务（比如 aud = serviceB）。</li>
+<li>B 只接受 aud=serviceB 的 token。</li>
+<li>即使 C 把 token 拿去请求别的系统，也会因为 aud 不匹配而失败。</li>
+</ul>
+<ol>
+<li><strong>绑定上下文（可选强化）</strong></li>
+</ol>
+<ul>
+<li>比如在 token 中加入 sub（调用方 ID）、jti（唯一 ID）。</li>
+<li>B 可以检测 jti 是否被重复使用（防重放）。</li>
+<li>甚至可以把 token 绑定到客户端证书/设备信息，但这通常需要额外的基础设施。</li>
+</ul>
+<ol>
+<li><strong>引入 Refresh Token + 短期 Access Token 模式</strong></li>
+</ol>
+<ul>
+<li>Access Token（JWT）很短命，被盗也没多大用处。</li>
+<li>Refresh Token 只在和授权服务交互时使用，不直接对外暴露。</li>
+</ul>
+<ol>
+<li><strong>使用 mTLS（双向 TLS）</strong></li>
+</ol>
+<ul>
+<li>只有握手时持有有效客户端证书的服务，才能和 B 建立连接。</li>
+<li>即使 JWT 泄露，没有证书也没法连上。</li>
+</ul>
+<hr>
+<h2 id="Refresh-Token-Access-Token"><a href="#Refresh-Token-Access-Token" class="headerlink" title="Refresh Token + Access Token"></a>Refresh Token + Access Token</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a><strong>原理</strong></h3><ul>
+<li><p><strong>Access Token（短期访问令牌）</strong></p>
+</li>
+<li><p>用来直接访问资源（API）。</p>
+</li>
+<li><p>生命周期很短（比如 5-15 分钟）。</p>
+</li>
+<li><p>被窃取也只能用很短时间。</p>
+</li>
+<li><p><strong>Refresh Token（刷新令牌）</strong></p>
+</li>
+<li><p>生命周期很长（几个小时到几天甚至几周）。</p>
+</li>
+<li><p>只在和认证服务器交互时使用，不直接调用资源服务。</p>
+</li>
+<li><p>作用是 <strong>用来换新 Access Token</strong>。</p>
+</li>
+<li><p>一般只保存在可信的客户端或安全存储中。</p>
+</li>
+</ul>
+<hr>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a><strong>特点</strong></h3><ul>
+<li><strong>安全性提升</strong>：Access Token 短命，被截获损失可控；Refresh Token 不会频繁出现在网络请求中。</li>
+<li><strong>用户体验好</strong>：用户不用频繁登录，因为客户端可以自动刷新 Access Token。</li>
+<li><strong>可控性</strong>：Refresh Token 可以在服务端主动撤销（踢出用户），比单纯的 JWT 可控。</li>
+</ul>
+<hr>
+<h3 id="典型流程"><a href="#典型流程" class="headerlink" title="典型流程"></a><strong>典型流程</strong></h3><ol>
+<li><strong>用户登录 / 授权</strong></li>
+</ol>
+<ul>
+<li>客户端向授权服务（Auth Server / Identity Provider）申请 Token。</li>
+<li>返回 <strong>Access Token + Refresh Token</strong>。</li>
+</ul>
+<ol>
+<li><strong>客户端调用 API</strong></li>
+</ol>
+<ul>
+<li>带着 <strong>Access Token</strong> 调用资源服务（Resource Server）。</li>
+</ul>
+<ol>
+<li><strong>Access Token 过期</strong></li>
+</ol>
+<ul>
+<li>客户端用 <strong>Refresh Token</strong> 向授权服务申请新的 Access Token。</li>
+<li>授权服务验证 Refresh Token 的合法性 → 返回新的 Access Token（可能还返回新的 Refresh Token）。</li>
+</ul>
+<ol>
+<li><strong>循环使用</strong></li>
+</ol>
+<ul>
+<li>只要 Refresh Token 没过期，就可以不停换新的 Access Token。</li>
+<li>如果 Refresh Token 被吊销（比如用户退出登录），那就彻底失效。</li>
+</ul>
+<hr>
+<h3 id="Refresh-token-安全保证"><a href="#Refresh-token-安全保证" class="headerlink" title="Refresh token 安全保证"></a>Refresh token 安全保证</h3><p>如果 <strong>Refresh Token 被截获</strong>，意味着攻击者可以不断拿它去换新的 Access Token，从而“长期持有”用户身份。</p>
+<hr>
+<p><strong>🔑</strong>** 防御机制**</p>
+<ol>
+<li><strong>短期 Refresh Token + Rotation（轮换刷新）</strong></li>
+</ol>
+<ul>
+<li>不要让 Refresh Token 永久有效。</li>
+<li>每次用 Refresh Token 换新 Access Token 时，授权服务器会：</li>
+</ul>
+<ol>
+<li><strong>签发一个新的 Refresh Token</strong>（替换旧的）。</li>
+<li><strong>立即废弃旧的 Refresh Token</strong>。</li>
+</ol>
+<ul>
+<li>如果攻击者拦截了旧的 Refresh Token 并尝试再用一次，授权服务器会发现这是“重放攻击”，直接拒绝并吊销会话。</li>
+</ul>
+<p>👉 这叫 <strong>Refresh Token Rotation</strong>，OAuth2.1 标准也推荐这么做。</p>
+<hr>
+<ol>
+<li><strong>绑定客户端/设备</strong></li>
+</ol>
+<ul>
+<li>Refresh Token 在签发时绑定到某个 <strong>客户端 ID / 设备指纹</strong>。</li>
+<li>拿到 Refresh Token 的请求如果不是来自绑定的客户端，就拒绝。</li>
+<li>有的实现还会绑定 <strong>IP 地址、User-Agent</strong> 等上下文信息。</li>
+</ul>
+<hr>
+<ol>
+<li><strong>存储保护</strong></li>
+</ol>
+<ul>
+<li><p>客户端必须妥善保存 Refresh Token：</p>
+</li>
+<li><p>移动端：存安全存储区（如 iOS Keychain，Android Keystore）。</p>
+</li>
+<li><p>Web 应用：不要存到 localStorage，建议用 <strong>HttpOnly + Secure Cookie</strong>。</p>
+</li>
+<li><p>不要通过 URL 传递 Refresh Token（避免出现在日志）。</p>
+</li>
+</ul>
+<hr>
+<ol>
+<li><strong>服务端控制 &amp; 黑名单</strong></li>
+</ol>
+<ul>
+<li><p>授权服务器会维护 Refresh Token 的状态：</p>
+</li>
+<li><p>是否已使用（轮换模式下）</p>
+</li>
+<li><p>是否已吊销（用户登出、管理员强制下线）</p>
+</li>
+<li><p>可以支持黑名单机制，随时让某个 Refresh Token 失效。</p>
+</li>
+</ul>
+<hr>
+<ol>
+<li><strong>缩短有效期 + 分层 TTL</strong></li>
+</ol>
+<ul>
+<li><p>例子：</p>
+</li>
+<li><p>Access Token：5-15 分钟</p>
+</li>
+<li><p>Refresh Token：1-2 小时（配合 Rotation 可延长）</p>
+</li>
+<li><p>如果攻击者窃取了 Refresh Token，也只能使用有限时间。</p>
+</li>
+</ul>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[27]-%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81/">https://zhangxin66666.github.io/2026/10/14/9.网络/网络系列[27]-用户认证/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E7%BD%91%E7%BB%9C.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B26%5D-HTTPS%E5%8D%8F%E8%AE%AE/"><img class="prev-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">网络系列[26]-HTTPS协议</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B29%5D-%E5%B8%B8%E8%A7%81%E7%9A%84%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98/"><img class="next-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">网络系列[29]-常见的网络问题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B11%5D-%E7%BD%91%E7%BA%BF%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%BB%9E%E7%BA%BF/" title="网络系列[11]-网线为什么使用双绞线"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[11]-网线为什么使用双绞线</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B10%5D-UDP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/" title="网络系列[10]-UDP协议的收发操作"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[10]-UDP协议的收发操作</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B13%5D-%E8%B7%AF%E7%94%B1%E5%99%A8%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[13]-路由器的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[13]-路由器的包转发</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B14%5D-%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%88NAT%EF%BC%89/" title="网络系列[14]-网络地址转换（NAT）"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[14]-网络地址转换（NAT）</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B15%5D-%E4%BB%8E%E4%BA%92%E8%81%94%E7%BD%91%E8%AE%BF%E9%97%AE%E5%85%AC%E5%8F%B8%E5%86%85%E7%BD%91/" title="网络系列[15]-从互联网访问公司内网"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[15]-从互联网访问公司内网</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B12%5D-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[12]-交换机的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[12]-交换机的包转发</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E8%AE%A4%E8%AF%81"><span class="toc-text">计算机网络中的认证</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F"><span class="toc-text">认证方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BASIC%E8%AE%A4%E8%AF%81"><span class="toc-text">BASIC认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DIGEST%E8%AE%A4%E8%AF%81"><span class="toc-text">DIGEST认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSL%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%A4%E8%AF%81"><span class="toc-text">SSL客户端认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95%E8%AE%A4%E8%AF%81"><span class="toc-text">表单认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OAuth2-0"><span class="toc-text">OAuth2.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E8%80%85%E7%9A%84%E5%B1%82%E7%BA%A7%E5%85%B3%E7%B3%BB"><span class="toc-text">****三者的层级关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%83%E4%BB%AC%E5%90%84%E8%87%AA%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">它们各自是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OAuth-2-0%EF%BC%9A%E6%8E%88%E6%9D%83%E6%A1%86%E6%9E%B6"><span class="toc-text">OAuth 2.0：授权框架</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bearer-Token%EF%BC%9A%E4%BB%A4%E7%89%8C%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">Bearer Token：令牌的类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JWT-JSON-Web-Token-%EF%BC%9A%E4%BB%A4%E7%89%8C%E6%A0%BC%E5%BC%8F"><span class="toc-text">JWT (JSON Web Token)：令牌格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-text">完整的流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0JWT%E9%89%B4%E6%9D%83"><span class="toc-text">非对称JWT鉴权</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%B5%81%E7%A8%8B%EF%BC%88%E6%AD%A5%E9%AA%A4%E5%8C%96%EF%BC%89"><span class="toc-text">端到端流程（步骤化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%85%AC%E9%92%A5%E6%B3%84%E9%9C%B2%E4%B8%8D%E4%BC%9A%E5%AF%BC%E8%87%B4%E4%BC%AA%E9%80%A0-JWT%EF%BC%9F"><span class="toc-text">为什么公钥泄露不会导致伪造 JWT？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JWT%E8%A2%AB%E6%88%AA%E8%8E%B7%EF%BC%88%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB%EF%BC%89%EF%BC%9F"><span class="toc-text">JWT被截获（重放攻击）？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF"><span class="toc-text">场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E8%BF%99%E6%A0%B7%EF%BC%9F"><span class="toc-text">为什么会这样？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2%EF%BC%9F"><span class="toc-text">如何防止？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refresh-Token-Access-Token"><span class="toc-text">Refresh Token + Access Token</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-text">特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B8%E5%9E%8B%E6%B5%81%E7%A8%8B"><span class="toc-text">典型流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Refresh-token-%E5%AE%89%E5%85%A8%E4%BF%9D%E8%AF%81"><span class="toc-text">Refresh token 安全保证</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

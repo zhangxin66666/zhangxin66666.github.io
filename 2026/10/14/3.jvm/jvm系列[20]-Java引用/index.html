@@ -1,0 +1,252 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>jvm系列[20]-Java引用 | 金子爸爸の家</title><meta name="keywords" content="JVM"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="jvm系列[20]-Java引用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm系列[20]-Java引用">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97[20]-Java%E5%BC%95%E7%94%A8/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="jvm系列[20]-Java引用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/jvm.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:22.923Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/jvm.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97[20]-Java%E5%BC%95%E7%94%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'jvm系列[20]-Java引用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/jvm.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">jvm系列[20]-Java引用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:22.923Z" title="更新于 2026-10-14 16:48:22">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/3-jvm/">3.jvm</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="jvm系列[20]-Java引用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>无论是引用计数法还是可达性分析算法，判定对象是否存活都和引用脱不开关系。</p>
+<p>Java 的四种引用类型（<strong>强引用、软引用、弱引用、虚引用</strong>）是 Java 内存管理的重要部分，主要用于控制对象的生命周期和垃圾回收行为。不同的引用类型适用于不同的应用场景。</p>
+<h3 id="1-强引用（Strong-Reference）"><a href="#1-强引用（Strong-Reference）" class="headerlink" title="1. 强引用（Strong Reference）"></a><strong>1. 强引用（Strong Reference）</strong></h3><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a><strong>特点</strong></h4><ul>
+<li><strong>默认的引用类型</strong>，例如 <code>Object obj = new Object();</code></li>
+<li>只要有强引用指向某个对象，该对象就<strong>不会被 GC 回收</strong></li>
+<li>可能导致 <strong>OOM（OutOfMemoryError）</strong>，因为 GC <strong>绝不会</strong> 主动回收强引用对象</li>
+</ul>
+<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a><strong>适用场景</strong></h4><ul>
+<li><p>适用于<strong>大多数场景</strong>，例如：</p>
+</li>
+<li><p>普通对象的声明和使用</p>
+</li>
+<li><p>依赖 JVM <strong>正常 GC 机制</strong> 管理对象生命周期</p>
+</li>
+</ul>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object(); <span class="comment">// 强引用</span></span><br><span class="line">obj = <span class="keyword">null</span>; <span class="comment">// 只有当对象不可达时，才会被 GC</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>回收条件</strong>：只有当 <code>obj = null</code> 或超出作用域，且没有其他引用指向该对象时，GC 才会回收它。</p>
+<h3 id="2-软引用（Soft-Reference）"><a href="#2-软引用（Soft-Reference）" class="headerlink" title="2. 软引用（Soft Reference）"></a><strong>2. 软引用（Soft Reference）</strong></h3><h4 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a><strong>特点</strong></h4><ul>
+<li>当<strong>内存不足</strong>时，GC 会回收<strong>软引用对象</strong>，否则不会回收</li>
+<li><strong>避免 OOM</strong>，适用于<strong>缓存</strong></li>
+<li>需要使用 <code>java.lang.ref.SoftReference</code> 类</li>
+</ul>
+<h4 id="适用场景-1"><a href="#适用场景-1" class="headerlink" title="适用场景"></a><strong>适用场景</strong></h4><ul>
+<li><strong>缓存系统</strong>（如 Java 内存缓存、图片缓存）</li>
+<li>允许<strong>在内存紧张时自动清理不重要的对象</strong></li>
+<li>例如，图片加载框架（如 Glide、LruCache）使用软引用来缓存图片</li>
+</ul>
+<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a><strong>示例</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.ref.SoftReference;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SoftReferenceExample</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SoftReference softRef = <span class="keyword">new</span> SoftReference&lt;&gt;(<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span>]); <span class="comment">// 10MB 缓存</span></span><br><span class="line">        System.out.println(softRef.get() != <span class="keyword">null</span> ? <span class="string">&quot;Object is alive&quot;</span> : <span class="string">&quot;Object has been collected&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.gc(); <span class="comment">// 尝试触发 GC</span></span><br><span class="line"></span><br><span class="line">        System.out.println(softRef.get() != <span class="keyword">null</span> ? <span class="string">&quot;Object is alive&quot;</span> : <span class="string">&quot;Object has been collected&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>回收条件</strong>：当内存不足时，JVM 会<strong>优先回收软引用对象</strong>，以避免 OOM。</p>
+<h3 id="3-弱引用（Weak-Reference）"><a href="#3-弱引用（Weak-Reference）" class="headerlink" title="3. 弱引用（Weak Reference）"></a><strong>3. 弱引用（Weak Reference）</strong></h3><h4 id="特点-2"><a href="#特点-2" class="headerlink" title="特点"></a><strong>特点</strong></h4><ul>
+<li>只要发生 <strong>GC</strong>，弱引用对象<strong>就会被回收</strong></li>
+<li>需要使用 <code>java.lang.ref.WeakReference</code></li>
+<li><strong>比软引用更容易被回收</strong></li>
+</ul>
+<h4 id="适用场景-2"><a href="#适用场景-2" class="headerlink" title="适用场景"></a><strong>适用场景</strong></h4><ul>
+<li><p><strong>避免内存泄漏</strong></p>
+</li>
+<li><p>适用于<strong>缓存但不重要的对象</strong>（例如 <code>ThreadLocal</code>、WeakHashMap）</p>
+</li>
+<li><p><strong>监听器、观察者模式</strong></p>
+</li>
+<li><p>避免<strong>监听器不被回收导致内存泄漏</strong></p>
+</li>
+<li><p><strong>动态代理</strong></p>
+</li>
+<li><p>例如 <code>WeakHashMap</code>，如果 key 没有其他强引用，GC 就会回收它</p>
+</li>
+</ul>
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a><strong>示例</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.ref.WeakReference;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeakReferenceExample</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        WeakReference weakRef = <span class="keyword">new</span> WeakReference&lt;&gt;(<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span>]); <span class="comment">// 10MB</span></span><br><span class="line"></span><br><span class="line">        System.out.println(weakRef.get() != <span class="keyword">null</span> ? <span class="string">&quot;Object is alive&quot;</span> : <span class="string">&quot;Object has been collected&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.gc(); <span class="comment">// 触发 GC，弱引用对象会被立即回收</span></span><br><span class="line"></span><br><span class="line">        System.out.println(weakRef.get() != <span class="keyword">null</span> ? <span class="string">&quot;Object is alive&quot;</span> : <span class="string">&quot;Object has been collected&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>回收条件</strong>：只要发生 GC，弱引用对象<strong>必定会被回收</strong>，适用于<strong>临时缓存</strong>。</p>
+<h3 id="4-虚引用（Phantom-Reference）"><a href="#4-虚引用（Phantom-Reference）" class="headerlink" title="4. 虚引用（Phantom Reference）"></a><strong>4. 虚引用（Phantom Reference）</strong></h3><h4 id="特点-3"><a href="#特点-3" class="headerlink" title="特点"></a><strong>特点</strong></h4><ul>
+<li><strong>最弱的引用类型</strong></li>
+<li>**对象被 GC 回收时，会被放入 **<code>**ReferenceQueue**</code>，但 <code>get()</code> 方法永远返回 <code>null</code></li>
+<li><strong>必须和 <strong><code>**ReferenceQueue**</code></strong> 结合使用</strong></li>
+<li>主要用于<strong>检测对象何时被 GC</strong></li>
+<li><strong>不能阻止对象被回收</strong></li>
+</ul>
+<h4 id="适用场景-3"><a href="#适用场景-3" class="headerlink" title="适用场景"></a><strong>适用场景</strong></h4><ul>
+<li><strong>监控对象是否被回收</strong>（类似于 <code>finalize()</code>，但更可控）</li>
+<li><strong>管理堆外内存</strong>（如 <code>DirectByteBuffer</code>）</li>
+<li><strong>确保对象被安全清理</strong></li>
+</ul>
+<h4 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a><strong>示例</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.ref.PhantomReference;</span><br><span class="line"><span class="keyword">import</span> java.lang.ref.ReferenceQueue;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhantomReferenceExample</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        ReferenceQueue queue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;();</span><br><span class="line">        PhantomReference phantomRef = <span class="keyword">new</span> PhantomReference&lt;&gt;(<span class="keyword">new</span> Object(), queue);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;Before GC: &quot;</span> + (phantomRef.get() == <span class="keyword">null</span> ? <span class="string">&quot;Phantom Reference is null&quot;</span> : <span class="string">&quot;Still accessible&quot;</span>));</span><br><span class="line"></span><br><span class="line">        System.gc(); <span class="comment">// 触发 GC</span></span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">1000</span>); <span class="comment">// 等待 GC 完成</span></span><br><span class="line">        System.out.println(<span class="string">&quot;After GC: &quot;</span> + (queue.poll() != <span class="keyword">null</span> ? <span class="string">&quot;Object has been GC&#x27;d and enqueued&quot;</span> : <span class="string">&quot;Still not GC&#x27;d&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>回收条件</strong>：当对象被回收时，**JVM 会把虚引用放入 **<code>**ReferenceQueue**</code><strong>，以通知程序对象已被回收</strong>。</p>
+<h3 id="四种引用的对比总结"><a href="#四种引用的对比总结" class="headerlink" title="四种引用的对比总结"></a><strong>四种引用的对比总结</strong></h3><p>引用类型</p>
+<p>被 GC 回收的时机</p>
+<p>适用场景</p>
+<p>代码示例</p>
+<p><strong>强引用</strong></p>
+<p><strong>永不回收</strong>（除非主动置 <code>null</code></p>
+<p>）</p>
+<p>业务对象、正常使用的对象</p>
+<p><code>Object obj = new Object();</code></p>
+<p><strong>软引用</strong></p>
+<p><strong>内存不足时</strong> 被回收</p>
+<p>缓存（如图片缓存）</p>
+<p><code>new SoftReference&lt;&gt;(obj);</code></p>
+<p><strong>弱引用</strong></p>
+<p><strong>发生 GC 时</strong> 被回收</p>
+<p><code>ThreadLocal</code></p>
+<p>、<code>WeakHashMap</code></p>
+<p>、监听器</p>
+<p><code>new WeakReference&lt;&gt;(obj);</code></p>
+<p><strong>虚引用</strong></p>
+<p><strong>GC 之后</strong> 放入 <code>ReferenceQueue</code></p>
+<p>监控对象回收、管理堆外内存</p>
+<p><code>new PhantomReference&lt;&gt;(obj, queue);</code></p>
+<h3 id="如何选择合适的引用类型？"><a href="#如何选择合适的引用类型？" class="headerlink" title="如何选择合适的引用类型？"></a><strong>如何选择合适的引用类型？</strong></h3><ol>
+<li><strong>强引用</strong>：一般情况下，普通对象应该用<strong>强引用</strong>，因为它们需要长期存在。</li>
+<li><strong>软引用</strong>：用于<strong>缓存对象</strong>，防止 OOM，比如<strong>图片缓存、数据库查询缓存</strong>。</li>
+<li><strong>弱引用</strong>：用于<strong>易回收的缓存对象</strong>，比如 <code>WeakHashMap</code> 作为<strong>临时缓存</strong>，或者<strong>防止监听器导致内存泄漏</strong>。</li>
+<li><strong>虚引用</strong>：用于<strong>监控对象何时被 GC</strong>，通常结合 <code>ReferenceQueue</code>，适用于<strong>资源释放</strong>或<strong>管理堆外内存</strong>（如 <code>DirectByteBuffer</code>）。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97[20]-Java%E5%BC%95%E7%94%A8/">https://zhangxin66666.github.io/2026/10/14/3.jvm/jvm系列[20]-Java引用/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/jvm.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97%5B19%5D-finalize/"><img class="prev-cover" src="/images/cover/jvm.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">jvm系列[19]-finalize</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97%5B1%5D-ZGC%E6%94%B6%E9%9B%86%E5%99%A8/"><img class="next-cover" src="/images/cover/jvm.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">jvm系列[1]-ZGC收集器</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97%5B10%5D-%E6%A0%B9%E8%8A%82%E7%82%B9%E6%9E%9A%E4%B8%BE/" title="jvm系列[10]-根节点枚举"><img class="cover" src="/images/cover/jvm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">jvm系列[10]-根节点枚举</div></div></a></div><div><a href="/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97%5B11%5D-Java17%E9%BB%98%E8%AE%A4%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E8%BF%87%E7%A8%8B/" title="jvm系列[11]-Java17默认垃圾收集过程"><img class="cover" src="/images/cover/jvm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">jvm系列[11]-Java17默认垃圾收集过程</div></div></a></div><div><a href="/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97%5B12%5D-Java8%E9%BB%98%E8%AE%A4%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E8%BF%87%E7%A8%8B/" title="jvm系列[12]-Java8默认垃圾收集过程"><img class="cover" src="/images/cover/jvm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">jvm系列[12]-Java8默认垃圾收集过程</div></div></a></div><div><a href="/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97%5B13%5D-Appel%20%E5%BC%8F%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/" title="jvm系列[13]-Appel 式回收算法"><img class="cover" src="/images/cover/jvm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">jvm系列[13]-Appel 式回收算法</div></div></a></div><div><a href="/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97%5B14%5D-%E6%A0%87%E8%AE%B0-%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95/" title="jvm系列[14]-标记-复制算法"><img class="cover" src="/images/cover/jvm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">jvm系列[14]-标记-复制算法</div></div></a></div><div><a href="/2026/10/14/3.jvm/jvm%E7%B3%BB%E5%88%97%5B15%5D-%E6%A0%87%E8%AE%B0-%E6%95%B4%E7%90%86%E7%AE%97%E6%B3%95/" title="jvm系列[15]-标记-整理算法"><img class="cover" src="/images/cover/jvm.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">jvm系列[15]-标记-整理算法</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%BC%BA%E5%BC%95%E7%94%A8%EF%BC%88Strong-Reference%EF%BC%89"><span class="toc-text">1. 强引用（Strong Reference）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">适用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%BD%AF%E5%BC%95%E7%94%A8%EF%BC%88Soft-Reference%EF%BC%89"><span class="toc-text">2. 软引用（Soft Reference）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-1"><span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-text">适用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%BC%B1%E5%BC%95%E7%94%A8%EF%BC%88Weak-Reference%EF%BC%89"><span class="toc-text">3. 弱引用（Weak Reference）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-2"><span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-text">适用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%99%9A%E5%BC%95%E7%94%A8%EF%BC%88Phantom-Reference%EF%BC%89"><span class="toc-text">4. 虚引用（Phantom Reference）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-3"><span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-text">适用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-3"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E7%A7%8D%E5%BC%95%E7%94%A8%E7%9A%84%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93"><span class="toc-text">四种引用的对比总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-text">如何选择合适的引用类型？</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/jvm.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

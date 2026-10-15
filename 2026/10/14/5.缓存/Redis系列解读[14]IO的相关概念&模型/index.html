@@ -1,0 +1,859 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Redis系列解读[14] IO的相关概念&amp;模型 | 金子爸爸の家</title><meta name="keywords" content="redis"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Redis系列解读[14] IO的相关概念&amp;模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis系列解读[14] IO的相关概念&amp;模型">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB[14]IO%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5&%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="Redis系列解读[14] IO的相关概念&amp;模型">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/redis.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:23.129Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/redis.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB[14]IO%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5&amp;%E6%A8%A1%E5%9E%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Redis系列解读[14] IO的相关概念&模型',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/redis.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Redis系列解读[14] IO的相关概念&amp;模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:23.129Z" title="更新于 2026-10-14 16:48:23">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/5-%E7%BC%93%E5%AD%98/">5.缓存</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">22.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>68分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Redis系列解读[14] IO的相关概念&amp;模型"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>在分析Redis的IO多路复用知识之前，我们先来从内核的角度来学习下IO的相关概念和模型。</p>
+<h1 id="一，一些概念"><a href="#一，一些概念" class="headerlink" title="一，一些概念"></a>一，一些概念</h1><h2 id="1-虚拟存储器-虚拟内存"><a href="#1-虚拟存储器-虚拟内存" class="headerlink" title="1.虚拟存储器(虚拟内存)"></a>1.虚拟存储器(虚拟内存)</h2><p>名词解释：主存：内存；辅存：磁盘（硬盘）</p>
+<p>计算机主存（内存）可看作一个由 M 个连续的字节大小的单元组成的数组，每个字节有一个唯一的地址，这个地址叫做物理地址（PA）。早期的计算机中，如果 CPU 需要内存，使用物理寻址，直接访问主存储器。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/mImWvP.png" alt="image.png"></p>
+<p>这种方式有几个弊端：</p>
+<ol>
+<li>在多用户多任务操作系统中，所有的进程共享主存，如果每个进程都独占一块物理地址空间，主存很快就会被用完。我们希望在不同的时刻，不同的进程可以共用同一块物理地址空间。</li>
+<li>如果所有进程都是直接访问物理内存，那么一个进程就可以修改其他进程的内存数据，导致物理地址空间被破坏，程序运行就会出现异常。为了解决这些问题，我们就想了一个办法，在 CPU 和主存之间增加一个中间层。CPU不再使用物理地址访问，而是访问一个虚拟地址，由这个中间层把地址转换成物理地址，最终获得数据。这个中间层就叫做虚拟存储器（Virtual Memory）。</li>
+</ol>
+<p>具体的操作如下所示：</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/F7objt.png" alt="image.png"></p>
+<p>在每一个进程开始创建的时候，都会分配一段虚拟地址，然后通过虚拟地址和物理地址的映射来获取真实数据，这样进程就不会直接接触到物理地址，甚至不知道自己调用的哪块物理地址的数据。</p>
+<p>目前，大多数操作系统都使用了虚拟内存，如 Windows 系统的虚拟内存、Linux 系统的交换空间等等。Windows 的虚拟内存（pagefile.sys）是磁盘空间的一部分。</p>
+<p>在 32 位的系统上，虚拟地址空间大小是 2^32bit=4G。在 64 位系统上，最大虚拟地址空间大小是多少？是不是 2^64bit=1024*1014TB=1024PB=16EB？实际上没有用到 64 位，因为用不到这么大的空间，而且会造成很大的系统开销。Linux 一般用低48 位来表示虚拟地址空间，也就是 2^48bit=256T。</p>
+<p>在Linux系统中执行以下命令：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/cpuinfo</span><br></pre></td></tr></table></figure>
+
+<p>输出如下：</p>
+<p>address sizes : 40 bits physical, 48 bits virtual</p>
+<hr>
+<p><strong>实际的物理内存可能远远小于虚拟内存的大小，引入虚拟内存，可以提供更大的地址空间，并且地址空间是连续的，使得程序编写、链接更加简单。并且可以对物理内存进行隔离，不同的进程操作互不影响。还可以通过把同一块物理内存映射到不同的虚拟地址空间实现内存共享。</strong></p>
+<hr>
+<h2 id="2-用户空间和内核空间"><a href="#2-用户空间和内核空间" class="headerlink" title="2.用户空间和内核空间"></a>2.用户空间和内核空间</h2><h3 id="2-1-为什么需要两种状态的切换"><a href="#2-1-为什么需要两种状态的切换" class="headerlink" title="2.1 为什么需要两种状态的切换"></a>2.1 为什么需要两种状态的切换</h3><p>在CPU的所有指令中，有一些指令是非常危险的，如果错用，将导致整个系统崩溃。比如：清内存、设置时钟等。如果所有的程序都能使用这些指令，那么你的系统一天死机n回就不足为奇了。所以，CPU将指令分为特权指令和非特权指令，对于那些危险的指令，只允许操作系统及其相关模块使用，普通的应用程序只能使用那些不会造成灾难的指令。</p>
+<h3 id="2-2-什么是内核空间和用户空间"><a href="#2-2-什么是内核空间和用户空间" class="headerlink" title="2.2 什么是内核空间和用户空间"></a>2.2 什么是内核空间和用户空间</h3><p>linux进程有4GB的地址空间，3-4G大部分是共享的，是内核态的地址空间。这里存放着整个内核的代码和所有的内核模块以及内核所维护的数据。</p>
+<table>
+<thead>
+<tr>
+<th>应用程序</th>
+<th>shell</th>
+<th>vi</th>
+<th>…..</th>
+<th>cc</th>
+<th>用户空间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务器</td>
+<td>库函数</td>
+<td>进程管理</td>
+<td>存储管理</td>
+<td>文件管理</td>
+<td>0-3G</td>
+</tr>
+<tr>
+<td>设备驱动</td>
+<td>消息队列</td>
+<td>时钟驱动</td>
+<td>键盘驱动</td>
+<td>磁盘驱动</td>
+<td>内核空间</td>
+</tr>
+<tr>
+<td>内核</td>
+<td>进程调度</td>
+<td>-</td>
+<td>信号量</td>
+<td>-</td>
+<td>3-4G</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-进程描述符和进程内核栈"><a href="#2-3-进程描述符和进程内核栈" class="headerlink" title="2.3 进程描述符和进程内核栈"></a>2.3 进程描述符和进程内核栈</h3><h4 id="①进程描述符"><a href="#①进程描述符" class="headerlink" title="①进程描述符"></a>①进程描述符</h4><p>为了管理进程，内核必须知道每个进程的信息与其所作的事情进程优先级、分配的地址空间、访问权限etc.）。</p>
+<p>进程描述符都是<code>task_struct</code>类型结构， 它的字段包含了与一个进程相关的所有信息（内核还定义了<code>task_t</code>数据类型来等同<code>struct task_struct</code>）。</p>
+<p>进程描述符都是<code>task_struct</code>类型的结构，它的字段包含了与一个进程相关的所有信息。因为进程描述符中存放了那么多信息，所以它是非常复杂的，它不仅仅包括了很多进程属性的字段，还有一些字段包括了指向其他数据结构的指针。</p>
+<p><mark data-lake-id="u9777ef3b" id="u9777ef3b">task_struct</mark></p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">标示符</span> <span class="string">： 描述本进程的唯一标识符，用来区别其他进程；</span></span><br><span class="line"><span class="meta">状态</span> <span class="string">：任务状态，退出代码，退出信号等；</span></span><br><span class="line"><span class="meta">优先级</span> <span class="string">：相对于其他进程的优先级；</span></span><br><span class="line"><span class="attr">程序计数器：程序中即将被执行的下一条指令的地址；</span></span><br><span class="line"><span class="attr">内存指针：包括程序代码和进程相关数据的指针，还有和其他进程共享的内存块的指针；</span></span><br><span class="line"><span class="attr">上下文数据：进程执行时处理器的寄存器中的数据。；</span></span><br><span class="line"><span class="attr">I／O状态信息：包括显示的I/O请求,分配给进程的I／O设备和被进程使用的文件列表；</span></span><br><span class="line"><span class="attr">记账信息：可能包含处理器时间总和，使用的时钟数总和，时间限制，记账列表等。</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>保存进程信息的数据结构叫做 task_struct，可以在 include/linux/sched.h 中找到它。</p>
+</li>
+<li><p>所有运行在系统中的进程都以 task_struct 链表的形式存在内核中。</p>
+</li>
+<li><p>进程的信息可以通过 /proc 系统文件夹查看。要获取PID为400的进程信息，需要查看 /proc/400 这个文件夹。大多数进程信息同样可以使用top和ps这些用户级工具来获取。</p>
+</li>
+</ul>
+<h4 id="②进程内核栈，用户栈"><a href="#②进程内核栈，用户栈" class="headerlink" title="②进程内核栈，用户栈"></a>②进程内核栈，用户栈</h4><p>内核在创建进程的时候，在创建task_struct的同时，会为进程创建相应的堆栈。每个进程会有两个栈，一个用户栈，存在于用户空间，一个内核栈，存在于内核空间。当进程在用户空间运行时，cpu堆栈指针寄存器里面的内容是用户堆栈地址，使用用户栈；当进程在内核空间时，cpu堆栈指针寄存器里面的内容是内核栈空间地址，使用内核栈。</p>
+<p>当进程因为中断或者系统调用而陷入内核态之行时，进程所使用的堆栈也要从用户栈转到内核栈。</p>
+<p>进程陷入内核态后，先把用户态堆栈的地址保存在内核栈之中，然后设置堆栈指针寄存器的内容为内核栈的地址，这样就完成了用户栈向内核栈的转换；当进程从内核态恢复到用户态之行时，在内核态之行的最后将保存在内核栈里面的用户栈的地址恢复到堆栈指针寄存器即可。这样就实现了内核栈和用户栈的互转。</p>
+<p>那么，我们知道从内核转到用户态时用户栈的地址是在陷入内核的时候保存在内核栈里面的，但是在陷入内核的时候，我们是如何知道内核栈的地址的呢？</p>
+<p>关键在进程从用户态转到内核态的时候，进程的内核栈总是空的。这是因为，当进程在用户态运行时，使用的是用户栈，当进程陷入到内核态时，内核栈保存进程在内核态运行的相关信心，但是一旦进程返回到用户态后，内核栈中保存的信息无效，会全部清除，因此每次进程从用户态陷入内核的时候得到的内核栈都是空的。所以在进程陷入内核的时候，直接把内核栈的栈顶地址给堆栈指针寄存器就可以了。</p>
+<h3 id="2-4切换时到底发生了什么"><a href="#2-4切换时到底发生了什么" class="headerlink" title="2.4切换时到底发生了什么"></a>2.4切换时到底发生了什么</h3><h4 id="①用户态切换到内核态有三种方式"><a href="#①用户态切换到内核态有三种方式" class="headerlink" title="①用户态切换到内核态有三种方式"></a>①用户态切换到内核态有三种方式</h4><p><strong>系统调用</strong></p>
+<p>这是用户态进程主动要求切换到内核态的一种方式。用户态进程通过系统调用申请使用操作系统提供的服务程序完成工作。例如fork（）就是执行了一个创建新进程的系统调用。系统调用的机制核心是使用了操作系统为用户特别开放的一个中断来实现，如Linux的int 80h中断。</p>
+<p><strong>异常</strong></p>
+<p>当cpu在执行运行在用户态下的程序时，发生了一些没有预知的异常，这时会触发由当前运行进程切换到处理此异常的内核相关进程中，也就是切换到了内核态，如缺页异常。</p>
+<p><strong>外围设备的中断</strong></p>
+<p>当外围设备完成用户请求的操作后，会向CPU发出相应的中断信号，这时CPU会暂停执行下一条即将要执行的指令而转到与中断信号对应的处理程序去执行，如果前面执行的指令是用户态下的程序，那么转换的过程自然就会是 由用户态到内核态的切换。如硬盘读写操作完成，系统会切换到硬盘读写的中断处理程序中执行后边的操作等。</p>
+<p>这三种方式是系统在运行时由用户态切换到内核态的最主要方式，其中系统调用可以认为是用户进程主动发起的，异常和外围设备中断则是被动的。从触发方式上看，切换方式都不一样，但从最终实际完成由用户态到内核态的切换操作来看，步骤是一样的，都相当于执行了一个中断响应的过程。系统调用实际上最终是中断机制实现的，而异常和中断的处理机制基本一致。</p>
+<h4 id="②具体的切换步骤"><a href="#②具体的切换步骤" class="headerlink" title="②具体的切换步骤"></a>②具体的切换步骤</h4><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/oxnYzB.jpg" alt="image"></p>
+<ul>
+<li><p>从当前进程的描述符中提取其内核栈的ss0及esp0信息。</p>
+</li>
+<li><p>使用ss0和esp0指向的内核栈将当前进程的cs,eip,eflags,ss,esp信息保存起来，这个过程也完成了由用户栈到内核栈的切换过程，同时保存了被暂停执行的程序的下一条指令。</p>
+</li>
+<li><p>将先前由中断向量检索得到的中断处理程序的cs,eip信息装入相应的寄存器，开始执行中断处理程序，这时就转到了内核态的程序执行了。</p>
+</li>
+</ul>
+<h3 id="2-5-缓冲区读写"><a href="#2-5-缓冲区读写" class="headerlink" title="2.5 缓冲区读写"></a>2.5 缓冲区读写</h3><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/5l80JD.jpg" alt="image"></p>
+<p>这个后面详细聊。</p>
+<hr>
+<h2 id="3-进程切换-cpu上下文切换"><a href="#3-进程切换-cpu上下文切换" class="headerlink" title="3.进程切换(cpu上下文切换)"></a>3.进程切换(cpu上下文切换)</h2><p>多任务操作系统是怎么实现运行远大于 CPU 数量的任务个数的？当然，这些任务实际上并不是真的在同时运行，而是因为系统通过时间片分片算法，在很短的时间内，将CPU 轮流分配给它们，造成多任务同时运行的错觉。为了控制进程的执行，内核必须有能力挂起正在 CPU 上运行的进程，并恢复以前挂起的某个进程的执行。这种行为被称为进程切换。</p>
+<p>什么叫上下文？在每个任务运行前，CPU 都需要知道任务从哪里加载、又从哪里开始运行，也就是说，需要系统事先帮它设置好 CPU 寄存器和程序计数器(Program Counter)，这个叫做CPU 的上下文。而这些保存下来的上下文，会存储在系统内核中，并在任务重新调度执行时再次加载进来。这样就能保证任务原来的状态不受影响，让任务看起来还是连续运行。在切换上下文的时候，需要完成一系列的工作，这是一个很消耗资源的操作。</p>
+<hr>
+<h2 id="4-进程的阻塞"><a href="#4-进程的阻塞" class="headerlink" title="4.进程的阻塞"></a>4.进程的阻塞</h2><p>正在运行的进程由于提出系统服务请求（如 I/O 操作），但因为某种原因未得到操作系统的立即响应，该进程只能把自己变成阻塞状态，等待相应的事件出现后才被唤醒。进程在阻塞状态不占用CPU 资源。</p>
+<hr>
+<h2 id="5-文件描述符-FD"><a href="#5-文件描述符-FD" class="headerlink" title="5.文件描述符(FD)"></a>5.文件描述符(FD)</h2><p>Linux 系统将所有设备都当作文件来处理，而 Linux 用文件描述符来标识每个文件对象。</p>
+<p>文件描述符（File Descriptor）是内核为了高效管理已被打开的文件所创建的索引，用于指向被打开的文件，所有执行 I/O 操作的系统调用都通过文件描述符；文件描述符是一个简单的非负整数，用以表明每个被进程打开的文件。</p>
+<p>Linux 系统里面有三个标准文件描述符：0：标准输入（键盘）；1：标准输出（显示器）；2：标准错误输出（显示器）。</p>
+<hr>
+<h1 id="二，内核如何处理网络数据包的收发过程"><a href="#二，内核如何处理网络数据包的收发过程" class="headerlink" title="二，内核如何处理网络数据包的收发过程"></a>二，内核如何处理网络数据包的收发过程</h1><h2 id="1-网络包接收流程"><a href="#1-网络包接收流程" class="headerlink" title="1.网络包接收流程"></a>1.网络包接收流程</h2><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/ib0oVA.jpeg" alt="网络包接收流程.jpg"></p>
+<ul>
+<li>当<code>网络数据帧</code>通过网络传输到达网卡时，网卡会将网络数据帧通过<code>DMA的方式</code>放到<code>环形缓冲区RingBuffer</code>中。</li>
+</ul>
+<p><code>RingBuffer</code>是网卡在启动的时候<code>分配和初始化</code>的<code>环形缓冲队列</code>。当<code>RingBuffer满</code>的时候，新来的数据包就会被<code>丢弃</code>。我们可以通过<code>ifconfig</code>命令查看网卡收发数据包的情况。其中<code>overruns</code>数据项表示当<code>RingBuffer满</code>时，被<code>丢弃的数据包</code>。如果发现出现丢包情况，可以通过<code>ethtool命令</code>来增大RingBuffer长度。</p>
+<ul>
+<li>当<code>DMA操作完成</code>时，网卡会向CPU发起一个<code>硬中断</code>，告诉<code>CPU</code>有网络数据到达。CPU调用网卡驱动注册的<code>硬中断响应程序</code>。网卡硬中断响应程序会为网络数据帧创建内核数据结构<code>sk_buffer</code>，并将网络数据帧<code>拷贝</code>到<code>sk_buffer</code>中。然后发起<code>软中断请求</code>，通知<code>内核</code>有新的网络数据帧到达。</li>
+</ul>
+<p><code>sk_buff</code>缓冲区，是一个维护网络帧结构的<code>双向链表</code>，链表中的每一个元素都是一个<code>网络帧</code>。虽然 TCP/IP 协议栈分了好几层，但上下不同层之间的传递，实际上只需要操作这个数据结构中的指针，而<code>无需进行数据复制</code>。</p>
+<ul>
+<li>内核线程<code>ksoftirqd</code>发现有软中断请求到来，随后调用网卡驱动注册的<code>poll函数</code>，<code>poll函数</code>将<code>sk_buffer</code>中的<code>网络数据包</code>送到内核协议栈中注册的<code>ip_rcv函数</code>中。</li>
+</ul>
+<p><code>每个CPU</code>会绑定<code>一个ksoftirqd</code>内核线程<code>专门</code>用来处理<code>软中断响应</code>。2个 CPU 时，就会有 <code>ksoftirqd/0</code> 和 <code>ksoftirqd/1</code>这两个内核线程。</p>
+<p><strong>这里有个事情需要注意下：</strong> 网卡接收到数据后，当<code>DMA拷贝完成</code>时，向CPU发出<code>硬中断</code>，这时<code>哪个CPU</code>上响应了这个<code>硬中断</code>，那么在网卡<code>硬中断响应程序</code>中发出的<code>软中断请求</code>也会在<code>这个CPU绑定的ksoftirqd线程</code>中响应。所以如果发现Linux软中断，CPU消耗都<code>集中在一个核上</code>的话，那么就需要调整硬中断的<code>CPU亲和性</code>，来将硬中断<code>打散</code>到<code>不通的CPU核</code>上去。</p>
+<ul>
+<li>在<code>ip_rcv函数</code>中也就是上图中的<code>网络层</code>，<code>取出</code>数据包的<code>IP头</code>，判断该数据包下一跳的走向，如果数据包是发送给本机的，则取出传输层的协议类型（<code>TCP</code>或者<code>UDP</code>)，并<code>去掉</code>数据包的<code>IP头</code>，将数据包交给上图中得<code>传输层</code>处理。</li>
+</ul>
+<p>传输层的处理函数：<code>TCP协议</code>对应内核协议栈中注册的<code>tcp_rcv函数</code>，<code>UDP协议</code>对应内核协议栈中注册的<code>udp_rcv函数</code>。</p>
+<ul>
+<li><p>当我们采用的是<code>TCP协议</code>时，数据包到达传输层时，会在内核协议栈中的<code>tcp_rcv函数</code>处理，在tcp_rcv函数中<code>去掉</code>TCP头，根据<code>四元组（源IP，源端口，目的IP，目的端口）</code>查找<code>对应的Socket</code>，如果找到对应的Socket则将网络数据包中的传输数据拷贝到<code>Socket</code>中的<code>接收缓冲区</code>中。如果没有找到，则发送一个<code>目标不可达</code>的<code>icmp</code>包。</p>
+</li>
+<li><p>内核在接收网络数据包时所做的工作我们就介绍完了，现在我们把视角放到应用层，当我们程序通过系统调用<code>read</code>读取<code>Socket接收缓冲区</code>中的数据时，如果接收缓冲区中<code>没有数据</code>，那么应用程序就会在系统调用上<code>阻塞</code>，直到Socket接收缓冲区<code>有数据</code>，然后<code>CPU</code>将<code>内核空间</code>（Socket接收缓冲区）的数据<code>拷贝</code>到<code>用户空间</code>，最后系统调用<code>read返回</code>，应用程序<code>读取</code>数据。</p>
+</li>
+</ul>
+<h3 id="性能开销"><a href="#性能开销" class="headerlink" title="性能开销"></a>性能开销</h3><p>从内核处理网络数据包接收的整个过程来看，内核帮我们做了非常之多的工作，最终我们的应用程序才能读取到网络数据。</p>
+<p>随着而来的也带来了很多的性能开销，结合前面介绍的网络数据包接收过程我们来看下网络数据包接收的过程中都有哪些性能开销：</p>
+<ul>
+<li>应用程序通过<code>系统调用</code>从<code>用户态</code>转为<code>内核态</code>的开销以及系统调用<code>返回</code>时从<code>内核态</code>转为<code>用户态</code>的开销。</li>
+<li>网络数据从<code>内核空间</code>通过<code>CPU拷贝</code>到<code>用户空间</code>的开销。</li>
+<li>内核线程<code>ksoftirqd</code>响应<code>软中断</code>的开销。</li>
+<li><code>CPU</code>响应<code>硬中断</code>的开销。</li>
+<li><code>DMA拷贝</code>网络数据包到<code>内存</code>中的开销。</li>
+</ul>
+<hr>
+<h2 id="2-网络包发送流程"><a href="#2-网络包发送流程" class="headerlink" title="2.网络包发送流程"></a>2.网络包发送流程</h2><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/1lSNe7.jpeg" alt="网络包发送流程.jpg"></p>
+<ul>
+<li>当我们在应用程序中调用<code>send</code>系统调用发送数据时，由于是系统调用所以线程会发生一次用户态到内核态的转换，在内核中首先根据<code>fd</code>将真正的Socket找出，这个Socket对象中记录着各种协议栈的函数地址，然后构造<code>struct msghdr</code>对象，将用户需要发送的数据全部封装在这个<code>struct msghdr</code>结构体中。</li>
+<li>调用内核协议栈函数<code>inet_sendmsg</code>，发送流程进入内核协议栈处理。在进入到内核协议栈之后，内核会找到Socket上的具体协议的发送函数。</li>
+</ul>
+<p>比如：我们使用的是<code>TCP协议</code>，对应的<code>TCP协议</code>发送函数是<code>tcp_sendmsg</code>，如果是<code>UDP协议</code>的话，对应的发送函数为<code>udp_sendmsg</code>。</p>
+<ul>
+<li>在<code>TCP协议</code>的发送函数<code>tcp_sendmsg</code>中，创建内核数据结构<code>sk_buffer</code>,将<code>struct msghdr</code>结构体中的发送数据<code>拷贝</code>到<code>sk_buffer</code>中。调用<code>tcp_write_queue_tail</code>函数获取<code>Socket</code>发送队列中的队尾元素，将新创建的<code>sk_buffer</code>添加到<code>Socket</code>发送队列的尾部。</li>
+</ul>
+<p><code>Socket</code>的发送队列是由<code>sk_buffer</code>组成的一个<code>双向链表</code>。</p>
+<p>发送流程走到这里，用户要发送的数据总算是从<code>用户空间</code>拷贝到了<code>内核</code>中，这时虽然发送数据已经<code>拷贝</code>到了内核<code>Socket</code>中的<code>发送队列</code>中，但并不代表内核会开始发送，因为<code>TCP协议</code>的<code>流量控制</code>和<code>拥塞控制</code>，用户要发送的数据包<code>并不一定</code>会立马被发送出去，需要符合<code>TCP协议</code>的发送条件。如果<code>没有达到发送条件</code>，那么本次<code>send</code>系统调用就会直接返回。</p>
+<ul>
+<li>如果符合发送条件，则开始调用<code>tcp_write_xmit</code>内核函数。在这个函数中，会循环获取<code>Socket</code>发送队列中待发送的<code>sk_buffer</code>，然后进行<code>拥塞控制</code>以及<code>滑动窗口的管理</code>。</li>
+<li>将从<code>Socket</code>发送队列中获取到的<code>sk_buffer</code>重新<code>拷贝一份</code>，设置<code>sk_buffer副本</code>中的<code>TCP HEADER</code>。</li>
+</ul>
+<p><code>sk_buffer</code> 内部其实包含了网络协议中所有的 <code>header</code>。在设置 <code>TCP HEADER</code>的时候，只是把指针指向 <code>sk_buffer</code>的合适位置。后面再设置 <code>IP HEADER</code>的时候，在把指针移动一下就行，避免频繁的内存申请和拷贝，效率很高。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/al5LcV.png" alt="image.png"></p>
+<p><strong>为什么不直接使用</strong><code>**Socket**</code><strong>发送队列中的</strong><code>**sk_buffer**</code><strong>而是需要拷贝一份呢？</strong>因为<code>TCP协议</code>是支持<code>丢包重传</code>的，在没有收到对端的<code>ACK</code>之前，这个<code>sk_buffer</code>是不能删除的。内核每次调用网卡发送数据的时候，实际上传递的是<code>sk_buffer</code>的<code>拷贝副本</code>，当网卡把数据发送出去后，<code>sk_buffer</code>拷贝副本会被释放。当收到对端的<code>ACK</code>之后，<code>Socket</code>发送队列中的<code>sk_buffer</code>才会被真正删除。</p>
+<ul>
+<li>当设置完<code>TCP头</code>后，内核协议栈<code>传输层</code>的事情就做完了，下面通过调用<code>ip_queue_xmit</code>内核函数，正式来到内核协议栈<code>网络层</code>的处理。</li>
+</ul>
+<p>通过<code>route</code>命令可以查看本机路由配置。</p>
+<p>如果你使用 <code>iptables</code>配置了一些规则，那么这里将检测<code>是否命中</code>规则。如果你设置了非常<code>复杂的 netfilter 规则</code>，在这个函数里将会导致你的线程 <code>CPU 开销</code>会<code>极大增加</code>。</p>
+<ul>
+<li></li>
+<li><p>将<code>sk_buffer</code>中的指针移动到<code>IP头</code>位置上，设置<code>IP头</code>。</p>
+</li>
+<li><p>执行<code>netfilters</code>过滤。过滤通过之后，如果数据大于 <code>MTU</code>的话，则执行分片。</p>
+</li>
+<li><p>检查<code>Socket</code>中是否有缓存路由表，如果没有的话，则查找路由项，并缓存到<code>Socket</code>中。接着在把路由表设置到<code>sk_buffer</code>中。</p>
+</li>
+<li><p>内核协议栈<code>网络层</code>的事情处理完后，现在发送流程进入了到了<code>邻居子系统</code>，<code>邻居子系统</code>位于内核协议栈中的<code>网络层</code>和<code>网络接口层</code>之间，用于发送<code>ARP请求</code>获取<code>MAC地址</code>，然后将<code>sk_buffer</code>中的指针移动到<code>MAC头</code>位置，填充<code>MAC头</code>。</p>
+</li>
+<li><p>经过<code>邻居子系统</code>的处理，现在<code>sk_buffer</code>中已经封装了一个完整的<code>数据帧</code>，随后内核将<code>sk_buffer</code>交给<code>网络设备子系统</code>进行处理。<code>网络设备子系统</code>主要做以下几项事情：</p>
+</li>
+<li></li>
+<li><p>选择发送队列（<code>RingBuffer</code>）。因为网卡拥有多个发送队列，所以在发送前需要选择一个发送队列。</p>
+</li>
+<li><p>将<code>sk_buffer</code>添加到发送队列中。</p>
+</li>
+<li><p>循环从发送队列（<code>RingBuffer</code>）中取出<code>sk_buffer</code>，调用内核函数<code>sch_direct_xmit</code>发送数据，其中会调用<code>网卡驱动程序</code>来发送数据。</p>
+</li>
+</ul>
+<p>以上过程全部是用户线程的内核态在执行，占用的CPU时间是系统态时间(<code>sy</code>)，当分配给用户线程的<code>CPU quota</code>用完的时候，会触发<code>NET_TX_SOFTIRQ</code>类型的软中断，内核线程<code>ksoftirqd</code>会响应这个软中断，并执行<code>NET_TX_SOFTIRQ</code>类型的软中断注册的回调函数<code>net_tx_action</code>，在回调函数中会执行到驱动程序函数 <code>dev_hard_start_xmit</code>来发送数据。</p>
+<p><strong>注意：当触发</strong><code>**NET_TX_SOFTIRQ**</code>**软中断来发送数据时，后边消耗的 CPU 就都显示在 **<code>**si**</code><strong>这里了，不会消耗用户进程的系统态时间（</strong><code>**sy**</code><strong>）了。</strong></p>
+<p>从这里可以看到网络包的发送过程和接受过程是不同的，在介绍网络包的接受过程时，我们提到是通过触发<code>NET_RX_SOFTIRQ</code>类型的软中断在内核线程<code>ksoftirqd</code>中执行<code>内核网络协议栈</code>接受数据。而在网络数据包的发送过程中是<code>用户线程的内核态</code>在执行<code>内核网络协议栈</code>，只有当线程的<code>CPU quota</code>用尽时，才触发<code>NET_TX_SOFTIRQ</code>软中断来发送数据。</p>
+<p>在整个网络包的发送和接受过程中，<code>NET_TX_SOFTIRQ</code>类型的软中断只会在发送网络包时并且当用户线程的<code>CPU quota</code>用尽时，才会触发。剩下的接受过程中触发的软中断类型以及发送完数据触发的软中断类型均为<code>NET_RX_SOFTIRQ</code>。所以这就是你在服务器上查看 <code>/proc/softirqs</code>，一般 <code>NET_RX</code>都要比 <code>NET_TX</code>大很多的的原因。</p>
+<ul>
+<li>现在发送流程终于到了网卡真实发送数据的阶段，前边我们讲到无论是用户线程的内核态还是触发<code>NET_TX_SOFTIRQ</code>类型的软中断在发送数据的时候最终会调用到网卡的驱动程序函数<code>dev_hard_start_xmit</code>来发送数据。在网卡驱动程序函数<code>dev_hard_start_xmit</code>中会将<code>sk_buffer</code>映射到网卡可访问的<code>内存 DMA 区域</code>，最终网卡驱动程序通过<code>DMA</code>的方式将<code>数据帧</code>通过物理网卡发送出去。</li>
+<li>当数据发送完毕后，还有最后一项重要的工作，就是清理工作。数据发送完毕后，网卡设备会向<code>CPU</code>发送一个硬中断，<code>CPU</code>调用网卡驱动程序注册的<code>硬中断响应程序</code>，在硬中断响应中触发<code>NET_RX_SOFTIRQ</code>类型的软中断，在软中断的回调函数<code>igb_poll</code>中清理释放 <code>sk_buffer</code>，清理<code>网卡</code>发送队列（<code>RingBuffer</code>），解除 DMA 映射。</li>
+</ul>
+<p>无论<code>硬中断</code>是因为<code>有数据要接收</code>，还是说<code>发送完成通知</code>，从硬中断触发的软中断都是 <code>NET_RX_SOFTIRQ</code>。</p>
+<p>这里释放清理的只是<code>sk_buffer</code>的副本，真正的<code>sk_buffer</code>现在还是存放在<code>Socket</code>的发送队列中。前面在<code>传输层</code>处理的时候我们提到过，因为传输层需要<code>保证可靠性</code>，所以 <code>sk_buffer</code>其实还没有删除。它得等收到对方的 ACK 之后才会真正删除。</p>
+<h3 id="性能开销-1"><a href="#性能开销-1" class="headerlink" title="性能开销"></a>性能开销</h3><p>前边我们提到了在网络包接收过程中涉及到的性能开销，现在介绍完了网络包的发送过程，我们来看下在数据包发送过程中的性能开销：</p>
+<ul>
+<li><p>和接收数据一样，应用程序在调用<code>系统调用send</code>的时候会从<code>用户态</code>转为<code>内核态</code>以及发送完数据后，<code>系统调用</code>返回时从<code>内核态</code>转为<code>用户态</code>的开销。</p>
+</li>
+<li><p>用户线程内核态<code>CPU quota</code>用尽时触发<code>NET_TX_SOFTIRQ</code>类型软中断，内核响应软中断的开销。</p>
+</li>
+<li><p>网卡发送完数据，向<code>CPU</code>发送硬中断，<code>CPU</code>响应硬中断的开销。以及在硬中断中发送<code>NET_RX_SOFTIRQ</code>软中断执行具体的内存清理动作。内核响应软中断的开销。</p>
+</li>
+<li><p>内存拷贝的开销。我们来回顾下在数据包发送的过程中都发生了哪些内存拷贝：</p>
+</li>
+<li><p>在内核协议栈的传输层中，<code>TCP协议</code>对应的发送函数<code>tcp_sendmsg</code>会申请<code>sk_buffer</code>，将用户要发送的数据<code>拷贝</code>到<code>sk_buffer</code>中。</p>
+</li>
+<li><p>在发送流程从传输层到网络层的时候，会<code>拷贝</code>一个<code>sk_buffer副本</code>出来，将这个<code>sk_buffer副本</code>向下传递。原始<code>sk_buffer</code>保留在<code>Socket</code>发送队列中，等待网络对端<code>ACK</code>，对端<code>ACK</code>后删除<code>Socket</code>发送队列中的<code>sk_buffer</code>。对端没有发送<code>ACK</code>，则重新从<code>Socket</code>发送队列中发送，实现<code>TCP协议</code>的可靠传输。</p>
+</li>
+<li><p>在网络层，如果发现要发送的数据大于<code>MTU</code>，则会进行分片操作，申请额外的<code>sk_buffer</code>，并将原来的sk_buffer<code>拷贝</code>到多个小的sk_buffer中。</p>
+</li>
+</ul>
+<hr>
+<h1 id="三，阻塞-amp-非阻塞，同步-amp-异步"><a href="#三，阻塞-amp-非阻塞，同步-amp-异步" class="headerlink" title="三，阻塞&amp;非阻塞，同步&amp;异步"></a>三，阻塞&amp;非阻塞，同步&amp;异步</h1><p>经过前边对网络数据包接收流程的介绍，在这里我们可以将整个流程总结为两个阶段：</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/Vi9Ga7.png" alt="image.png"></p>
+<ul>
+<li><strong>数据准备阶段：</strong> 在这个阶段，网络数据包到达网卡，通过DMA的方式将数据包拷贝到内存中，然后经过硬中断，软中断，接着通过内核线程ksoftirqd经过内核协议栈的处理，最终将数据发送到内核Socket的接收缓冲区中。</li>
+<li><strong>数据拷贝阶段：</strong> 当数据到达内核Socket的接收缓冲区中时，此时数据存在于内核空间中，需要将数据拷贝到用户空间中，才能够被应用程序读取。</li>
+</ul>
+<h2 id="1-阻塞-amp-非阻塞"><a href="#1-阻塞-amp-非阻塞" class="headerlink" title="1.阻塞&amp;非阻塞"></a>1.阻塞&amp;非阻塞</h2><p>阻塞与非阻塞的区别主要发生在第一阶段：数据准备阶段。</p>
+<p>当应用程序发起系统调用read时，线程从用户态转为内核态，读取内核Socket的接收缓冲区中的网络数据。</p>
+<h3 id="1-1-阻塞"><a href="#1-1-阻塞" class="headerlink" title="1.1 阻塞"></a>1.1 阻塞</h3><p>如果这时内核Socket的接收缓冲区没有数据，那么线程就会一直等待，直到Socket接收缓冲区有数据为止。随后将数据从内核空间拷贝到用户空间，系统调用read返回。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/E2pWx3.png" alt="image.png"></p>
+<p>从图中我们可以看出：<strong>阻塞</strong>的特点是在第一阶段和第二阶段都会等待。</p>
+<h3 id="1-2-非阻塞"><a href="#1-2-非阻塞" class="headerlink" title="1.2 非阻塞"></a>1.2 非阻塞</h3><p>阻塞和非阻塞主要的区分是在第一阶段：数据准备阶段。</p>
+<ul>
+<li>在第一阶段，当Socket的接收缓冲区中没有数据的时候，阻塞模式下应用线程会一直等待。非阻塞模式下应用线程不会等待，系统调用直接返回错误标志EWOULDBLOCK。</li>
+<li>当Socket的接收缓冲区中有数据的时候，阻塞和非阻塞的表现是一样的，都会进入第二阶段等待数据从内核空间拷贝到用户空间，然后系统调用返回。</li>
+</ul>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/ZipH6D.png" alt="image.png"></p>
+<p>从上图中，我们可以看出：<strong>非阻塞</strong>的特点是第一阶段不会等待，但是在第二阶段还是会等待。</p>
+<h2 id="2-同步-amp-异步"><a href="#2-同步-amp-异步" class="headerlink" title="2.同步&amp;异步"></a>2.同步&amp;异步</h2><p>同步与异步主要的区别发生在第二阶段：数据拷贝阶段。</p>
+<p>前边我们提到在数据拷贝阶段主要是将数据从内核空间拷贝到用户空间。然后应用程序才可以读取数据。</p>
+<p>当内核Socket的接收缓冲区有数据到达时，进入第二阶段。</p>
+<h3 id="2-1-同步"><a href="#2-1-同步" class="headerlink" title="2.1 同步"></a>2.1 同步</h3><p>同步模式在数据准备好后，是由用户线程的内核态来执行第二阶段。所以应用程序会在第二阶段发生阻塞，直到数据从内核空间拷贝到用户空间，系统调用才会返回。Linux下的 epoll和Mac 下的 kqueue都属于同步 IO。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/J9r9j8.png" alt="image.png"></p>
+<h3 id="2-2-异步"><a href="#2-2-异步" class="headerlink" title="2.2 异步"></a>2.2 异步</h3><p>异步模式下是由内核来执行第二阶段的数据拷贝操作，当内核执行完第二阶段，会通知用户线程IO操作已经完成，并将数据回调给用户线程。所以在异步模式下 数据准备阶段和数据拷贝阶段均是由内核来完成，不会对应用程序造成任何阻塞。基于以上特征，我们可以看到异步模式需要内核的支持，比较依赖操作系统底层的支持。</p>
+<p>在目前流行的操作系统中，只有Windows 中的 IOCP才真正属于异步 IO，实现的也非常成熟。但Windows很少用来作为服务器使用。而常用来作为服务器使用的Linux，异步IO机制实现的不够成熟，与NIO相比性能提升的也不够明显。但Linux kernel 在5.1版本由Facebook的大神Jens Axboe引入了新的异步IO库io_uring 改善了原来Linux native AIO的一些性能问题。性能相比Epoll以及之前原生的AIO提高了不少，值得关注。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/C8SUkA.png" alt="image.png"></p>
+<hr>
+<h1 id="四，IO模型"><a href="#四，IO模型" class="headerlink" title="四，IO模型"></a>四，IO模型</h1><p>在进行网络IO操作时，用什么样的IO模型来读写数据将在很大程度上决定了网络框架的IO性能。所以IO模型的选择是构建一个高性能网络框架的基础。</p>
+<p>在《UNIX 网络编程》一书中介绍了五种IO模型：阻塞IO,非阻塞IO,IO多路复用,信号驱动IO,异步IO，每一种IO模型的出现都是对前一种的升级优化。</p>
+<p>下面我们就来分别介绍下这五种IO模型各自都解决了什么问题，适用于哪些场景，各自的优缺点是什么？</p>
+<h2 id="1-阻塞IO（BIO）"><a href="#1-阻塞IO（BIO）" class="headerlink" title="1.阻塞IO（BIO）"></a>1.阻塞IO（BIO）</h2><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/q0ojjz.png" alt="image.png"></p>
+<p>下边我们来看下在阻塞IO模型下，网络数据的读写过程。</p>
+<h3 id="1-1-阻塞读"><a href="#1-1-阻塞读" class="headerlink" title="1.1 阻塞读"></a>1.1 阻塞读</h3><p>当用户线程发起read系统调用，用户线程从用户态切换到内核态，在内核中去查看Socket接收缓冲区是否有数据到来。</p>
+<ul>
+<li>Socket接收缓冲区中有数据，则用户线程在内核态将内核空间中的数据拷贝到用户空间，系统IO调用返回。</li>
+<li>Socket接收缓冲区中无数据，则用户线程让出CPU，进入阻塞状态。当数据到达Socket接收缓冲区后，内核唤醒阻塞状态中的用户线程进入就绪状态，随后经过CPU的调度获取到CPU quota进入运行状态，将内核空间的数据拷贝到用户空间，随后系统调用返回。</li>
+</ul>
+<h3 id="1-2阻塞写"><a href="#1-2阻塞写" class="headerlink" title="1.2阻塞写"></a>1.2阻塞写</h3><p>当用户线程发起send系统调用时，用户线程从用户态切换到内核态，将发送数据从用户空间拷贝到内核空间中的Socket发送缓冲区中。</p>
+<ul>
+<li>当Socket发送缓冲区能够容纳下发送数据时，用户线程会将全部的发送数据写入Socket缓冲区，然后执行在《网络包发送流程》这小节介绍的后续流程，然后返回。</li>
+<li>当Socket发送缓冲区空间不够，无法容纳下全部发送数据时，用户线程让出CPU,进入阻塞状态，直到Socket发送缓冲区能够容纳下全部发送数据时，内核唤醒用户线程，执行后续发送流程。</li>
+</ul>
+<p>阻塞IO模型下的写操作做事风格比较硬刚，非得要把全部的发送数据写入发送缓冲区才肯善罢甘休。</p>
+<h3 id="1-3-阻塞IO模型"><a href="#1-3-阻塞IO模型" class="headerlink" title="1.3 阻塞IO模型"></a>1.3 阻塞IO模型</h3><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/VZnm80.png" alt="image.png"></p>
+<p>由于阻塞IO的读写特点，所以导致在阻塞IO模型下，每个请求都需要被一个独立的线程处理。一个线程在同一时刻只能与一个连接绑定。来一个请求，服务端就需要创建一个线程用来处理请求。</p>
+<p>当客户端请求的并发量突然增大时，服务端在一瞬间就会创建出大量的线程，而创建线程是需要系统资源开销的，这样一来就会一瞬间占用大量的系统资源。</p>
+<p>如果客户端创建好连接后，但是一直不发数据，通常大部分情况下，网络连接也并不总是有数据可读，那么在空闲的这段时间内，服务端线程就会一直处于阻塞状态，无法干其他的事情。CPU也无法得到充分的发挥，同时还会导致大量线程切换的开销。</p>
+<h3 id="1-4-适用场景"><a href="#1-4-适用场景" class="headerlink" title="1.4 适用场景"></a>1.4 适用场景</h3><p>基于以上阻塞IO模型的特点，该模型只适用于连接数少，并发度低的业务场景。</p>
+<p>比如公司内部的一些管理系统，通常请求数在100个左右，使用阻塞IO模型还是非常适合的。而且性能还不输NIO。</p>
+<p>该模型在C10K之前，是普遍被采用的一种IO模型。</p>
+<hr>
+<h2 id="2-非阻塞IO（NIO）"><a href="#2-非阻塞IO（NIO）" class="headerlink" title="2.非阻塞IO（NIO）"></a>2.非阻塞IO（NIO）</h2><p>阻塞IO模型最大的问题就是一个线程只能处理一个连接，如果这个连接上没有数据的话，那么这个线程就只能阻塞在系统IO调用上，不能干其他的事情。这对系统资源来说，是一种极大的浪费。同时大量的线程上下文切换，也是一个巨大的系统开销。</p>
+<p>所以为了解决这个问题，<strong>我们就需要用尽可能少的线程去处理更多的连接。</strong>，网络IO模型的演变也是根据这个需求来一步一步演进的。</p>
+<p>基于这个需求，第一种解决方案非阻塞IO就出现了。我们来看下网络读写操作在非阻塞IO下的特点：</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/1SQXhf.png" alt="image.png"></p>
+<h3 id="2-1非阻塞读"><a href="#2-1非阻塞读" class="headerlink" title="2.1非阻塞读"></a>2.1非阻塞读</h3><p>当用户线程发起非阻塞read系统调用时，用户线程从用户态转为内核态，在内核中去查看Socket接收缓冲区是否有数据到来。</p>
+<ul>
+<li>Socket接收缓冲区中无数据，系统调用立马返回，并带有一个 EWOULDBLOCK 或 EAGAIN错误，这个阶段用户线程不会阻塞，也不会让出CPU，而是会继续轮训直到Socket接收缓冲区中有数据为止。</li>
+<li>Socket接收缓冲区中有数据，用户线程在内核态会将内核空间中的数据拷贝到用户空间，<strong>注意</strong>这个数据拷贝阶段，应用程序是阻塞的，当数据拷贝完成，系统调用返回。</li>
+</ul>
+<h3 id="2-2非阻塞写"><a href="#2-2非阻塞写" class="headerlink" title="2.2非阻塞写"></a>2.2非阻塞写</h3><p>前边我们在介绍阻塞写的时候提到阻塞写的风格特别的硬朗，头比较铁非要把全部发送数据一次性都写到Socket的发送缓冲区中才返回，如果发送缓冲区中没有足够的空间容纳，那么就一直阻塞死等，特别的刚。</p>
+<p>相比较而言非阻塞写的特点就比较佛系，当发送缓冲区中没有足够的空间容纳全部发送数据时，非阻塞写的特点是能写多少写多少，写不下了，就立即返回。并将写入到发送缓冲区的字节数返回给应用程序，方便用户线程不断的轮训尝试将剩下的数据写入发送缓冲区中。</p>
+<h3 id="2-3-非阻塞IO模型"><a href="#2-3-非阻塞IO模型" class="headerlink" title="2.3 非阻塞IO模型"></a>2.3 非阻塞IO模型</h3><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/fJbiCE.png" alt="image.png"></p>
+<p>基于以上非阻塞IO的特点，我们就不必像阻塞IO那样为每个请求分配一个线程去处理连接上的读写了。</p>
+<p>我们可以利用<strong>一个线程或者很少的线程</strong>，去不断地轮询每个Socket的接收缓冲区是否有数据到达，如果没有数据，不必阻塞线程，而是接着去轮询下一个Socket接收缓冲区，直到轮询到数据后，处理连接上的读写，或者交给业务线程池去处理，轮询线程则继续轮询其他的Socket接收缓冲区。</p>
+<p>这样一个非阻塞IO模型就实现了我们在本小节开始提出的需求：<strong>我们需要用尽可能少的线程去处理更多的连接</strong></p>
+<h3 id="2-4适用场景"><a href="#2-4适用场景" class="headerlink" title="2.4适用场景"></a>2.4适用场景</h3><p>虽然非阻塞IO模型与阻塞IO模型相比，减少了很大一部分的资源消耗和系统开销。</p>
+<p>但是它仍然有很大的性能问题，因为在非阻塞IO模型下，需要用户线程去不断地发起系统调用去轮训Socket接收缓冲区，这就需要用户线程不断地从用户态切换到内核态，内核态切换到用户态。随着并发量的增大，这个上下文切换的开销也是巨大的。</p>
+<p>所以单纯的非阻塞IO模型还是无法适用于高并发的场景。只能适用于C10K以下的场景。</p>
+<hr>
+<h2 id="3-IO多路复用"><a href="#3-IO多路复用" class="headerlink" title="3.IO多路复用"></a>3.IO多路复用</h2><p>在非阻塞IO这一小节的开头，我们提到网络IO模型的演变都是围绕着—<strong>如何用尽可能少的线程去处理更多的连接</strong>这个核心需求开始展开的。</p>
+<p>本小节我们来谈谈IO多路复用模型，那么什么是多路？，什么又是复用呢？</p>
+<p>我们还是以这个核心需求来对这两个概念展开阐述：</p>
+<ul>
+<li><strong>多路</strong>：我们的核心需求是要用尽可能少的线程来处理尽可能多的连接，这里的多路指的就是我们需要处理的众多连接。</li>
+<li><strong>复用</strong>：核心需求要求我们使用尽可能少的线程，尽可能少的系统开销去处理尽可能多的连接（多路），那么这里的复用指的就是用有限的资源，比如用一个线程或者固定数量的线程去处理众多连接上的读写事件。换句话说，在阻塞IO模型中一个连接就需要分配一个独立的线程去专门处理这个连接上的读写，到了IO多路复用模型中，多个连接可以复用这一个独立的线程去处理这多个连接上的读写。</li>
+</ul>
+<p>好了，IO多路复用模型的概念解释清楚了，那么<strong>问题的关键</strong>是我们如何去实现这个复用，也就是如何让一个独立的线程去处理众多连接上的读写事件呢？</p>
+<p>这个问题其实在非阻塞IO模型中已经给出了它的答案，在非阻塞IO模型中，利用非阻塞的系统IO调用去不断的轮询众多连接的Socket接收缓冲区看是否有数据到来，如果有则处理，如果没有则继续轮询下一个Socket。这样就达到了用一个线程去处理众多连接上的读写事件了。</p>
+<hr>
+<p><strong>但是</strong>非阻塞IO模型最大的问题就是需要不断的发起系统调用去轮询各个Socket中的接收缓冲区是否有数据到来，频繁的系统调用随之带来了大量的上下文切换开销。随着并发量的提升，这样也会导致非常严重的性能问题。</p>
+<hr>
+<p><strong>那么如何避免频繁的系统调用同时又可以实现我们的核心需求呢？</strong></p>
+<p>这就需要操作系统的内核来支持这样的操作，我们可以把频繁的轮询操作交给操作系统内核来替我们完成，这样就避免了在用户空间频繁的去使用系统调用来轮询所带来的性能开销。</p>
+<p>正如我们所想，操作系统内核也确实为我们提供了这样的功能实现，下面我们来一起看下操作系统对IO多路复用模型的实现。</p>
+<h3 id="3-1-select"><a href="#3-1-select" class="headerlink" title="3.1 select"></a>3.1 select</h3><p>select是操作系统内核提供给我们使用的一个系统调用，它解决了在非阻塞IO模型中需要不断的发起系统IO调用去轮询各个连接上的Socket接收缓冲区所带来的用户空间与内核空间不断切换的系统开销。</p>
+<p>select系统调用将轮询的操作交给了内核来帮助我们完成，从而避免了在用户空间不断的发起轮询所带来的的系统性能开销。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/U3ZoEJ.jpeg" alt="select.jpg"></p>
+<ul>
+<li>首先用户线程在发起select系统调用的时候会阻塞在select系统调用上。此时，用户线程从用户态切换到了内核态完成了一次上下文切换</li>
+<li>用户线程将需要监听的Socket对应的文件描述符fd数组通过select系统调用传递给内核。此时，用户线程将用户空间中的文件描述符fd数组拷贝到内核空间。</li>
+</ul>
+<p>这里的<strong>文件描述符数组</strong>其实是一个BitMap，BitMap下标为文件描述符fd，下标对应的值为：1表示该fd上有读写事件，0表示该fd上没有读写事件。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/8Mp6z1.png" alt="image.png"></p>
+<p><strong>文件描述符fd</strong>其实就是一个整数值，在Linux中一切皆文件，Socket也是一个文件。描述进程所有信息的数据结构task_struct中有一个属性struct files_struct *files，它最终指向了一个数组，数组里存放了进程打开的所有文件列表，文件信息封装在struct file结构体中，这个数组存放的类型就是struct file结构体，数组的下标则是我们常说的文件描述符fd。</p>
+<ul>
+<li>当用户线程调用完select后开始进入阻塞状态，内核开始轮询遍历fd数组，查看fd对应的Socket接收缓冲区中是否有数据到来。如果有数据到来，则将fd对应BitMap的值设置为1。如果没有数据到来，则保持值为0。</li>
+</ul>
+<p><strong>注意</strong>这里内核会修改原始的fd数组！！</p>
+<ul>
+<li>内核遍历一遍fd数组后，如果发现有些fd上有IO数据到来，则将修改后的fd数组返回给用户线程。此时，会将fd数组从内核空间拷贝到用户空间。</li>
+<li>当内核将修改后的fd数组返回给用户线程后，用户线程解除阻塞，由用户线程开始遍历fd数组然后找出fd数组中值为1的Socket文件描述符。最后对这些Socket发起系统调用读取数据。</li>
+</ul>
+<p>select不会告诉用户线程具体哪些fd上有IO数据到来，只是在IO活跃的fd上打上标记，将打好标记的完整fd数组返回给用户线程，所以用户线程还需要遍历fd数组找出具体哪些fd上有IO数据到来。</p>
+<ul>
+<li>由于内核在遍历的过程中已经修改了fd数组，所以在用户线程遍历完fd数组后获取到IO就绪的Socket后，就需要重置fd数组，并重新调用select传入重置后的fd数组，让内核发起新的一轮遍历轮询。</li>
+</ul>
+<h4 id="①API介绍"><a href="#①API介绍" class="headerlink" title="①API介绍"></a>①API介绍</h4><p>当我们熟悉了select的原理后，就很容易理解内核给我们提供的select API了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> maxfdp1,fd_set *readset,fd_set *writeset,fd_set *exceptset,<span class="keyword">const</span> struct timeval *timeout)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>从select API中我们可以看到，select系统调用是在规定的超时时间内，监听（轮询）用户感兴趣的文件描述符集合上的可读,可写,异常三类事件。</p>
+<ul>
+<li>maxfdp1 ： select传递给内核监听的文件描述符集合中数值最大的文件描述符+1，目的是用于限定内核遍历范围。比如：select监听的文件描述符集合为{0,1,2,3,4}，那么maxfdp1的值为5。</li>
+<li>fd_set *readset： 对可读事件感兴趣的文件描述符集合。</li>
+<li>fd_set *writeset： 对可写事件感兴趣的文件描述符集合。</li>
+<li>fd_set *exceptset：对可写事件感兴趣的文件描述符集合。</li>
+</ul>
+<p>这里的fd_set就是我们前边提到的文件描述符数组，是一个BitMap结构。</p>
+<ul>
+<li>const struct timeval *timeout：select系统调用超时时间，在这段时间内，内核如果没有发现有IO就绪的文件描述符，就直接返回。</li>
+</ul>
+<p>上小节提到，在内核遍历完fd数组后，发现有IO就绪的fd，则会将该fd对应的BitMap中的值设置为1，并将修改后的fd数组，返回给用户线程。</p>
+<p>在用户线程中需要重新遍历fd数组，找出IO就绪的fd出来，然后发起真正的读写调用。</p>
+<p>下面介绍下在用户线程中重新遍历fd数组的过程中，我们需要用到的API：</p>
+<ul>
+<li>void FD_ZERO(fd_set *fdset)：清空指定的文件描述符集合，即让fd_set中不在包含任何文件描述符。</li>
+<li>void FD_SET(int fd, fd_set *fdset)：将一个给定的文件描述符加入集合之中。</li>
+</ul>
+<p>每次调用select之前都要通过FD_ZERO和FD_SET重新设置文件描述符，因为文件描述符集合会在内核中被修改。</p>
+<ul>
+<li>int FD_ISSET(int fd, fd_set *fdset)：检查集合中指定的文件描述符是否可以读写。用户线程遍历文件描述符集合,调用该方法检查相应的文件描述符是否IO就绪。</li>
+<li>void FD_CLR(int fd, fd_set *fdset)：将一个给定的文件描述符从集合中删除</li>
+</ul>
+<h4 id="②性能开销"><a href="#②性能开销" class="headerlink" title="②性能开销"></a>②性能开销</h4><p>虽然select解决了非阻塞IO模型中频繁发起系统调用的问题，但是在整个select工作过程中，我们还是看出了select有些不足的地方。</p>
+<ul>
+<li>在发起select系统调用以及返回时，用户线程各发生了一次用户态到内核态以及内核态到用户态的上下文切换开销。<strong>发生2次上下文****切换</strong></li>
+<li>在发起select系统调用以及返回时，用户线程在内核态需要将文件描述符集合从用户空间拷贝到内核空间。以及在内核修改完文件描述符集合后，又要将它从内核空间拷贝到用户空间。<strong>发生2次文件描述符集合的****拷贝</strong></li>
+<li>虽然由原来在用户空间发起轮询优化成了在内核空间发起轮询但select不会告诉用户线程到底是哪些Socket上发生了IO就绪事件，只是对IO就绪的Socket作了标记，用户线程依然要遍历文件描述符集合去查找具体IO就绪的Socket。时间复杂度依然为O(n)。</li>
+</ul>
+<p>大部分情况下，网络连接并不总是活跃的，如果select监听了大量的客户端连接，只有少数的连接活跃，然而使用轮询的这种方式会随着连接数的增大，效率会越来越低。</p>
+<ul>
+<li>内核会对原始的文件描述符集合进行修改。导致每次在用户空间重新发起select调用时，都需要对文件描述符集合进行重置。</li>
+<li>BitMap结构的文件描述符集合，长度为固定的1024,所以只能监听0~1023的文件描述符。</li>
+<li>select系统调用 不是线程安全的。</li>
+</ul>
+<p>以上select的不足所产生的性能开销都会随着并发量的增大而线性增长。很明显select也不能解决C10K问题，只适用于1000个左右的并发连接场景。</p>
+<h3 id="3-2poll"><a href="#3-2poll" class="headerlink" title="3.2poll"></a>3.2poll</h3><p>poll相当于是改进版的select，但是工作原理基本和select没有本质的区别。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(struct pollfd *fds, unsigned <span class="keyword">int</span> nfds, <span class="keyword">int</span> timeout)</span></span></span><br><span class="line"><span class="function">struct pollfd </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>   fd;         <span class="comment">/* 文件描述符 */</span></span><br><span class="line">    <span class="keyword">short</span> events;     <span class="comment">/* 需要监听的事件 */</span></span><br><span class="line">    <span class="keyword">short</span> revents;    <span class="comment">/* 实际发生的事件 由内核修改设置 */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>select中使用的文件描述符集合是采用的固定长度为1024的BitMap结构的fd_set，而poll换成了一个pollfd结构没有固定长度的数组，这样就没有了最大描述符数量的限制（当然还会受到系统文件描述符限制），poll只是改进了select只能监听1024个文件描述符的数量限制，但是并没有在性能方面做出改进。和select上本质并没有多大差别。</p>
+<ul>
+<li>同样需要在内核空间和用户空间中对文件描述符集合进行轮询，查找出IO就绪的Socket的时间复杂度依然为O(n)。</li>
+<li>同样需要将包含大量文件描述符的集合整体在用户空间和内核空间之间来回复制，<strong>无论这些文件描述符是否就绪</strong>。他们的开销都会随着文件描述符数量的增加而线性增大。</li>
+<li>select，poll在每次新增，删除需要监听的socket时，都需要将整个新的socket集合全量传至内核。</li>
+</ul>
+<p>poll同样不适用高并发的场景。依然无法解决C10K问题。</p>
+<h3 id="3-3-epoll"><a href="#3-3-epoll" class="headerlink" title="3.3 epoll"></a>3.3 epoll</h3><p>通过上边对select,poll核心原理的介绍，我们看到select,poll的性能瓶颈主要体现在下面三个地方：</p>
+<ul>
+<li>因为内核不会保存我们要监听的socket集合，所以在每次调用select,poll的时候都需要传入，传出全量的socket文件描述符集合。这导致了大量的文件描述符在用户空间和内核空间频繁的来回复制。</li>
+<li>由于内核不会通知具体IO就绪的socket，只是在这些IO就绪的socket上打好标记，所以当select系统调用返回时，在用户空间还是需要完整遍历一遍socket文件描述符集合来获取具体IO就绪的socket。</li>
+<li>在内核空间中也是通过遍历的方式来得到IO就绪的socket。</li>
+</ul>
+<p>下面我们来看下epoll是如何解决这些问题的。在介绍epoll的核心原理之前，我们需要介绍下理解epoll工作过程所需要的一些核心基础知识。</p>
+<h4 id="①Socket的创建"><a href="#①Socket的创建" class="headerlink" title="①Socket的创建"></a>①Socket的创建</h4><p>服务端线程调用accept系统调用后开始阻塞，当有客户端连接上来并完成TCP三次握手后，内核会创建一个对应的Socket作为服务端与客户端通信的内核接口。</p>
+<p>在Linux内核的角度看来，一切皆是文件，Socket也不例外，当内核创建出Socket之后，会将这个Socket放到当前进程所打开的文件列表中管理起来。</p>
+<p>下面我们来看下进程管理这些打开的文件列表相关的内核数据结构是什么样的？在了解完这些数据结构后，我们会更加清晰的理解Socket在内核中所发挥的作用。并且对后面我们理解epoll的创建过程有很大的帮助。</p>
+<h5 id="进程中管理文件列表结构"><a href="#进程中管理文件列表结构" class="headerlink" title="进程中管理文件列表结构"></a>进程中管理文件列表结构</h5><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/WiFy86.png" alt="image.png"></p>
+<p>struct tast_struct是内核中用来表示进程的一个数据结构，它包含了进程的所有信息。本小节我们只列出和文件管理相关的属性。</p>
+<p>其中进程内打开的所有文件是通过一个数组fd_array来进行组织管理，数组的下标即为我们常提到的文件描述符，数组中存放的是对应的文件数据结构struct file。每打开一个文件，内核都会创建一个struct file与之对应，并在fd_array中找到一个空闲位置分配给它，数组中对应的下标，就是我们在用户空间用到的文件描述符。</p>
+<p>对于任何一个进程，默认情况下，文件描述符 0表示 stdin 标准输入，文件描述符 1表示stdout 标准输出，文件描述符2表示stderr 标准错误输出。</p>
+<p>进程中打开的文件列表fd_array定义在内核数据结构struct files_struct中，在struct fdtable结构中有一个指针struct fd **fd指向fd_array。</p>
+<hr>
+<p><strong>由于本小节讨论的是内核网络系统部分的数据结构</strong>，所以这里拿Socket文件类型来举例说明：</p>
+<p>用于封装文件元信息的内核数据结构struct file中的private_data指针指向具体的Socket结构。</p>
+<p>struct file中的file_operations属性定义了文件的操作函数，不同的文件类型，对应的file_operations是不同的，针对Socket文件类型，这里的file_operations指向socket_file_ops。</p>
+<p>我们在用户空间对Socket发起的读写等系统调用，进入内核首先会调用的是Socket对应的struct file中指向的socket_file_ops。<strong>比如</strong>：对Socket发起write写操作，在内核中首先被调用的就是socket_file_ops中定义的sock_write_iter。Socket发起read读操作内核中对应的则是sock_read_iter。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> struct file_operations socket_file_ops = &#123;</span><br><span class="line">  .owner =  THIS_MODULE,</span><br><span class="line">  .llseek =  no_llseek,</span><br><span class="line">  .read_iter =  sock_read_iter,</span><br><span class="line">  .write_iter =  sock_write_iter,</span><br><span class="line">  .poll =    sock_poll,</span><br><span class="line">  .unlocked_ioctl = sock_ioctl,</span><br><span class="line">  .mmap =    sock_mmap,</span><br><span class="line">  .release =  sock_close,</span><br><span class="line">  .fasync =  sock_fasync,</span><br><span class="line">  .sendpage =  sock_sendpage,</span><br><span class="line">  .splice_write = generic_splice_sendpage,</span><br><span class="line">  .splice_read =  sock_splice_read,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Socket内核结构"><a href="#Socket内核结构" class="headerlink" title="Socket内核结构"></a>Socket内核结构</h5><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/4hixIj.jpeg" alt="未命名文件.jpg"></p>
+<p>在我们进行网络程序的编写时会首先创建一个Socket，然后基于这个Socket进行bind，listen，我们先将这个Socket称作为监听Socket。</p>
+<ol>
+<li>当我们调用accept后，内核会基于监听Socket创建出来一个新的Socket专门用于与客户端之间的网络通信。并将监听Socket中的Socket操作函数集合（inet_stream_ops）ops赋值到新的Socket的ops属性中。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> struct proto_ops inet_stream_ops = &#123;</span><br><span class="line">  .bind = inet_bind,</span><br><span class="line">  .connect = inet_stream_connect,</span><br><span class="line">  .accept = inet_accept,</span><br><span class="line">  .poll = tcp_poll,</span><br><span class="line">  .listen = inet_listen,</span><br><span class="line">  .sendmsg = inet_sendmsg,</span><br><span class="line">  .recvmsg = inet_recvmsg,</span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意的是，监听的 socket和真正用来网络通信的 Socket，是两个 Socket，一个叫作监听 Socket，一个叫作已连接的Socket。</p>
+<ol>
+<li>接着内核会为已连接的Socket创建struct file并初始化，并把Socket文件操作函数集合（socket_file_ops）赋值给struct file中的f_ops指针。然后将struct socket中的file指针指向这个新分配申请的struct file结构体。</li>
+</ol>
+<p>内核会维护两个队列：</p>
+<ul>
+<li>一个是已经完成TCP三次握手，连接状态处于established的连接队列。内核中为icsk_accept_queue。</li>
+<li>一个是还没有完成TCP三次握手，连接状态处于syn_rcvd的半连接队列。</li>
+</ul>
+<ol>
+<li>然后调用socket-&gt;ops-&gt;accept，从Socket内核结构图中我们可以看到其实调用的是inet_accept，该函数会在icsk_accept_queue中查找是否有已经建立好的连接，如果有的话，直接从icsk_accept_queue中获取已经创建好的struct sock。并将这个struct sock对象赋值给struct socket中的sock指针。</li>
+</ol>
+<p><code>struct sock</code>在<code>struct socket</code>中是一个非常核心的内核对象，正是在这里定义了我们在介绍<code>网络包的接收发送流程</code>中提到的<code>接收队列</code>，<code>发送队列</code>，<code>等待队列</code>，<code>数据就绪回调函数指针</code>，`内核协议栈操作函数集合。</p>
+<ul>
+<li>根据创建Socket时发起的系统调用sock_create中的protocol参数(对于TCP协议这里的参数值为SOCK_STREAM)查找到对于 tcp 定义的操作方法实现集合 inet_stream_ops 和tcp_prot。并把它们分别设置到socket-&gt;ops和sock-&gt;sk_prot上。</li>
+</ul>
+<p>socket相关的操作接口定义在inet_stream_ops函数集合中，负责对上给用户提供接口。而socket与内核协议栈之间的操作接口定义在struct sock中的sk_prot指针上，这里指向tcp_prot协议操作函数集合。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct proto tcp_prot = &#123;</span><br><span class="line">  .name      = <span class="string">&quot;TCP&quot;</span>,</span><br><span class="line">  .owner      = THIS_MODULE,</span><br><span class="line">  .close      = tcp_close,</span><br><span class="line">  .connect    = tcp_v4_connect,</span><br><span class="line">  .disconnect    = tcp_disconnect,</span><br><span class="line">  .accept      = inet_csk_accept,</span><br><span class="line">  .keepalive    = tcp_set_keepalive,</span><br><span class="line">  .recvmsg    = tcp_recvmsg,</span><br><span class="line">  .sendmsg    = tcp_sendmsg,</span><br><span class="line">  .backlog_rcv    = tcp_v4_do_rcv,</span><br><span class="line">   ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之前提到的对Socket发起的系统IO调用，在内核中首先会调用Socket的文件结构struct file中的file_operations文件操作集合，然后调用struct socket中的ops指向的inet_stream_opssocket操作函数，最终调用到struct sock中sk_prot指针指向的tcp_prot内核协议栈操作函数接口集合。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/itcRjI.jpeg" alt="未命名文件 (1).jpg"></p>
+<ul>
+<li>将struct sock 对象中的sk_data_ready 函数指针设置为 sock_def_readable，在Socket数据就绪的时候内核会回调该函数。</li>
+<li>struct sock中的等待队列中存放的是系统IO调用发生阻塞的进程fd，以及相应的回调函数。<strong>记住这个地方，后边介绍epoll的时候我们还会提到！</strong></li>
+</ul>
+<ol>
+<li>当struct file，struct socket，struct sock这些核心的内核对象创建好之后，最后就是把socket对象对应的struct file放到进程打开的文件列表fd_array中。随后系统调用accept返回socket的文件描述符fd给用户程序。</li>
+</ol>
+<h4 id="②阻塞IO中用户进程阻塞以及唤醒原理"><a href="#②阻塞IO中用户进程阻塞以及唤醒原理" class="headerlink" title="②阻塞IO中用户进程阻塞以及唤醒原理"></a>②阻塞IO中用户进程阻塞以及唤醒原理</h4><p>在前边小节我们介绍阻塞IO的时候提到，当用户进程发起系统IO调用时，这里我们拿read举例，用户进程会在内核态查看对应Socket接收缓冲区是否有数据到来。</p>
+<ul>
+<li>Socket接收缓冲区有数据，则拷贝数据到用户空间，系统调用返回。</li>
+<li>Socket接收缓冲区没有数据，则用户进程让出CPU进入阻塞状态，当数据到达接收缓冲区时，用户进程会被唤醒，从阻塞状态进入就绪状态，等待CPU调度。</li>
+</ul>
+<p>本小节我们就来看下用户进程是如何阻塞在Socket上，又是如何在Socket上被唤醒的。<strong>理解这个过程很重要，对我们理解epoll的事件通知过程很有帮助</strong></p>
+<ul>
+<li>首先我们在用户进程中对Socket进行read系统调用时，用户进程会从用户态转为内核态。</li>
+<li>在进程的struct task_struct结构找到fd_array，并根据Socket的文件描述符fd找到对应的struct file，调用struct file中的文件操作函数结合file_operations，read系统调用对应的是sock_read_iter。</li>
+<li>在sock_read_iter函数中找到struct file指向的struct socket，并调用socket-&gt;ops-&gt;recvmsg，这里我们知道调用的是inet_stream_ops集合中定义的inet_recvmsg。</li>
+<li>在inet_recvmsg中会找到struct sock，并调用sock-&gt;skprot-&gt;recvmsg,这里调用的是tcp_prot集合中定义的tcp_recvmsg函数。</li>
+</ul>
+<p>整个调用过程可以参考上边的《系统IO调用结构图》</p>
+<hr>
+<p><strong>熟悉了内核函数调用栈后，我们来看下系统IO调用在<strong><strong>tcp_recvmsg</strong></strong>内核函数中是如何将用户进程给阻塞掉的</strong></p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/YYSBkf.png" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tcp_recvmsg</span><span class="params">(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,</span></span></span><br><span class="line"><span class="params"><span class="function">  size_t len, <span class="keyword">int</span> nonblock, <span class="keyword">int</span> flags, <span class="keyword">int</span> *addr_len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    .................省略非核心代码...............</span><br><span class="line">   <span class="comment">//访问sock对象中定义的接收队列</span></span><br><span class="line">  skb_queue_walk(&amp;sk-&gt;sk_receive_queue, skb) &#123;</span><br><span class="line"></span><br><span class="line">    .................省略非核心代码...............</span><br><span class="line"></span><br><span class="line">  <span class="comment">//没有收到足够数据，调用sk_wait_data 阻塞当前进程</span></span><br><span class="line">  sk_wait_data(sk, &amp;timeo);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sk_wait_data</span><span class="params">(struct sock *sk, <span class="keyword">long</span> *timeo)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="comment">//创建struct sock中等待队列上的元素wait_queue_t</span></span><br><span class="line"> <span class="comment">//将进程描述符和回调函数autoremove_wake_function关联到wait_queue_t中</span></span><br><span class="line"> DEFINE_WAIT(wait);</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 调用 sk_sleep 获取 sock 对象下的等待队列的头指针wait_queue_head_t</span></span><br><span class="line"> <span class="comment">// 调用prepare_to_wait将新创建的等待项wait_queue_t插入到等待队列中，并将进程状态设置为可打断 INTERRUPTIBLE</span></span><br><span class="line"> prepare_to_wait(sk_sleep(sk), &amp;wait, TASK_INTERRUPTIBLE);</span><br><span class="line"> set_bit(SOCK_ASYNC_WAITDATA, &amp;sk-&gt;sk_socket-&gt;flags);</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 通过调用schedule_timeout让出CPU，然后进行睡眠，导致一次上下文切换</span></span><br><span class="line"> rc = sk_wait_event(sk, timeo, !skb_queue_empty(&amp;sk-&gt;sk_receive_queue));</span><br><span class="line"> ...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先会在DEFINE_WAIT中创建struct sock中等待队列上的等待类型wait_queue_t。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#<span class="function">define <span class="title">DEFINE_WAIT</span><span class="params">(name)</span> <span class="title">DEFINE_WAIT_FUNC</span><span class="params">(name, autoremove_wake_function)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">#define <span class="title">DEFINE_WAIT_FUNC</span><span class="params">(name, function)</span>    \</span></span><br><span class="line"><span class="function"> wait_queue_t name </span>= &#123;      \</span><br><span class="line">  .<span class="keyword">private</span> = current,    \</span><br><span class="line">  .func  = function,    \</span><br><span class="line">  .task_list = LIST_HEAD_INIT((name).task_list), \</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>等待类型wait_queue_t中的private用来关联阻塞在当前socket上的用户进程fd。func用来关联等待项上注册的回调函数。这里注册的是autoremove_wake_function。</p>
+<ul>
+<li>调用sk_sleep(sk)获取struct sock对象中的等待队列头指针wait_queue_head_t。</li>
+<li>调用prepare_to_wait将新创建的等待项wait_queue_t插入到等待队列中，并将进程设置为可打断 INTERRUPTIBL。</li>
+<li>调用sk_wait_event让出CPU，进程进入睡眠状态。</li>
+</ul>
+<p>用户进程的阻塞过程我们就介绍完了，关键是要理解记住struct sock中定义的等待队列上的等待类型wait_queue_t的结构。后面epoll的介绍中我们还会用到它。</p>
+<p><strong>下面我们接着介绍当数据就绪后，用户进程是如何被唤醒的</strong></p>
+<p>在本文开始介绍《网络包接收过程》这一小节中我们提到：</p>
+<ul>
+<li>当网络数据包到达网卡时，网卡通过DMA的方式将数据放到RingBuffer中。</li>
+<li>然后向CPU发起硬中断，在硬中断响应程序中创建sk_buffer，并将网络数据拷贝至sk_buffer中。</li>
+<li>随后发起软中断，内核线程ksoftirqd响应软中断，调用poll函数将sk_buffer送往内核协议栈做层层协议处理。</li>
+<li>在传输层tcp_rcv 函数中，去掉TCP头，根据四元组（源IP，源端口，目的IP，目的端口）查找对应的Socket。</li>
+<li>最后将sk_buffer放到Socket中的接收队列里。</li>
+</ul>
+<p>上边这些过程是内核接收网络数据的完整过程，下边我们来看下，当数据包接收完毕后，用户进程是如何被唤醒的。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/gIkgSO.png" alt="image.png"></p>
+<ul>
+<li>当软中断将sk_buffer放到Socket的接收队列上时，接着就会调用数据就绪函数回调指针sk_data_ready，前边我们提到，这个函数指针在初始化的时候指向了sock_def_readable函数。</li>
+<li>在sock_def_readable函数中会去获取socket-&gt;sock-&gt;sk_wq等待队列。在wake_up_common函数中从等待队列sk_wq中找出一个等待项wait_queue_t，回调注册在该等待项上的func回调函数（wait_queue_t-&gt;func）,创建等待项wait_queue_t是我们提到，这里注册的回调函数是autoremove_wake_function。</li>
+</ul>
+<p>即使是有多个进程都阻塞在同一个 socket 上，也只唤醒 1 个进程。其作用是为了避免惊群。</p>
+<ul>
+<li>在autoremove_wake_function函数中，根据等待项wait_queue_t上的private关联的阻塞进程fd调用try_to_wake_up唤醒阻塞在该Socket上的进程。</li>
+</ul>
+<p>记住wait_queue_t中的func函数指针，在epoll中这里会注册epoll的回调函数。</p>
+<p>现在理解epoll所需要的基础知识我们就介绍完了，唠叨了这么多，下面终于正式进入本小节的主题epoll了。</p>
+<h4 id="③epoll-create创建epoll对象"><a href="#③epoll-create创建epoll对象" class="headerlink" title="③epoll_create创建epoll对象"></a>③epoll_create创建epoll对象</h4><p>epoll_create是内核提供给我们创建epoll对象的一个系统调用，当我们在用户进程中调用epoll_create时，内核会为我们创建一个struct eventpoll对象，并且也有相应的struct file与之关联，同样需要把这个struct eventpoll对象所关联的struct file放入进程打开的文件列表fd_array中管理。</p>
+<p>熟悉了Socket的创建逻辑，epoll的创建逻辑也就不难理解了。</p>
+<p>struct eventpoll对象关联的struct file中的file_operations 指针指向的是eventpoll_fops操作函数集合。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> struct file_operations eventpoll_fops = &#123;</span><br><span class="line">     .release = ep_eventpoll_release;</span><br><span class="line">     .poll = ep_eventpoll_poll,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/Sscjkq.jpeg" alt="未命名文件 (2).jpg"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct eventpoll &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//等待队列，阻塞在epoll上的进程会放在这里</span></span><br><span class="line">    wait_queue_head_t wq;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//就绪队列，IO就绪的socket连接会放在这里</span></span><br><span class="line">    struct list_head rdllist;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//红黑树用来管理所有监听的socket连接</span></span><br><span class="line">    struct rb_root rbr;</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>wait_queue_head_t wq：epoll中的等待队列，队列里存放的是阻塞在epoll上的用户进程。在IO就绪的时候epoll可以通过这个队列找到这些阻塞的进程并唤醒它们，从而执行IO调用读写Socket上的数据。</li>
+</ul>
+<p>这里注意与Socket中的等待队列区分！！！</p>
+<ul>
+<li>struct list_head rdllist：epoll中的就绪队列，队列里存放的是都是IO就绪的Socket，被唤醒的用户进程可以直接读取这个队列获取IO活跃的Socket。无需再次遍历整个Socket集合。</li>
+</ul>
+<p>这里正是epoll比select ，poll高效之处，select ，poll返回的是全部的socket连接，我们需要在用户空间再次遍历找出真正IO活跃的Socket连接。而epoll只是返回IO活跃的Socket连接。用户进程可以直接进行IO操作。</p>
+<ul>
+<li>struct rb_root rbr : 由于红黑树在查找，插入，删除等综合性能方面是最优的，所以epoll内部使用一颗红黑树来管理海量的Socket连接。</li>
+</ul>
+<p>select用数组管理连接，poll用链表管理连接。</p>
+<h4 id="④epoll-ctl向epoll对象中添加监听的Socket"><a href="#④epoll-ctl向epoll对象中添加监听的Socket" class="headerlink" title="④epoll_ctl向epoll对象中添加监听的Socket"></a>④epoll_ctl向epoll对象中添加监听的Socket</h4><p>当我们调用epoll_create在内核中创建出epoll对象struct eventpoll后，我们就可以利用epoll_ctl向epoll中添加我们需要管理的Socket连接了。</p>
+<ol>
+<li>首先要在epoll内核中创建一个表示Socket连接的数据结构struct epitem，而在epoll中为了综合性能的考虑，采用一颗红黑树来管理这些海量socket连接。所以struct epitem是一个红黑树节点。</li>
+</ol>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/9xP5cR.png" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct epitem</span><br><span class="line">&#123;</span><br><span class="line">      <span class="comment">//指向所属epoll对象</span></span><br><span class="line">      struct eventpoll *ep; </span><br><span class="line">      <span class="comment">//注册的感兴趣的事件,也就是用户空间的epoll_event     </span></span><br><span class="line">      struct epoll_event event; </span><br><span class="line">      <span class="comment">//指向epoll对象中的就绪队列</span></span><br><span class="line">      struct list_head rdllink;  </span><br><span class="line">      <span class="comment">//指向epoll中对应的红黑树节点</span></span><br><span class="line">      struct rb_node rbn;     </span><br><span class="line">      <span class="comment">//指向epitem所表示的socket-&gt;file结构以及对应的fd</span></span><br><span class="line">      struct epoll_filefd ffd;                  </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里重点记住struct epitem结构中的rdllink以及epoll_filefd成员，后面我们会用到。</p>
+<ol>
+<li>在内核中创建完表示Socket连接的数据结构struct epitem后，我们就需要在Socket中的等待队列上创建等待项wait_queue_t并且注册epoll的回调函数ep_poll_callback。</li>
+</ol>
+<p>通过《阻塞IO中用户进程阻塞以及唤醒原理》小节的铺垫，我想大家已经猜到这一步的意义所在了吧！当时在等待项wait_queue_t中注册的是autoremove_wake_function回调函数。</p>
+<p>epoll的回调函数ep_poll_callback正是epoll同步IO事件通知机制的核心所在，也是区别于select，poll采用内核轮询方式的根本性能差异所在。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/fNn8qC.jpeg" alt="未命名文件 (3).jpg"></p>
+<p><strong>这里又出现了一个新的数据结构<strong><strong>struct eppoll_entry</strong></strong>，那它的作用是干什么的呢？大家可以结合上图先猜测下它的作用!</strong></p>
+<p>我们知道socket-&gt;sock-&gt;sk_wq等待队列中的类型是wait_queue_t，我们需要在struct epitem所表示的socket的等待队列上注册epoll回调函数ep_poll_callback。</p>
+<p>这样当数据到达socket中的接收队列时，内核会回调sk_data_ready，在阻塞IO中用户进程阻塞以及唤醒原理这一小节中，我们知道这个sk_data_ready函数指针会指向sk_def_readable函数，在sk_def_readable中会回调注册在等待队列里的等待项wait_queue_t -&gt; func回调函数ep_poll_callback。<strong>在<strong><strong>ep_poll_callback</strong></strong>中需要找到****epitem</strong>，将IO就绪的epitem放入epoll中的就绪队列中。</p>
+<p>而socket等待队列中类型是wait_queue_t无法关联到epitem。所以就出现了struct eppoll_entry结构体，它的作用就是关联Socket等待队列中的等待项wait_queue_t和epitem。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct eppoll_entry &#123; </span><br><span class="line">   <span class="comment">//指向关联的epitem</span></span><br><span class="line">   struct epitem *base; </span><br><span class="line"></span><br><span class="line">  <span class="comment">// 关联监听socket中等待队列中的等待项 (private = null  func = ep_poll_callback)</span></span><br><span class="line">   wait_queue_t wait;   </span><br><span class="line"></span><br><span class="line">   <span class="comment">// 监听socket中等待队列头指针</span></span><br><span class="line">   wait_queue_head_t *whead; </span><br><span class="line">    .........</span><br><span class="line">  &#125;; </span><br></pre></td></tr></table></figure>
+
+<p>这样在ep_poll_callback回调函数中就可以根据Socket等待队列中的等待项wait，通过container_of宏找到eppoll_entry，继而找到epitem了。</p>
+<p>container_of在Linux内核中是一个常用的宏，用于从包含在某个结构中的指针获得结构本身的指针，通俗地讲就是通过结构体变量中某个成员的首地址进而获得整个结构体变量的首地址。</p>
+<p>这里需要注意下这次等待项wait_queue_t中的private设置的是null，因为这里Socket是交给epoll来管理的，阻塞在Socket上的进程是也由epoll来唤醒。在等待项wait_queue_t注册的func是ep_poll_callback而不是autoremove_wake_function，阻塞进程并不需要autoremove_wake_function来唤醒，所以这里设置private为null。</p>
+<ol>
+<li>当在Socket的等待队列中创建好等待项wait_queue_t并且注册了epoll的回调函数ep_poll_callback，然后又通过eppoll_entry关联了epitem后。剩下要做的就是将epitem插入到epoll中的红黑树struct rb_root rbr中。</li>
+</ol>
+<p>这里可以看到epoll另一个优化的地方，epoll将所有的socket连接通过内核中的红黑树来集中管理。每次添加或者删除socket连接都是增量添加删除，而不是像select，poll那样每次调用都是全量socket连接集合传入内核。避免了频繁大量的内存拷贝。</p>
+<h4 id="⑤epoll-wait同步阻塞获取IO就绪的Socket"><a href="#⑤epoll-wait同步阻塞获取IO就绪的Socket" class="headerlink" title="⑤epoll_wait同步阻塞获取IO就绪的Socket"></a>⑤epoll_wait同步阻塞获取IO就绪的Socket</h4><ol>
+<li>用户程序调用epoll_wait后，内核首先会查找epoll中的就绪队列eventpoll-&gt;rdllist是否有IO就绪的epitem。epitem里封装了socket的信息。如果就绪队列中有就绪的epitem，就将就绪的socket信息封装到epoll_event返回。</li>
+<li>如果eventpoll-&gt;rdllist就绪队列中没有IO就绪的epitem，则会创建等待项wait_queue_t，将用户进程的fd关联到wait_queue_t-&gt;private上，并在等待项wait_queue_t-&gt;func上注册回调函数default_wake_function。最后将等待项添加到epoll中的等待队列中。用户进程让出CPU，进入阻塞状态。</li>
+</ol>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/TYKnq0.png" alt="image.png"></p>
+<p>这里和阻塞IO模型中的阻塞原理是一样的，只不过在阻塞IO模型中注册到等待项wait_queue_t-&gt;func上的是autoremove_wake_function，并将等待项添加到socket中的等待队列中。这里注册的是default_wake_function，将等待项添加到epoll中的等待队列上。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/pFJR93.jpeg" alt="未命名文件 (4).jpg"></p>
+<ol>
+<li><strong>前边做了那么多的知识铺垫，下面终于到了<strong><strong>epoll</strong></strong>的整个工作流程了：</strong></li>
+</ol>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/JzbCfr.jpeg" alt="epoll.jpg"></p>
+<ul>
+<li>当网络数据包在软中断中经过内核协议栈的处理到达socket的接收缓冲区时，紧接着会调用socket的数据就绪回调指针sk_data_ready，回调函数为sock_def_readable。在socket的等待队列中找出等待项，其中等待项中注册的回调函数为ep_poll_callback。</li>
+<li>在回调函数ep_poll_callback中，根据struct eppoll_entry中的struct wait_queue_t wait通过container_of宏找到eppoll_entry对象并通过它的base指针找到封装socket的数据结构struct epitem，并将它加入到epoll中的就绪队列rdllist中。</li>
+<li>随后查看epoll中的等待队列中是否有等待项，也就是说查看是否有进程阻塞在epoll_wait上等待IO就绪的socket。如果没有等待项，则软中断处理完成。</li>
+<li>如果有等待项，则回到注册在等待项中的回调函数default_wake_function,在回调函数中唤醒阻塞进程，并将就绪队列rdllist中的epitem的IO就绪socket信息封装到struct epoll_event中返回。</li>
+<li>用户进程拿到epoll_event获取IO就绪的socket，发起系统IO调用读取数据。</li>
+</ul>
+<hr>
+<h3 id="3-4-水平触发和边缘触发"><a href="#3-4-水平触发和边缘触发" class="headerlink" title="3.4 水平触发和边缘触发"></a>3.4 水平触发和边缘触发</h3><p>经过上边对<code>epoll</code>工作过程的详细解读，我们知道，当我们监听的<code>socket</code>上有数据到来时，软中断会执行<code>epoll</code>的回调函数<code>ep_poll_callback</code>,在回调函数中会将<code>epoll</code>中描述<code>socket信息</code>的数据结构<code>epitem</code>插入到<code>epoll</code>中的就绪队列<code>rdllist</code>中。随后用户进程从<code>epoll</code>的等待队列中被唤醒，<code>epoll_wait</code>将<code>IO就绪</code>的<code>socket</code>返回给用户进程，随即<code>epoll_wait</code>会清空<code>rdllist</code>。</p>
+<p><strong>水平触发</strong>和<strong>边缘触发</strong>最关键的<strong>区别</strong>就在于当<code>socket</code>中的接收缓冲区还有数据可读时。<code>**epoll_wait**</code><strong>是否会清空</strong><code>**rdllist**</code><strong>。</strong></p>
+<ul>
+<li><strong>水平触发</strong>：在这种模式下，用户线程调用<code>epoll_wait</code>获取到<code>IO就绪</code>的socket后，对<code>Socket</code>进行系统IO调用读取数据，假设<code>socket</code>中的数据只读了一部分没有全部读完，这时再次调用<code>epoll_wait</code>，<code>epoll_wait</code>会检查这些<code>Socket</code>中的接收缓冲区是否还有数据可读，如果还有数据可读，就将<code>socket</code>重新放回<code>rdllist</code>。所以当<code>socket</code>上的IO没有被处理完时，再次调用<code>epoll_wait</code>依然可以获得这些<code>socket</code>，用户进程可以接着处理<code>socket</code>上的IO事件。</li>
+<li><strong>边缘触发：</strong> 在这种模式下，<code>epoll_wait</code>就会直接清空<code>rdllist</code>，不管<code>socket</code>上是否还有数据可读。所以在边缘触发模式下，当你没有来得及处理<code>socket</code>接收缓冲区的剩下可读数据时，再次调用<code>epoll_wait</code>，因为这时<code>rdlist</code>已经被清空了，<code>socket</code>不会再次从<code>epoll_wait</code>中返回，所以用户进程就不会再次获得这个<code>socket</code>了，也就无法在对它进行IO处理了。<strong>除非，这个</strong><code>**socket**</code><strong>上有新的IO数据到达</strong>，根据<code>epoll</code>的工作过程，该<code>socket</code>会被再次放入<code>rdllist</code>中。</li>
+</ul>
+<p>如果你在<code>边缘触发模式</code>下，处理了部分<code>socket</code>上的数据，那么想要处理剩下部分的数据，就只能等到这个<code>socket</code>上再次有网络数据到达。</p>
+<p>在<code>Netty</code>中实现的<code>EpollSocketChannel</code>默认的就是<code>边缘触发</code>模式。<code>JDK</code>的<code>NIO</code>默认是<code>水平触发</code>模式。</p>
+<h3 id="3-5-epoll对select，poll的优化总结"><a href="#3-5-epoll对select，poll的优化总结" class="headerlink" title="3.5 epoll对select，poll的优化总结"></a>3.5 epoll对select，poll的优化总结</h3><ul>
+<li><code>epoll</code>在内核中通过<code>红黑树</code>管理海量的连接，所以在调用<code>epoll_wait</code>获取<code>IO就绪</code>的socket时，不需要传入监听的socket文件描述符。从而避免了海量的文件描述符集合在<code>用户空间</code>和<code>内核空间</code>中来回复制。</li>
+</ul>
+<p><code>select，poll</code>每次调用时都需要传递全量的文件描述符集合，导致大量频繁的拷贝操作。</p>
+<ul>
+<li><code>epoll</code>仅会通知<code>IO就绪</code>的socket。避免了在用户空间遍历的开销。</li>
+</ul>
+<p><code>select，poll</code>只会在<code>IO就绪</code>的socket上打好标记，依然是全量返回，所以在用户空间还需要用户程序在一次遍历全量集合找出具体<code>IO就绪</code>的socket。</p>
+<ul>
+<li><code>epoll</code>通过在<code>socket</code>的等待队列上注册回调函数<code>ep_poll_callback</code>通知用户程序<code>IO就绪</code>的socket。避免了在内核中轮询的开销。</li>
+</ul>
+<p>大部分情况下<code>socket</code>上并不总是<code>IO活跃</code>的，在面对海量连接的情况下，<code>select，poll</code>采用内核轮询的方式获取<code>IO活跃</code>的socket，无疑是性能低下的核心原因。</p>
+<p>根据以上<code>epoll</code>的性能优势，它是目前为止各大主流网络框架，以及反向代理中间件使用到的网络IO模型。</p>
+<p>利用<code>epoll</code>多路复用IO模型可以轻松的解决<code>C10K</code>问题。</p>
+<p><code>C100k</code>的解决方案也还是基于<code>C10K</code>的方案，通过<code>epoll</code> 配合线程池，再加上 CPU、内存和网络接口的性能和容量提升。大部分情况下，<code>C100K</code>很自然就可以达到。</p>
+<p>甚至<code>C1000K</code>的解决方法，本质上还是构建在 <code>epoll</code> 的<code>多路复用 I/O 模型</code>上。只不过，除了 I/O 模型之外，还需要从应用程序到 Linux 内核、再到 CPU、内存和网络等各个层次的深度优化，特别是需要借助硬件，来卸载那些原来通过软件处理的大量功能（<code>去掉大量的中断响应开销</code>，<code>以及内核协议栈处理的开销</code>）。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>select</th>
+<th>poll</th>
+<th>epoll</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>操作方式</td>
+<td>遍历</td>
+<td>遍历</td>
+<td>回调</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>bitmap</td>
+<td>数组</td>
+<td>红黑树</td>
+</tr>
+<tr>
+<td>最大连接数</td>
+<td>1024/2084</td>
+<td>无上限</td>
+<td>无上限</td>
+</tr>
+<tr>
+<td>最大支持文件描述符数</td>
+<td>一般有最大值限制</td>
+<td>65535</td>
+<td>65535</td>
+</tr>
+<tr>
+<td>fd拷贝</td>
+<td>每次调用select，都需要把fd集合从用户态拷贝到内核态</td>
+<td>每次调用poll，都需要把fd集合从用户态拷贝到内核态</td>
+<td>fd首次调用epoll_ctl拷贝，每次调用epoll_wait不拷贝</td>
+</tr>
+<tr>
+<td>工作效率</td>
+<td>每次调用都进行线性遍历，时间复杂度为On</td>
+<td>每次调用都进行线性遍历，时间复杂度为On</td>
+<td>事件通知方式，每当fd就绪，系统注册的回调函数就会被回调，将就绪fd放到readyList</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-信号驱动IO"><a href="#4-信号驱动IO" class="headerlink" title="4.信号驱动IO"></a>4.信号驱动IO</h2><p>在<code>信号驱动IO模型</code>下，用户进程操作通过<code>系统调用 sigaction 函数</code>发起一个 IO 请求，在对应的<code>socket</code>注册一个<code>信号回调</code>，此时<code>不阻塞</code>用户进程，进程会继续工作。当内核数据就绪时，内核就为该进程生成一个 <code>SIGIO 信号</code>，通过信号回调通知进程进行相关 IO 操作。</p>
+<p>这里需要注意的是：<code>信号驱动式 IO 模型</code>依然是<code>同步IO</code>，因为它虽然可以在等待数据的时候不被阻塞，也不会频繁的轮询，但是当数据就绪，内核信号通知后，用户进程依然要自己去读取数据，在<code>数据拷贝阶段</code>发生阻塞。</p>
+<p>信号驱动 IO模型 相比于前三种 IO 模型，实现了在等待数据就绪时，进程不被阻塞，主循环可以继续工作，所以<code>理论上</code>性能更佳。</p>
+<p>但是实际上，使用<code>TCP协议</code>通信时，<code>信号驱动IO模型</code>几乎<code>不会被采用</code>。原因如下：</p>
+<ul>
+<li>信号IO 在大量 IO 操作时可能会因为信号队列溢出导致没法通知</li>
+<li><code>SIGIO 信号</code>是一种 Unix 信号，信号没有附加信息，如果一个信号源有多种产生信号的原因，信号接收者就无法确定究竟发生了什么。而 TCP socket 生产的信号事件有七种之多，这样应用程序收到 SIGIO，根本无从区分处理。</li>
+</ul>
+<p>但<code>信号驱动IO模型</code>可以用在 <code>UDP</code>通信上，因为UDP 只有<code>一个数据请求事件</code>，这也就意味着在正常情况下 UDP 进程只要捕获 SIGIO 信号，就调用 <code>read 系统调用</code>读取到达的数据。如果出现异常，就返回一个异常错误。</p>
+<p><code>IO多路复用模型</code>就像是我们在饭店门口排队等待叫号。叫号器就好比<code>select,poll,epoll</code>可以统一管理全部顾客的<code>吃饭就绪</code>事件，客户好比是<code>socket</code>连接，谁可以去吃饭了，叫号器就通知谁。</p>
+<hr>
+<h2 id="5-异步IO（AIO）"><a href="#5-异步IO（AIO）" class="headerlink" title="5.异步IO（AIO）"></a>5.异步IO（AIO）</h2><p>以上介绍的四种<code>IO模型</code>均为<code>同步IO</code>，它们都会阻塞在第二阶段<code>数据拷贝阶段</code>。</p>
+<p>通过在前边小节《同步与异步》中的介绍，相信大家很容易就会理解<code>异步IO模型</code>，在<code>异步IO模型</code>下，IO操作在<code>数据准备阶段</code>和<code>数据拷贝阶段</code>均是由内核来完成，不会对应用程序造成任何阻塞。应用进程只需要在<code>指定的数组</code>中引用数据即可。</p>
+<p><code>异步 IO</code> 与<code>信号驱动 IO</code> 的主要区别在于：<code>信号驱动 IO</code> 由内核通知何时可以<code>开始一个 IO 操作</code>，而<code>异步 IO</code>由内核通知 <code>IO 操作何时已经完成</code>。</p>
+<p>举个生活中的例子：<code>异步IO模型</code>就像我们去一个高档饭店里的包间吃饭，我们只需要坐在包间里面，点完餐（<code>类比异步IO调用</code>）之后，我们就什么也不需要管，该喝酒喝酒，该聊天聊天，饭餐做好后服务员（<code>类比内核</code>）会自己给我们送到包间（<code>类比用户空间</code>）来。整个过程没有任何阻塞。</p>
+<p><code>异步IO</code>的系统调用需要操作系统内核来支持，目前只有<code>Window</code>中的<code>IOCP</code>实现了非常成熟的<code>异步IO机制</code>。</p>
+<p>而<code>Linux</code>系统对<code>异步IO机制</code>实现的不够成熟，且与<code>NIO</code>的性能相比提升也不明显。</p>
+<p>但Linux kernel 在5.1版本由Facebook的大神Jens Axboe引入了新的异步IO库<code>io_uring</code> 改善了原来Linux native AIO的一些性能问题。性能相比<code>Epoll</code>以及之前原生的<code>AIO</code>提高了不少，值得关注。</p>
+<p>再加上<code>信号驱动IO模型</code>不适用<code>TCP协议</code>，所以目前大部分采用的还是<code>IO多路复用模型</code>。</p>
+<hr>
+<h1 id="五，IO线程模型"><a href="#五，IO线程模型" class="headerlink" title="五，IO线程模型"></a>五，IO线程模型</h1><p>在前边内容的介绍中，我们详述了网络数据包的接收和发送过程，并通过介绍5种IO模型了解了内核是如何读取网络数据并通知给用户线程的。</p>
+<p>前边的内容都是以内核空间的视角来剖析网络数据的收发模型，本小节我们站在用户空间的视角来看下如果对网络数据进行收发。</p>
+<p>相对内核来讲，用户空间的IO线程模型相对就简单一些。这些用户空间的IO线程模型都是在讨论当多线程一起配合工作时谁负责接收连接，谁负责响应IO 读写、谁负责计算、谁负责发送和接收，仅仅是用户IO线程的不同分工模式罢了。</p>
+<h2 id="1-Reactor"><a href="#1-Reactor" class="headerlink" title="1.Reactor"></a>1.Reactor</h2><p>Reactor是利用NIO对IO线程进行不同的分工：</p>
+<ul>
+<li>使用前边我们提到的IO多路复用模型比如select,poll,epoll,kqueue,进行IO事件的注册和监听。</li>
+<li>将监听到就绪的IO事件分发dispatch到各个具体的处理Handler中进行相应的IO事件处理。</li>
+</ul>
+<p>通过IO多路复用技术就可以不断的监听IO事件，不断的分发dispatch，就像一个反应堆一样，看起来像不断的产生IO事件，因此我们称这种模式为Reactor模型。</p>
+<p>下面我们来看下Reactor模型的三种分类：</p>
+<h3 id="1-1单Reactor单线程"><a href="#1-1单Reactor单线程" class="headerlink" title="1.1单Reactor单线程"></a>1.1单Reactor单线程</h3><p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/jBfcTZ.png" alt="image.png"></p>
+<p>Reactor模型是依赖IO多路复用技术实现监听IO事件，从而源源不断的产生IO就绪事件，在Linux系统下我们使用epoll来进行IO多路复用，我们以Linux系统为例：</p>
+<ul>
+<li>单Reactor意味着只有一个epoll对象，用来监听所有的事件，比如连接事件，读写事件。</li>
+<li>单线程意味着只有一个线程来执行epoll_wait获取IO就绪的Socket，然后对这些就绪的Socket执行读写，以及后边的业务处理也依然是这个线程。</li>
+</ul>
+<p>单Reactor单线程模型就好比我们开了一个很小很小的小饭馆，作为老板的我们需要一个人干所有的事情，包括：迎接顾客（accept事件），为顾客介绍菜单等待顾客点菜(IO请求)，做菜（业务处理），上菜（IO响应），送客（断开连接）。</p>
+<h3 id="1-2单Reactor多线程"><a href="#1-2单Reactor多线程" class="headerlink" title="1.2单Reactor多线程"></a>1.2单Reactor多线程</h3><p>随着客人的增多（并发请求），显然饭馆里的事情只有我们一个人干（单线程）肯定是忙不过来的，这时候我们就需要多招聘一些员工（多线程）来帮着一起干上述的事情。</p>
+<p>于是就有了单Reactor多线程模型：</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/SRHbvo.jpeg" alt="reactor模型.jpg"></p>
+<ul>
+<li>这种模式下，也是只有一个epoll对象来监听所有的IO事件，一个线程来调用epoll_wait获取IO就绪的Socket。</li>
+<li>但是当IO就绪事件产生时，这些IO事件对应处理的业务Handler，我们是通过线程池来执行。这样相比单Reactor单线程模型提高了执行效率，充分发挥了多核CPU的优势。</li>
+</ul>
+<h3 id="1-3主从Reactor多线程"><a href="#1-3主从Reactor多线程" class="headerlink" title="1.3主从Reactor多线程"></a>1.3主从Reactor多线程</h3><p>做任何事情都要区分事情的优先级，我们应该优先高效的去做优先级更高的事情，而不是一股脑不分优先级的全部去做。</p>
+<p>当我们的小饭馆客人越来越多（并发量越来越大），我们就需要扩大饭店的规模，在这个过程中我们发现，迎接客人是饭店最重要的工作，我们要先把客人迎接进来，不能让客人一看人多就走掉，只要客人进来了，哪怕菜做的慢一点也没关系。</p>
+<p>于是，主从Reactor多线程模型就产生了：</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/INh45d.png" alt="image.png"></p>
+<ul>
+<li>我们由原来的单Reactor变为了多Reactor。主Reactor用来优先专门做优先级最高的事情，也就是迎接客人（处理连接事件），对应的处理Handler就是图中的acceptor。</li>
+<li>当创建好连接，建立好对应的socket后，在acceptor中将要监听的read事件注册到从Reactor中，由从Reactor来监听socket上的读写事件。</li>
+<li>最终将读写的业务逻辑处理交给线程池处理。</li>
+</ul>
+<hr>
+<p><strong>注意</strong>：这里向从Reactor注册的只是read事件，并没有注册write事件，因为read事件是由epoll内核触发的，而write事件则是由用户业务线程触发的（什么时候发送数据是由具体业务线程决定的），所以write事件理应是由用户业务线程去注册。</p>
+<p>用户线程注册write事件的时机是只有当用户发送的数据无法一次性全部写入buffer时，才会去注册write事件，等待buffer重新可写时，继续写入剩下的发送数据、如果用户线程可以一股脑的将发送数据全部写入buffer，那么也就无需注册write事件到从Reactor中。</p>
+<p>主从Reactor多线程模型是现在大部分主流网络框架中采用的一种IO线程模型。</p>
+<h2 id="2-Proactor"><a href="#2-Proactor" class="headerlink" title="2.Proactor"></a>2.Proactor</h2><p>Proactor是基于AIO对IO线程进行分工的一种模型。前边我们介绍了异步IO模型，它是操作系统内核支持的一种全异步编程模型，在数据准备阶段和数据拷贝阶段全程无阻塞。</p>
+<p>ProactorIO线程模型将IO事件的监听，IO操作的执行，IO结果的dispatch统统交给内核来做。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/BpvAVk.png" alt="image.png"></p>
+<p><strong>Proactor模型****组件介绍：</strong></p>
+<ul>
+<li>completion handler 为用户程序定义的异步IO操作回调函数，在异步IO操作完成时会被内核回调并通知IO结果。</li>
+<li>Completion Event Queue 异步IO操作完成后，会产生对应的IO完成事件，将IO完成事件放入该队列中。</li>
+<li>Asynchronous Operation Processor 负责异步IO的执行。执行完成后产生IO完成事件放入Completion Event Queue 队列中。</li>
+<li>Proactor 是一个事件循环派发器，负责从Completion Event Queue中获取IO完成事件，并回调与IO完成事件关联的completion handler。</li>
+<li>Initiator 初始化异步操作（asynchronous operation）并通过Asynchronous Operation Processor将completion handler和proactor注册到内核。</li>
+</ul>
+<p><strong>Proactor模型****执行过程：</strong></p>
+<ul>
+<li>用户线程发起aio_read，并告诉内核用户空间中的读缓冲区地址，以便内核完成IO操作将结果放入用户空间的读缓冲区，用户线程直接可以读取结果（无任何阻塞）。</li>
+<li>Initiator 初始化aio_read异步读取操作（asynchronous operation）,并将completion handler注册到内核。</li>
+</ul>
+<p>在Proactor中我们关心的IO完成事件：内核已经帮我们读好数据并放入我们指定的读缓冲区，用户线程可以直接读取。在Reactor中我们关心的是IO就绪事件：数据已经到来，但是需要用户线程自己去读取。</p>
+<ul>
+<li>此时用户线程就可以做其他事情了，无需等待IO结果。而内核与此同时开始异步执行IO操作。当IO操作完成时会产生一个completion event事件，将这个IO完成事件放入completion event queue中。</li>
+<li>Proactor从completion event queue中取出completion event，并回调与IO完成事件关联的completion handler。</li>
+<li>在completion handler中完成业务逻辑处理。</li>
+</ul>
+<h2 id="3-Reactor与Proactor对比"><a href="#3-Reactor与Proactor对比" class="headerlink" title="3.Reactor与Proactor对比"></a>3.Reactor与Proactor对比</h2><ul>
+<li>Reactor是基于NIO实现的一种IO线程模型，Proactor是基于AIO实现的IO线程模型。</li>
+<li>Reactor关心的是IO就绪事件，Proactor关心的是IO完成事件。</li>
+<li>在Proactor中，用户程序需要向内核传递用户空间的读缓冲区地址。Reactor则不需要。这也就导致了在Proactor中每个并发操作都要求有独立的缓存区，在内存上有一定的开销。</li>
+<li>Proactor 的实现逻辑复杂，编码成本较 Reactor要高很多。</li>
+<li>Proactor 在处理高耗时 IO时的性能要高于 Reactor，但对于低耗时 IO的执行效率提升并不明显。</li>
+</ul>
+<hr>
+<p>文章参考：</p>
+<p>[1]  聊聊Netty那些事儿之从内核角度看IO模型</p>
+<p>[2] BIO&amp;NIO&amp;AIO</p>
+<p>[3] 零拷贝及Java实现</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB[14]IO%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5&amp;%E6%A8%A1%E5%9E%8B/">https://zhangxin66666.github.io/2026/10/14/5.缓存/Redis系列解读[14]IO的相关概念&amp;模型/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/redis/">redis</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/redis.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB%5B13%5D%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><img class="prev-cover" src="/images/cover/redis.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Redis系列解读[13]事务源码分析</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB%5B15%5D%EF%BC%88AE%EF%BC%89%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9E%8B/"><img class="next-cover" src="/images/cover/redis.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Redis系列解读[15] （AE）事件模型</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2025/01/03/5.%E7%BC%93%E5%AD%98/Redis-%E9%81%BF%E5%85%8D%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E7%9A%84%E5%88%A9%E5%99%A8%E4%B9%8BBloomFilter/" title="Redis-避免缓存穿透的利器之BloomFilter"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-03</div><div class="title">Redis-避免缓存穿透的利器之BloomFilter</div></div></a></div><div><a href="/2024/12/26/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(1)%E2%80%94%E2%80%94dict/" title="Redis内部数据结构详解(1)——dict"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-26</div><div class="title">Redis内部数据结构详解(1)——dict</div></div></a></div><div><a href="/2024/12/30/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(2)%E2%80%94%E2%80%94sds/" title="Redis内部数据结构详解(2)——sds"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="title">Redis内部数据结构详解(2)——sds</div></div></a></div><div><a href="/2024/12/30/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(4)%E2%80%94%E2%80%94ziplist/" title="Redis内部数据结构详解(4)——ziplist"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="title">Redis内部数据结构详解(4)——ziplist</div></div></a></div><div><a href="/2024/12/30/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(5)%E2%80%94%E2%80%94quicklist/" title="Redis内部数据结构详解(5)——quicklist"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="title">Redis内部数据结构详解(5)——quicklist</div></div></a></div><div><a href="/2025/01/02/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(7)%E2%80%94%E2%80%94intset/" title="Redis内部数据结构详解(7)——intset"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-02</div><div class="title">Redis内部数据结构详解(7)——intset</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%EF%BC%8C%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5"><span class="toc-text">一，一些概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-text">1.虚拟存储器(虚拟内存)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E5%92%8C%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="toc-text">2.用户空间和内核空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%B8%A4%E7%A7%8D%E7%8A%B6%E6%80%81%E7%9A%84%E5%88%87%E6%8D%A2"><span class="toc-text">2.1 为什么需要两种状态的切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E5%92%8C%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4"><span class="toc-text">2.2 什么是内核空间和用户空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%BF%9B%E7%A8%8B%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%92%8C%E8%BF%9B%E7%A8%8B%E5%86%85%E6%A0%B8%E6%A0%88"><span class="toc-text">2.3 进程描述符和进程内核栈</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0%E8%BF%9B%E7%A8%8B%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="toc-text">①进程描述符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1%E8%BF%9B%E7%A8%8B%E5%86%85%E6%A0%B8%E6%A0%88%EF%BC%8C%E7%94%A8%E6%88%B7%E6%A0%88"><span class="toc-text">②进程内核栈，用户栈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E5%88%87%E6%8D%A2%E6%97%B6%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-text">2.4切换时到底发生了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0%E7%94%A8%E6%88%B7%E6%80%81%E5%88%87%E6%8D%A2%E5%88%B0%E5%86%85%E6%A0%B8%E6%80%81%E6%9C%89%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text">①用户态切换到内核态有三种方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1%E5%85%B7%E4%BD%93%E7%9A%84%E5%88%87%E6%8D%A2%E6%AD%A5%E9%AA%A4"><span class="toc-text">②具体的切换步骤</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E7%BC%93%E5%86%B2%E5%8C%BA%E8%AF%BB%E5%86%99"><span class="toc-text">2.5 缓冲区读写</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2-cpu%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">3.进程切换(cpu上下文切换)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%98%BB%E5%A1%9E"><span class="toc-text">4.进程的阻塞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6-FD"><span class="toc-text">5.文件描述符(FD)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%EF%BC%8C%E5%86%85%E6%A0%B8%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B"><span class="toc-text">二，内核如何处理网络数据包的收发过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BD%91%E7%BB%9C%E5%8C%85%E6%8E%A5%E6%94%B6%E6%B5%81%E7%A8%8B"><span class="toc-text">1.网络包接收流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%BC%80%E9%94%80"><span class="toc-text">性能开销</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BD%91%E7%BB%9C%E5%8C%85%E5%8F%91%E9%80%81%E6%B5%81%E7%A8%8B"><span class="toc-text">2.网络包发送流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%BC%80%E9%94%80-1"><span class="toc-text">性能开销</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%EF%BC%8C%E9%98%BB%E5%A1%9E-amp-%E9%9D%9E%E9%98%BB%E5%A1%9E%EF%BC%8C%E5%90%8C%E6%AD%A5-amp-%E5%BC%82%E6%AD%A5"><span class="toc-text">三，阻塞&amp;非阻塞，同步&amp;异步</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%98%BB%E5%A1%9E-amp-%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="toc-text">1.阻塞&amp;非阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%98%BB%E5%A1%9E"><span class="toc-text">1.1 阻塞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="toc-text">1.2 非阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%8C%E6%AD%A5-amp-%E5%BC%82%E6%AD%A5"><span class="toc-text">2.同步&amp;异步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%90%8C%E6%AD%A5"><span class="toc-text">2.1 同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%BC%82%E6%AD%A5"><span class="toc-text">2.2 异步</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%EF%BC%8CIO%E6%A8%A1%E5%9E%8B"><span class="toc-text">四，IO模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%98%BB%E5%A1%9EIO%EF%BC%88BIO%EF%BC%89"><span class="toc-text">1.阻塞IO（BIO）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%98%BB%E5%A1%9E%E8%AF%BB"><span class="toc-text">1.1 阻塞读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E9%98%BB%E5%A1%9E%E5%86%99"><span class="toc-text">1.2阻塞写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E9%98%BB%E5%A1%9EIO%E6%A8%A1%E5%9E%8B"><span class="toc-text">1.3 阻塞IO模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">1.4 适用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%9D%9E%E9%98%BB%E5%A1%9EIO%EF%BC%88NIO%EF%BC%89"><span class="toc-text">2.非阻塞IO（NIO）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E9%9D%9E%E9%98%BB%E5%A1%9E%E8%AF%BB"><span class="toc-text">2.1非阻塞读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%86%99"><span class="toc-text">2.2非阻塞写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%9D%9E%E9%98%BB%E5%A1%9EIO%E6%A8%A1%E5%9E%8B"><span class="toc-text">2.3 非阻塞IO模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">2.4适用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="toc-text">3.IO多路复用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-select"><span class="toc-text">3.1 select</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0API%E4%BB%8B%E7%BB%8D"><span class="toc-text">①API介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1%E6%80%A7%E8%83%BD%E5%BC%80%E9%94%80"><span class="toc-text">②性能开销</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2poll"><span class="toc-text">3.2poll</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-epoll"><span class="toc-text">3.3 epoll</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0Socket%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-text">①Socket的创建</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%AD%E7%AE%A1%E7%90%86%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="toc-text">进程中管理文件列表结构</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Socket%E5%86%85%E6%A0%B8%E7%BB%93%E6%9E%84"><span class="toc-text">Socket内核结构</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1%E9%98%BB%E5%A1%9EIO%E4%B8%AD%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B%E9%98%BB%E5%A1%9E%E4%BB%A5%E5%8F%8A%E5%94%A4%E9%86%92%E5%8E%9F%E7%90%86"><span class="toc-text">②阻塞IO中用户进程阻塞以及唤醒原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2epoll-create%E5%88%9B%E5%BB%BAepoll%E5%AF%B9%E8%B1%A1"><span class="toc-text">③epoll_create创建epoll对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3epoll-ctl%E5%90%91epoll%E5%AF%B9%E8%B1%A1%E4%B8%AD%E6%B7%BB%E5%8A%A0%E7%9B%91%E5%90%AC%E7%9A%84Socket"><span class="toc-text">④epoll_ctl向epoll对象中添加监听的Socket</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A4epoll-wait%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9E%E8%8E%B7%E5%8F%96IO%E5%B0%B1%E7%BB%AA%E7%9A%84Socket"><span class="toc-text">⑤epoll_wait同步阻塞获取IO就绪的Socket</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%B0%B4%E5%B9%B3%E8%A7%A6%E5%8F%91%E5%92%8C%E8%BE%B9%E7%BC%98%E8%A7%A6%E5%8F%91"><span class="toc-text">3.4 水平触发和边缘触发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-epoll%E5%AF%B9select%EF%BC%8Cpoll%E7%9A%84%E4%BC%98%E5%8C%96%E6%80%BB%E7%BB%93"><span class="toc-text">3.5 epoll对select，poll的优化总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8IO"><span class="toc-text">4.信号驱动IO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%BC%82%E6%AD%A5IO%EF%BC%88AIO%EF%BC%89"><span class="toc-text">5.异步IO（AIO）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%EF%BC%8CIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-text">五，IO线程模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Reactor"><span class="toc-text">1.Reactor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E5%8D%95Reactor%E5%8D%95%E7%BA%BF%E7%A8%8B"><span class="toc-text">1.1单Reactor单线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E5%8D%95Reactor%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-text">1.2单Reactor多线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E4%B8%BB%E4%BB%8EReactor%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-text">1.3主从Reactor多线程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Proactor"><span class="toc-text">2.Proactor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Reactor%E4%B8%8EProactor%E5%AF%B9%E6%AF%94"><span class="toc-text">3.Reactor与Proactor对比</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/redis.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

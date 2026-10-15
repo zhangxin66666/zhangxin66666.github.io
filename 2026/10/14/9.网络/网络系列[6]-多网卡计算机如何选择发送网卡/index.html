@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>网络系列[6]-多网卡计算机如何选择发送网卡 | 金子爸爸の家</title><meta name="keywords" content="网络"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="多网卡计算机如何选择发送网卡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络系列[6]-多网卡计算机如何选择发送网卡">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[6]-%E5%A4%9A%E7%BD%91%E5%8D%A1%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E5%8F%91%E9%80%81%E7%BD%91%E5%8D%A1/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="多网卡计算机如何选择发送网卡">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:23.512Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[6]-%E5%A4%9A%E7%BD%91%E5%8D%A1%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E5%8F%91%E9%80%81%E7%BD%91%E5%8D%A1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络系列[6]-多网卡计算机如何选择发送网卡',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">网络系列[6]-多网卡计算机如何选择发送网卡</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:23.512Z" title="更新于 2026-10-14 16:48:23">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/9-%E7%BD%91%E7%BB%9C/">9.网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网络系列[6]-多网卡计算机如何选择发送网卡"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><strong>路由表匹配规则是网络路由的核心机制。当操作系统需要发送一个IP数据包时，它会根据数据包的目标IP地址，在路由表中查找最匹配的条目，发送方IP地址则自动选择该网卡配置的IP。</strong></p>
+<hr>
+<h2 id="路由表"><a href="#路由表" class="headerlink" title="路由表"></a>路由表</h2><p>每个操作系统都维护着一个<strong>路由表</strong>，它告诉系统：去往某个目标IP的数据包应该通过哪个网卡发送。</p>
+<p>查看路由表：<code>netstat -nr</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Routing tables</span><br><span class="line"></span><br><span class="line">Internet:</span><br><span class="line">Destination        Gateway            Flags               Netif Expire</span><br><span class="line">default            192.168.31.1       UGScg                 en0       </span><br><span class="line">127                127.0.0.1          UCS                   lo0       </span><br><span class="line">127.0.0.1          127.0.0.1          UH                    lo0       </span><br><span class="line">169.254            link#12            UCS                   en0      !</span><br><span class="line">192.168.31         link#12            UCS                   en0      !</span><br><span class="line">192.168.31.1/32    link#12            UCS                   en0      !</span><br><span class="line">192.168.31.1       a4:ba:70:60:23:eb  UHLWIir               en0   1177</span><br><span class="line">192.168.31.29      b6:9c:c:a7:f8:57   UHLWI                 en0   1127</span><br><span class="line">192.168.31.62/32   link#12            UCS                   en0      !</span><br><span class="line">192.168.31.125     c4:39:60:c8:29:d4  UHLWI                 en0   1176</span><br><span class="line">192.168.31.192     dc:ed:83:33:a2:5c  UHLWI                 en0   1172</span><br><span class="line">192.168.31.247     d2:5b:7e:f7:ad:ed  UHLWI                 en0      !</span><br><span class="line">224.0.0/4          link#12            UmCS                  en0      !</span><br><span class="line">224.0.0.251        1:0:5e:0:0:fb      UHmLWI                en0       </span><br><span class="line">255.255.255.255/32 link#12            UCS                   en0      !</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>Destination</strong>：目标网络或主机</p>
+</li>
+<li><p><code>default</code> = 默认路由（0.0.0.0）</p>
+</li>
+<li><p>具体IP或网络地址</p>
+</li>
+<li><p><strong>Gateway</strong>：下一跳网关</p>
+</li>
+<li><p><code>link#N</code> = 直接连接（同一网络）</p>
+</li>
+<li><p>IP地址 = 需要通过该网关转发</p>
+</li>
+<li><p><strong>Flags</strong>：路由标志</p>
+</li>
+<li><p><code>U</code> = 路由有效（Up）</p>
+</li>
+<li><p><code>G</code> = 使用网关（Gateway）</p>
+</li>
+<li><p><code>H</code> = 主机路由（Host）</p>
+</li>
+<li><p><code>S</code> = 静态路由（Static）</p>
+</li>
+<li><p><code>C</code> = 克隆路由</p>
+</li>
+<li><p><code>W</code> = 被WasCloned</p>
+</li>
+<li><p><code>L</code> = 本地路由</p>
+</li>
+<li><p><strong>Netif</strong>：网络接口</p>
+</li>
+<li><p><code>en0</code> = 以太网/Wi-Fi</p>
+</li>
+<li><p><code>en1</code> = 其他接口</p>
+</li>
+<li><p><code>lo0</code> = 回环接口</p>
+</li>
+</ul>
+<hr>
+<h2 id="路由决策过程"><a href="#路由决策过程" class="headerlink" title="路由决策过程"></a>路由决策过程</h2><p>当应用程序要发送数据包时：</p>
+<h3 id="匹配目标地址"><a href="#匹配目标地址" class="headerlink" title="匹配目标地址"></a>匹配目标地址</h3><p>操作系统查看数据包的<strong>目标IP地址</strong>，然后在路由表中寻找最匹配的条目。</p>
+<p>匹配规则遵循“最长前缀匹配”原则（Longest Prefix Match），即选择子网掩码最长的路由条目（也就是最具体的路由）。</p>
+<ol>
+<li>将目标IP地址与路由表中每一个条目的子网掩码进行按位与运算，得到目标网络地址。</li>
+<li>将得到的目标网络地址与路由表中的目标网络地址进行比较。</li>
+<li>匹配的原则是：选择其中子网掩码最长的（即最具体的）路由条目。如果有多个匹配项，则选择掩码最长的那个。</li>
+<li>如果没有任何匹配项，则使用默认路由（目标为0.0.0.0，子网掩码0.0.0.0）。</li>
+</ol>
+<p>注意：如果存在多个相同掩码长度的匹配路由，则根据度量值（Metric）或其他策略进行选择。</p>
+<p>假设路由表如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">目标网络        子网掩码         网关          接口    度量</span><br><span class="line">0.0.0.0        0.0.0.0        192.168.1.1    en0     25</span><br><span class="line">192.168.1.0    255.255.255.0   192.168.1.1    en0     25</span><br><span class="line">192.168.1.100  255.255.255.255 192.168.1.1    en0     25</span><br><span class="line">10.0.0.0       255.0.0.0       10.1.1.1       en1     10</span><br></pre></td></tr></table></figure>
+
+<p>现在有一个数据包要发送到目标IP：192.168.1.150</p>
+<p>步骤：</p>
+<ol>
+<li>将目标IP与每个路由条目的子网掩码进行按位与运算，然后与目标网络比较：</li>
+</ol>
+<ul>
+<li>第一条：0.0.0.0/0.0.0.0 -&gt; 匹配（默认路由）</li>
+<li>第二条：192.168.1.0/255.255.255.0 -&gt; 192.168.1.150 &amp; 255.255.255.0 = 192.168.1.0，匹配</li>
+<li>第三条：192.168.1.100/255.255.255.255 -&gt; 192.168.1.150 &amp; 255.255.255.255 = 192.168.1.150，不等于192.168.1.100，不匹配</li>
+<li>第四条：10.0.0.0/255.0.0.0 -&gt; 192.168.1.150 &amp; 255.0.0.0 = 192.0.0.0，不等于10.0.0.0，不匹配</li>
+</ul>
+<ol>
+<li>在匹配的条目中（第一条和第二条），选择子网掩码最长的。第二条的掩码是255.255.255.0（24位），第一条的掩码是0.0.0.0（0位），所以选择第二条。</li>
+</ol>
+<p>因此，数据包将通过en0接口发送到网关192.168.1.1。</p>
+<p>再举一个例子，目标IP：192.168.1.100<br>匹配情况：<br>第一条：匹配<br>第二条：匹配（192.168.1.100 &amp; 255.255.255.0 = 192.168.1.0，与目标网络192.168.1.0相等）<br>第三条：匹配（192.168.1.100 &amp; 255.255.255.255 = 192.168.1.100，与目标网络192.168.1.100相等）</p>
+<p>这三个条目都匹配，但第三条的掩码最长（32位），所以选择第三条。</p>
+<p>如果目标IP是10.1.2.3，那么只有第一条和第四条匹配。第四条掩码为8位，第一条为0位，所以选择第四条。</p>
+<p>如果目标IP是203.0.113.5，那么只有第一条匹配（默认路由），所以使用默认路由。</p>
+<hr>
+<h3 id="确定出口网卡和网关"><a href="#确定出口网卡和网关" class="headerlink" title="确定出口网卡和网关"></a>确定出口网卡和网关</h3><ul>
+<li><p><strong>Netif列</strong>：告诉系统使用哪个网卡。</p>
+</li>
+<li><p><strong>Gateway列</strong>：告诉系统下一跳地址。</p>
+</li>
+<li><p><code>link#12</code>：表示目标在同一局域网，直接发送。</p>
+</li>
+<li><p>具体IP：表示需要通过该网关转发。</p>
+</li>
+</ul>
+<hr>
+<h3 id="自动选择源IP地址"><a href="#自动选择源IP地址" class="headerlink" title="自动选择源IP地址"></a>自动选择源IP地址</h3><p>一旦确定了出口网卡，系统就自动使用<strong>该网卡配置的IP地址</strong>作为数据包的<strong>源IP地址</strong>。</p>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[6]-%E5%A4%9A%E7%BD%91%E5%8D%A1%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E5%8F%91%E9%80%81%E7%BD%91%E5%8D%A1/">https://zhangxin66666.github.io/2026/10/14/9.网络/网络系列[6]-多网卡计算机如何选择发送网卡/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E7%BD%91%E7%BB%9C.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B5%5D-IP%E4%B8%8E%E4%BB%A5%E5%A4%AA%E7%BD%91%E7%9A%84%E5%8C%85%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/"><img class="prev-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">网络系列[5]-IP与以太网的包收发操作</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B7%5D-%E9%80%9A%E8%BF%87ARP%E6%9F%A5%E8%AF%A2%E7%9B%AE%E6%A0%87%E8%B7%AF%E7%94%B1%E5%99%A8MAC%E5%9C%B0%E5%9D%80/"><img class="next-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">网络系列[7]-通过ARP查询目标路由器MAC地址</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B11%5D-%E7%BD%91%E7%BA%BF%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%BB%9E%E7%BA%BF/" title="网络系列[11]-网线为什么使用双绞线"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[11]-网线为什么使用双绞线</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B10%5D-UDP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/" title="网络系列[10]-UDP协议的收发操作"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[10]-UDP协议的收发操作</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B13%5D-%E8%B7%AF%E7%94%B1%E5%99%A8%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[13]-路由器的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[13]-路由器的包转发</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B14%5D-%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%88NAT%EF%BC%89/" title="网络系列[14]-网络地址转换（NAT）"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[14]-网络地址转换（NAT）</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B15%5D-%E4%BB%8E%E4%BA%92%E8%81%94%E7%BD%91%E8%AE%BF%E9%97%AE%E5%85%AC%E5%8F%B8%E5%86%85%E7%BD%91/" title="网络系列[15]-从互联网访问公司内网"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[15]-从互联网访问公司内网</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B12%5D-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[12]-交换机的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[12]-交换机的包转发</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E8%A1%A8"><span class="toc-text">路由表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B"><span class="toc-text">路由决策过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E7%9B%AE%E6%A0%87%E5%9C%B0%E5%9D%80"><span class="toc-text">匹配目标地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E5%87%BA%E5%8F%A3%E7%BD%91%E5%8D%A1%E5%92%8C%E7%BD%91%E5%85%B3"><span class="toc-text">确定出口网卡和网关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E9%80%89%E6%8B%A9%E6%BA%90IP%E5%9C%B0%E5%9D%80"><span class="toc-text">自动选择源IP地址</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

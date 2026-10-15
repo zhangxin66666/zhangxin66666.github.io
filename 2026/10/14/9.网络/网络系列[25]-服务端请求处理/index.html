@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>网络系列[25]-服务端请求处理 | 金子爸爸の家</title><meta name="keywords" content="网络"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="服务端请求处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络系列[25]-服务端请求处理">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[25]-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="服务端请求处理">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:23.504Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[25]-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络系列[25]-服务端请求处理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">网络系列[25]-服务端请求处理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:23.504Z" title="更新于 2026-10-14 16:48:23">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/9-%E7%BD%91%E7%BB%9C/">9.网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网络系列[25]-服务端请求处理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="服务器概览"><a href="#服务器概览" class="headerlink" title="服务器概览"></a>服务器概览</h1><h2 id="客户端与服务器的区别"><a href="#客户端与服务器的区别" class="headerlink" title="客户端与服务器的区别"></a>客户端与服务器的区别</h2><p>当网络包到达服务器之后，服务器就会接收这个包并进行处理，但是服务器的操作并不是从这里开始的。实际上，在服务器启动之后，需要进行各种准备工作，才能接受客户端的访问。客户端和服务器虽然有很多不同，但是网络相关的部分，如网卡，协议栈，Socket库等功能和客户端都是一致的。但是功能相同不代表用法相同。在连接过程中，客户端发起连接操作，服务器等待连接，因此在Socket库的用法上有一些区别，即应用程序调用Socket库的组件不同。</p>
+<hr>
+<h2 id="服务器程序的结构"><a href="#服务器程序的结构" class="headerlink" title="服务器程序的结构"></a>服务器程序的结构</h2><p>程序可以分为<strong>等待连接模块</strong>和负责<strong>与客户端通信的模块</strong>。当服务器程序启动后，就会运行<strong>等待连接模块</strong>。这个模块会创建套接字，然后进入等待连击的暂停状态。接下来当客户端发起连接时，这个模块会恢复运行并接受连接，然后启动<strong>客户端通信模块</strong>，并移交完成连接的套接字。接下来<strong>客户端通信模块</strong>就会使用已连接的套接字与客户端进行通信，通信结束后，这个模块就退出了。</p>
+<p>每次有新客户端发起连接，都会启动一个新的<strong>客户端通信模块</strong>，因此<strong>客户端通信的模块</strong>与客户端是一一对应的关系。</p>
+<hr>
+<h2 id="服务端的套接字和端口"><a href="#服务端的套接字和端口" class="headerlink" title="服务端的套接字和端口"></a>服务端的套接字和端口</h2><p>TCP的连接操作是在有一方等待连接的情况下，另一方才能发起连接，因此这部分需要区分<strong>发起连接</strong>和<strong>等待连接</strong>这两个不同的角色。从数据收发的角度看，这就是客户端与服务器的区别：</p>
+<ul>
+<li>客户端发起连接</li>
+<li>服务端等待连接</li>
+</ul>
+<p>这个区别体现在如何调用Socket库上。首先客户端数据收发需要经过下面四个阶段。</p>
+<ol>
+<li>创建套接字</li>
+<li>用管道连接服务端套接字</li>
+<li>收发数据</li>
+<li>断开管道并删除套接字</li>
+</ol>
+<p>相对的，服务端来说是将阶段2改成了等待连接。</p>
+<ol>
+<li><p>创建套接字</p>
+</li>
+<li><p>将套接字设置为等待连接，接受连接</p>
+</li>
+<li><p>收发数据</p>
+</li>
+<li><p>断开管道并删除套接字</p>
+</li>
+<li><p>协议栈调用Socket创建套接字。</p>
+</li>
+<li><p>协议栈调用<code>bind</code>将端口号写入套接字中。</p>
+</li>
+<li><p>协议栈调用<code>listen</code>向套接字写入等待连接状态这一控制信息（套接字会开始等待来自客户端的网络包）。</p>
+</li>
+<li><p>协议栈调用<code>accept</code>来接受连接。</p>
+</li>
+</ol>
+<p>在执行<code>accept</code>的时候，一般服务器都是处于等待包到达的状态，这时应用程序会暂停运行。在这个状态下，一旦客户端的包到达，就会返回响应包并开始接受连接操作。接下来，协议栈会给等待连接的套接字复制一个副本，然后将连接对象等控制信息写入新的套接字中。</p>
+<ol>
+<li><code>accept</code>结束之后等待连接的过程也就结束了，这时等待连接模块会启动客户端通信模块，然后将连接好的新套接字转交给客户端通信模块，由这个模块来执行与客户端之间的通信操作。之后的数据收发操作和客户端的工作过程相同。</li>
+</ol>
+<p><strong>在复制出一个新的套接字之后，原来那个处于等待连接状态的套接字会怎么样呢?</strong></p>
+<p>其实它还会以等待连接的状态继续存在，当再次调用<code>accept</code>，客户端连接包到达时，它又可以再次执行接受连接操作。接受新的连接之后，和刚才一样，协议栈会为这个等待连接的套接字复制一个新的副本，然后让客户端连接到这个新的副本套接字上。像这样每次为新的连接创建新的套接字就是这一步操作的一个关键点。如果不创建新副本，而是直接让客户端连接到等待连接的套接字上，那么就没有套接字在等待连接了，这时如果有其他客户端发起连接就会遇到问题。</p>
+<p>创建新套接字时端口号也是一个关键点。端口号是用来识别套接字的，不同的套接字应该对应不同的端口号，但如果这样做，这里就会出现问题。因为在接受连接的时候，新创建的套接字副本就必须和原来的等待连接的套接字具有不同的端口号才行。这样一来，比如客户端本来想要连接80端口上的套接字，结果从另一个端口号返回了包，这样一来客户端就无法判断这个包到底是要连接的那个对象返回的，还是其他程序返回的。因此，新创建的套接字副本必须和原来的等待连接的套接字具有相同的端口号。</p>
+<p>但是这样一来又会引发另一个问题。端口号是用来识别套接字的，如果一个端口号对应多个套接字，就无法通过端口号来定位到某一个套接字了。当客户端的包到达时，如果协议栈只看TCP头部中的接收方端口号,是无法判断这个包到底应该交给哪个套接字的。</p>
+<p>这个问题可以用下面的方法来解决，即要确定某个套接字时，不仅使用服务器端套接字对应的端口号，还同时使用客户端的端口号再加上IP地址，总共使用下面4种信息来进行判断。</p>
+<ul>
+<li>客户端IP地址</li>
+<li>客户端端口号</li>
+<li>服务器IP地址</li>
+<li>服务器端口号</li>
+</ul>
+<p>服务器上可能存在多个端口号相同的套接字，但客户端的套接字都是对应不同端口号的，因此可以通过客户端的端口号来确定服务器上的某个套接字。不过，使用不同端口号的规则仅限一台客户端的内部，当有多个客户端进行连接时，它们之间的端口号是可以重复的。因此，必须加上客户端的IP地址才能进行判断。</p>
+<p><strong>既然通过客户端IP地址、客户端端口号、服务器IP地址、服务器端口号这4种信息可以确定某个套接字，那么要指代某个套接字时用这4种信息就好了，为什么还要使用描述符呢?</strong></p>
+<p>其实无法用上面4种信息来代替描述符。</p>
+<ol>
+<li>在套接字刚刚创建好，还没有建立连接的状态下，这4种信息是不全的。</li>
+<li>为了指代一个套接字，使用一种信息(描述符)比使用4种信息要简单。</li>
+</ol>
+<p>出于上面两个原因，<strong>应用程序和协议栈之间是使用描述符来指代套接字的</strong>。</p>
+<hr>
+<h1 id="服务器的接收操作"><a href="#服务器的接收操作" class="headerlink" title="服务器的接收操作"></a>服务器的接收操作</h1><h2 id="网卡将接收到的信号转化成数字信号"><a href="#网卡将接收到的信号转化成数字信号" class="headerlink" title="网卡将接收到的信号转化成数字信号"></a>网卡将接收到的信号转化成数字信号</h2><p>到达服务器的网络包本质上是光电信号，接收信号的过程和客户端是一样的。</p>
+<ol>
+<li>网卡接收信号，然后将其还原成数字信息。</li>
+<li>根据包末尾的校验序列（FCS）来校验错误。</li>
+<li>检查MAC头部中的接收方MAC地址。</li>
+</ol>
+<p>至此，接收信号并还原成数字信息的操作就完成了，还原后的数字信息被保存在网卡内部的缓冲区中。</p>
+<p>上面的所有操作都是网卡的MAC模块完成的。</p>
+<p>在这个过程中，服务器的CPU并不是一直在监控网络包的到达，而是在执行其他的任务，因此CPU并不知道此时网络包已经到达了。但接下来的接收操作需要CPU来参与，因此网卡需要通过中断将网络包到达的事件通知给CPU。</p>
+<p>接下来，CPU就会暂停当前的工作，并切换到网卡的任务。然后，网卡驱动会开始运行，从网卡缓冲区中将接收到的包读取出来，根据MAC头部的以太类型字段判断协议的种类，并调用负责处理该协议的软件。这里，以太类型的值应该是表示IP协议，因此会调用TCP/IP协议栈，并将包转交给它。</p>
+<hr>
+<h2 id="IP模块的接收操作"><a href="#IP模块的接收操作" class="headerlink" title="IP模块的接收操作"></a>IP模块的接收操作</h2><p>当网络包转交到协议栈时，IP模块会首先开始工作，检查IP头部。IP模块首先会检查IP头部的格式是否符合规范，然后检查接收方IP地址，看包是不是发给自己的。当服务器启用类似路由器的包转发功能时，对于不是发给自己的包，会像路由器一样根据路由表对包进行转发 。</p>
+<p>确认包是发给当前机器的之后,接下来需要检查包有没有被分片。检查IP头部的内容就可以知道是否分片，如果是分片的包，则将包暂时存放在内存中，等所有分片全部到达之后将分片组装起来还原成原始包;如果没有分片，则直接保留接收时的样子，不需要进行重组。到这里，服务器端就完成了包的接收。</p>
+<p>接下来需要检查IP头部的协议号字段，并将包转交给相应的模块。例如，如果协议号为06(十六进制)，则将包转交给TCP模块;如果是11(十六进制)，则转交给UDP 模块。</p>
+<hr>
+<h2 id="TCP模块如何处理连接包"><a href="#TCP模块如何处理连接包" class="headerlink" title="TCP模块如何处理连接包"></a>TCP模块如何处理连接包</h2><p>前面的步骤对于任何包都是一样的，但后面的TCP模块的操作则根据包的内容有所区别。</p>
+<p>当TCP头部中的控制位SYN为1时，表示这是一个发起连接的包。</p>
+<p>如果收到的是发起连接的包，则TCP 模块会：</p>
+<ol>
+<li>确认TCP头部的控制位 SYN。</li>
+<li>检查接收方端口号</li>
+<li>为相应的等待连接套接字复制一个新的副本。</li>
+<li>记录发送方IP 地址和端口号等信息。</li>
+</ol>
+<hr>
+<h2 id="TCP模块如何处理数据包"><a href="#TCP模块如何处理数据包" class="headerlink" title="TCP模块如何处理数据包"></a>TCP模块如何处理数据包</h2><p>收到数据包时，TCP 模块会：</p>
+<ol>
+<li>根据收到的包的发送方IP地址、发送方端口号、接收方IP 地址、接收方端口号找到相对应的套接字。</li>
+<li>将数据块拼合起来并保存在接收缓冲区中。</li>
+<li>向客户端返回ACK。</li>
+</ol>
+<hr>
+<h2 id="TCP模块的断开操作"><a href="#TCP模块的断开操作" class="headerlink" title="TCP模块的断开操作"></a>TCP模块的断开操作</h2><p>在TCP协议的规则中，断开操作可以由客户端或服务器任何一方发起，具体的顺序是由应用层协议决定的。Web中，这一顺序随HTTP协议版本不同而不同，在HTTP1.0 中，是服务器先发起断开操作。</p>
+<p>这时，服务器程序会调用Socket库的<code>close</code>，TCP模块会生成一个控制位FIN为1的TCP头部，并委托IP模块发送给客户端。当客户端收到这个包之后，会返回一个ACK号。接下来客户端调用<code>close</code>，生成一个 FIN为1的TCP头部发给服务器，服务器再返回ACK号，这时断开操作就完成了。HTTP1.1中，是客户端先发起断开操作，这种情况下只要将客户端和服务器的操作颠倒一下就可以了。</p>
+<p>无论哪种情况，当断开操作完成后，套接字会在经过一段时间后被删除。</p>
+<hr>
+<h2 id="服务端返回响应消息"><a href="#服务端返回响应消息" class="headerlink" title="服务端返回响应消息"></a>服务端返回响应消息</h2><p>当服务器完成对请求消息的各种处理之后，就可以返回响应消息了。这里的工作过程和客户端向服务器发送请求消息时的过程相同。</p>
+<p>首先，Web服务器调用Socket库的<code>write</code>，将响应消息交给协议栈。这时，需要告诉协议栈这个响应消息应该发给谁，给出表示通信使用的套接字的描述符。</p>
+<p>接下来，协议栈会将数据拆分成多个网络包，然后加上头部发送出去。这些包中包含接收方客户端的地址，它们将经过交换机和路由器的转发，通过互联网最终到达客户端。</p>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[25]-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86/">https://zhangxin66666.github.io/2026/10/14/9.网络/网络系列[25]-服务端请求处理/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E7%BD%91%E7%BB%9C.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B24%5D-%E5%86%85%E5%AE%B9%E5%88%86%E5%8F%91%E6%9C%8D%E5%8A%A1%EF%BC%88CDN%EF%BC%89/"><img class="prev-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">网络系列[24]-内容分发服务（CDN）</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B26%5D-HTTPS%E5%8D%8F%E8%AE%AE/"><img class="next-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">网络系列[26]-HTTPS协议</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B11%5D-%E7%BD%91%E7%BA%BF%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%BB%9E%E7%BA%BF/" title="网络系列[11]-网线为什么使用双绞线"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[11]-网线为什么使用双绞线</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B10%5D-UDP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/" title="网络系列[10]-UDP协议的收发操作"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[10]-UDP协议的收发操作</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B13%5D-%E8%B7%AF%E7%94%B1%E5%99%A8%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[13]-路由器的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[13]-路由器的包转发</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B14%5D-%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%88NAT%EF%BC%89/" title="网络系列[14]-网络地址转换（NAT）"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[14]-网络地址转换（NAT）</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B15%5D-%E4%BB%8E%E4%BA%92%E8%81%94%E7%BD%91%E8%AE%BF%E9%97%AE%E5%85%AC%E5%8F%B8%E5%86%85%E7%BD%91/" title="网络系列[15]-从互联网访问公司内网"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[15]-从互联网访问公司内网</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B12%5D-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[12]-交换机的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[12]-交换机的包转发</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A6%82%E8%A7%88"><span class="toc-text">服务器概览</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">客户端与服务器的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">服务器程序的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9A%84%E5%A5%97%E6%8E%A5%E5%AD%97%E5%92%8C%E7%AB%AF%E5%8F%A3"><span class="toc-text">服务端的套接字和端口</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%8E%A5%E6%94%B6%E6%93%8D%E4%BD%9C"><span class="toc-text">服务器的接收操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E5%B0%86%E6%8E%A5%E6%94%B6%E5%88%B0%E7%9A%84%E4%BF%A1%E5%8F%B7%E8%BD%AC%E5%8C%96%E6%88%90%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7"><span class="toc-text">网卡将接收到的信号转化成数字信号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP%E6%A8%A1%E5%9D%97%E7%9A%84%E6%8E%A5%E6%94%B6%E6%93%8D%E4%BD%9C"><span class="toc-text">IP模块的接收操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP%E6%A8%A1%E5%9D%97%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E8%BF%9E%E6%8E%A5%E5%8C%85"><span class="toc-text">TCP模块如何处理连接包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP%E6%A8%A1%E5%9D%97%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="toc-text">TCP模块如何处理数据包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP%E6%A8%A1%E5%9D%97%E7%9A%84%E6%96%AD%E5%BC%80%E6%93%8D%E4%BD%9C"><span class="toc-text">TCP模块的断开操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%94%E5%9B%9E%E5%93%8D%E5%BA%94%E6%B6%88%E6%81%AF"><span class="toc-text">服务端返回响应消息</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

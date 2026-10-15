@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>网络系列[24]-内容分发服务（CDN） | 金子爸爸の家</title><meta name="keywords" content="网络"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="内容分发服务（CDN）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络系列[24]-内容分发服务（CDN）">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[24]-%E5%86%85%E5%AE%B9%E5%88%86%E5%8F%91%E6%9C%8D%E5%8A%A1%EF%BC%88CDN%EF%BC%89/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="内容分发服务（CDN）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:23.503Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[24]-%E5%86%85%E5%AE%B9%E5%88%86%E5%8F%91%E6%9C%8D%E5%8A%A1%EF%BC%88CDN%EF%BC%89/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络系列[24]-内容分发服务（CDN）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">网络系列[24]-内容分发服务（CDN）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:23.503Z" title="更新于 2026-10-14 16:48:23">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/9-%E7%BD%91%E7%BB%9C/">9.网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网络系列[24]-内容分发服务（CDN）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="利用内容分发服务器分担负载"><a href="#利用内容分发服务器分担负载" class="headerlink" title="利用内容分发服务器分担负载"></a>利用内容分发服务器分担负载</h1><p>缓存服务器部署在不同位置会带来不同的效果。如图 a) 所示，当缓存服务器位于服务器端时，可有效减轻 Web 服务器的负载，但对互联网整体流量的减少作用有限。相较之下，将缓存服务器部署在客户端侧（图 b)）则能显著降低网络传输量。</p>
+<p>互联网中常存在拥塞节点，数据包在这些节点处传输延迟较大。若缓存服务器位于客户端侧，可在本地直接响应请求，从而减少经过拥塞点的频率，使网络通信更加稳定。尤其是在访问包含大量图片或视频等大流量内容时，这种部署方式的效果更为明显。</p>
+<p>然而，客户端侧的缓存服务器通常由客户端网络运营管理者控制，Web 服务器的运营方无法直接管理。例如，当网站内容增多导致缓存空间不足时，如果缓存服务器部署在服务器端，运营方可通过扩容磁盘等方式灵活调整；而位于客户端侧的缓存服务器则无法直接扩容，甚至部分客户端网络可能并未配置缓存服务器。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/Xx4A1M.png" alt="image.png"></p>
+<p>综上所述，缓存服务器部署在服务器端与客户端各有优劣。为兼顾两者的优势，可采用如图 c) 所示的混合方式：由 Web 服务器运营方与网络运营商签约，将可由自身控制的缓存服务器部署在运营商的网络节点处。这样既能让缓存服务器更靠近用户，提升访问效率，又能保持对缓存服务器的管理和控制。</p>
+<p>不过，该方案在实际部署中面临挑战。由于互联网中的服务器面向全球开放访问，若要全面覆盖用户请求，需在各主要运营商的接入点（POP）中都部署缓存服务器，数量巨大，实施成本极高。</p>
+<p>为降低部署成本，可仅选择部分主要运营商进行合作。尽管这样会导致部分用户访问缓存服务器的路径仍然较长，但整体访问距离依然短于直接访问 Web 服务器，性能上仍具明显优势。</p>
+<p>即便如此，Web 服务器运营方若单独与多家运营商签约并自行部署缓存服务器，仍会在费用与运维精力上面临巨大压力。为此，出现了专门提供缓存分发服务的厂商——<strong>内容分发服务提供商（CDSP）</strong>。</p>
+<p>CDSP 通常会与各大运营商签约，并在其网络中部署大量缓存服务器；同时再与 Web 服务器运营方签约，使这些缓存服务器与目标网站协同工作。</p>
+<p>当客户端访问某一网站时，实际上访问的可能是 CDSP 的缓存节点，而非网站自身的主服务器。</p>
+<p>CDSP 的缓存服务器可同时为多个网站提供服务，实现资源共享。通过这种方式，各网站的平均成本显著降低，运维压力也随之减轻。同时，CDSP 统一负责与各运营商的合作与节点维护，使网站运营方能够专注于内容运营与业务优化。</p>
+<hr>
+<h1 id="如何找到最近的缓存服务器"><a href="#如何找到最近的缓存服务器" class="headerlink" title="如何找到最近的缓存服务器"></a>如何找到最近的缓存服务器</h1><p>在内容分发服务（CDS）中，互联网中分布着大量缓存服务器。为了提高访问速度，必须使客户端能够自动连接到距离最近的缓存服务器。</p>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/piAipq.png" alt="image.png"></p>
+<p>若依赖浏览器中的代理设置虽然可以实现这一目标，但显然无法让所有用户手动配置。因此，需要一种无需用户干预、即可将请求自动路由到最近缓存服务器的机制。</p>
+<p>常见的实现方法之一是利用 <strong>DNS（域名系统）</strong> 进行访问分配，其原理与负载均衡类似。DNS 服务器在返回 Web 服务器 IP 地址时，可以对响应内容进行“加工”，使返回结果为距离客户端最近的缓存服务器的 IP 地址。</p>
+<p>在介绍这种机制的细节前，先回顾 DNS 的基本工作过程。</p>
+<hr>
+<h2 id="DNS-的基本工作方式"><a href="#DNS-的基本工作方式" class="headerlink" title="DNS 的基本工作方式"></a><strong>DNS 的基本工作方式</strong></h2><p>互联网中部署着大量 DNS 服务器，它们通过逐级解析的方式完成域名查询。</p>
+<ol>
+<li>客户端首先根据要访问的 Web 服务器域名生成查询请求，并将该请求发送至本地局域网中的 DNS 服务器（图①）。</li>
+<li>本地 DNS 服务器根据域名的层级结构逐步定位到负责管理该域名的权威 DNS 服务器（即 Web 服务器侧的 DNS 服务器），并将查询请求转发给它（图②）。</li>
+<li>Web 服务器端的 DNS 服务器收到查询后，从内部维护的域名与 IP 地址对应表中查找匹配记录，并返回相应的 IP 地址（图③）。</li>
+<li>查询结果沿反向路径依次返回给本地 DNS 服务器，最终再返回给客户端（图④）。</li>
+</ol>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/zT2iNl.png" alt="image.png"></p>
+<p>通常情况下，一个域名只对应一个 IP 地址。但若配置了多个 IP 地址，DNS 服务器往往会采用轮询（Round Robin）的方式依次返回各个地址，从而在多台服务器之间分散访问负载。</p>
+<hr>
+<h2 id="基于距离的-DNS-解析策略"><a href="#基于距离的-DNS-解析策略" class="headerlink" title="基于距离的 DNS 解析策略"></a><strong>基于距离的 DNS 解析策略</strong></h2><p>在标准的 DNS 工作机制下，返回 IP 地址的顺序与客户端和服务器之间的物理或网络距离无关，因此可能导致客户端连接到较远的缓存服务器。</p>
+<p>为了让用户始终访问距离最近的缓存节点，DNS 服务器需要根据客户端与各缓存服务器的<strong>网络距离</strong>来决定返回的 IP 地址。</p>
+<p>关键问题在于如何判断客户端与缓存服务器之间的距离。解决方法如下：</p>
+<ol>
+<li><strong>路由信息收集</strong></li>
+</ol>
+<p>事先从缓存服务器部署地点的路由器中收集路由表信息。</p>
+<p>假设共有 4 台缓存服务器，分别部署在 4 个不同地点，则需要从这 4 个地点的路由器分别导出路由表，并集中存放在 DNS 服务器中。</p>
+<ol>
+<li><strong>距离估算与比较</strong></li>
+</ol>
+<p>当 DNS 服务器接收到来自客户端 DNS 服务器的查询消息时，可利用这些路由表信息推测网络距离。</p>
+<p>例如，根据路由器 A 的路由表可以查出，从路由器 A 到查询发起方（客户端 DNS 服务器）所经过的路径，如：先通过运营商 X，再经过运营商 Y，最终抵达运营商 Z。</p>
+<p>通过对比这些路径的网络跳数、自治系统（AS）路径或延迟指标，即可大致判断各路由器（也即各缓存服务器位置）到客户端的远近关系。</p>
+<ol>
+<li><strong>返回最优结果</strong></li>
+</ol>
+<p>比较所有缓存服务器的路径距离后，DNS 服务器选择距离最近的缓存服务器，并将其 IP 地址作为解析结果返回。客户端随后即可通过该地址访问相应的缓存节点。</p>
+<p>需要注意的是，客户端 DNS 服务器与实际客户端可能并非处于完全相同的地理或网络位置，因此该方法的距离估算并不完全精准。但在绝大多数情况下，基于路由信息的判断仍能获得较为理想的分配效果。</p>
+<hr>
+<h1 id="通过重定向服务器分配访问目标"><a href="#通过重定向服务器分配访问目标" class="headerlink" title="通过重定向服务器分配访问目标"></a>通过重定向服务器分配访问目标</h1><p>除了利用 DNS 分配访问外，还可以通过 <strong>HTTP 重定向（Redirect）</strong> 的方式，使客户端自动访问距离最近的缓存服务器。</p>
+<p>在 HTTP 协议中定义了多个头部字段，其中的 <strong>Location</strong> 字段用于指示资源已被转移至其他服务器。当 Web 服务器返回包含 Location 字段的响应时，表示资源位置已更改，客户端应按照该字段指定的地址重新发起请求。</p>
+<p>这种引导客户端访问其他 Web 服务器的机制即为 <strong>重定向</strong>。利用该机制，可将客户端访问请求转发至最近的缓存服务器。</p>
+<hr>
+<h2 id="重定向的工作过程"><a href="#重定向的工作过程" class="headerlink" title="重定向的工作过程"></a><strong>重定向的工作过程</strong></h2><p>当使用重定向实现缓存服务器的分配时，首先需在 Web 服务器端的 DNS 中注册一台 <strong>重定向服务器</strong>。客户端在解析域名后，会将 HTTP 请求发送至这台重定向服务器。</p>
+<p>重定向服务器与基于 DNS 分配方法中的 DNS 服务器类似，同样需要预先收集来自各个缓存服务器部署地路由器的路由信息。</p>
+<p>当接收到客户端的 HTTP 请求后，重定向服务器根据这些路由信息计算客户端与各缓存服务器之间的距离，选出最近的缓存节点，并在响应中返回 Location 字段，指向该缓存服务器的地址。客户端接收到响应后，会根据该字段重新向缓存服务器发起访问请求。</p>
+<hr>
+<h2 id="方法比较与精度分析"><a href="#方法比较与精度分析" class="headerlink" title="方法比较与精度分析"></a><strong>方法比较与精度分析</strong></h2><p>与基于 DNS 的方法相比，重定向方式虽然增加了一次 HTTP 消息交互，通信开销略高，但在精度上具有明显优势。</p>
+<p>DNS 方式依赖的是 <strong>客户端 DNS 服务器</strong> 与缓存服务器之间的距离估算，而重定向方式可以直接依据 <strong>客户端 IP 地址</strong> 计算到各缓存服务器的距离，因此判断结果更为准确。</p>
+<hr>
+<h2 id="精度提升与扩展方式"><a href="#精度提升与扩展方式" class="headerlink" title="精度提升与扩展方式"></a><strong>精度提升与扩展方式</strong></h2><p>重定向服务器除可依赖路由信息进行距离估算外，还可结合其他实时网络特征以进一步提高准确度。</p>
+<p>例如，服务器可以返回一段用于测量网络延迟的脚本。客户端执行脚本后，会向多台缓存服务器分别发送测试包（如 ICMP 或 HTTP 请求），测量各节点的往返时间（RTT），并自动选择响应最快、延迟最低的服务器作为访问目标。</p>
+<p>这种方式能够动态地反映网络状态，从而更精确地将客户端引导至性能最优的缓存服务器，实现更高效的内容分发。</p>
+<hr>
+<h1 id="缓存更新方法会影响性能"><a href="#缓存更新方法会影响性能" class="headerlink" title="缓存更新方法会影响性能"></a>缓存更新方法会影响性能</h1><p>缓存服务器的核心思想，是将曾经访问过的数据临时保存下来，在后续访问相同内容时直接提供缓存结果，以提升访问效率，这一机制可显著降低对原始服务器的访问频率。</p>
+<p>然而，这种方式存在两个局限：</p>
+<ol>
+<li>首次访问无法命中缓存。</li>
+<li>在后续访问中，需要频繁向原始服务器确认数据是否更新。当网络出现拥塞时，这类验证操作会导致响应时间明显延长，从而削弱缓存带来的性能提升。</li>
+</ol>
+<hr>
+<h2 id="主动更新机制"><a href="#主动更新机制" class="headerlink" title="主动更新机制"></a><strong>主动更新机制</strong></h2><p>为改善上述问题，可采用 <strong>主动更新（Push-based Invalidation）</strong> 机制。</p>
+<p>该方法由 Web 服务器在原始数据发生变更时主动通知缓存服务器，使其立即更新对应的缓存内容。通过这种方式，缓存服务器始终持有最新数据，无需在每次访问时与原始服务器进行一致性确认。</p>
+<p>同时，缓存服务器在收到通知后即可直接响应请求，因此从第一次访问起便能发挥缓存加速效果。</p>
+<p>在内容分发服务（CDS）体系中，部署的缓存服务器通常具备此类主动同步能力，以确保分发内容与源站保持一致。</p>
+<hr>
+<h2 id="动态内容的缓存策略"><a href="#动态内容的缓存策略" class="headerlink" title="动态内容的缓存策略"></a><strong>动态内容的缓存策略</strong></h2><p>除了静态内容外，部分 Web 页面由 <strong>CGI、Servlet</strong> 或其他动态程序在接收请求后即时生成，这类 <strong>动态页面（Dynamic Content）</strong> 无法直接缓存。</p>
+<p>针对这种情况，可将页面内容划分为两部分：</p>
+<ul>
+<li><strong>静态部分</strong>：如页面框架、样式表、图片等不随请求变化的内容，可安全地缓存；</li>
+<li><strong>动态部分</strong>：由应用程序生成、在每次请求中变化的数据，不进行缓存。</li>
+</ul>
+<p>通过这种 <strong>静态与动态分离（Static-Dynamic Separation）</strong> 策略，可在保持页面灵活性的同时，最大化缓存服务器的性能收益。</p>
+<hr>
+<h2 id="请求路径中的缓存角色"><a href="#请求路径中的缓存角色" class="headerlink" title="请求路径中的缓存角色"></a><strong>请求路径中的缓存角色</strong></h2><p>在典型的 Web 架构中，请求消息在到达 Web 服务器之前，会依次经过多种中间节点，如防火墙、代理服务器及缓存服务器等。</p>
+<p>Web 服务器在接收到请求后，会解析请求内容，生成对应的响应消息并返回。若缓存服务器具备最新内容，可在请求到达 Web 服务器之前直接响应，从而显著降低服务器负载并改善整体响应速度。</p>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[24]-%E5%86%85%E5%AE%B9%E5%88%86%E5%8F%91%E6%9C%8D%E5%8A%A1%EF%BC%88CDN%EF%BC%89/">https://zhangxin66666.github.io/2026/10/14/9.网络/网络系列[24]-内容分发服务（CDN）/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E7%BD%91%E7%BB%9C.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B23%5D-%E9%98%B2%E7%81%AB%E5%A2%99%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E5%8E%9F%E7%90%86/"><img class="prev-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">网络系列[23]-防火墙的结构和原理</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B25%5D-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86/"><img class="next-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">网络系列[25]-服务端请求处理</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B11%5D-%E7%BD%91%E7%BA%BF%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%BB%9E%E7%BA%BF/" title="网络系列[11]-网线为什么使用双绞线"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[11]-网线为什么使用双绞线</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B10%5D-UDP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/" title="网络系列[10]-UDP协议的收发操作"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[10]-UDP协议的收发操作</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B13%5D-%E8%B7%AF%E7%94%B1%E5%99%A8%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[13]-路由器的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[13]-路由器的包转发</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B14%5D-%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%88NAT%EF%BC%89/" title="网络系列[14]-网络地址转换（NAT）"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[14]-网络地址转换（NAT）</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B15%5D-%E4%BB%8E%E4%BA%92%E8%81%94%E7%BD%91%E8%AE%BF%E9%97%AE%E5%85%AC%E5%8F%B8%E5%86%85%E7%BD%91/" title="网络系列[15]-从互联网访问公司内网"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[15]-从互联网访问公司内网</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B12%5D-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[12]-交换机的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[12]-交换机的包转发</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%86%85%E5%AE%B9%E5%88%86%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E6%8B%85%E8%B4%9F%E8%BD%BD"><span class="toc-text">利用内容分发服务器分担负载</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%89%BE%E5%88%B0%E6%9C%80%E8%BF%91%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">如何找到最近的缓存服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="toc-text">DNS 的基本工作方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B7%9D%E7%A6%BB%E7%9A%84-DNS-%E8%A7%A3%E6%9E%90%E7%AD%96%E7%95%A5"><span class="toc-text">基于距离的 DNS 解析策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E9%87%8D%E5%AE%9A%E5%90%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E9%85%8D%E8%AE%BF%E9%97%AE%E7%9B%AE%E6%A0%87"><span class="toc-text">通过重定向服务器分配访问目标</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B"><span class="toc-text">重定向的工作过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83%E4%B8%8E%E7%B2%BE%E5%BA%A6%E5%88%86%E6%9E%90"><span class="toc-text">方法比较与精度分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%BE%E5%BA%A6%E6%8F%90%E5%8D%87%E4%B8%8E%E6%89%A9%E5%B1%95%E6%96%B9%E5%BC%8F"><span class="toc-text">精度提升与扩展方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E6%96%B9%E6%B3%95%E4%BC%9A%E5%BD%B1%E5%93%8D%E6%80%A7%E8%83%BD"><span class="toc-text">缓存更新方法会影响性能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E5%8A%A8%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6"><span class="toc-text">主动更新机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%86%85%E5%AE%B9%E7%9A%84%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="toc-text">动态内容的缓存策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E8%A7%92%E8%89%B2"><span class="toc-text">请求路径中的缓存角色</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>网络系列[30]-常用网络问题排查命令 | 金子爸爸の家</title><meta name="keywords" content="网络"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="常用网络问题排查命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络系列[30]-常用网络问题排查命令">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[30]-%E5%B8%B8%E7%94%A8%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="常用网络问题排查命令">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:23.510Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[30]-%E5%B8%B8%E7%94%A8%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%91%BD%E4%BB%A4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络系列[30]-常用网络问题排查命令',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">网络系列[30]-常用网络问题排查命令</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:23.510Z" title="更新于 2026-10-14 16:48:23">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/9-%E7%BD%91%E7%BB%9C/">9.网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网络系列[30]-常用网络问题排查命令"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a><strong>nslookup</strong></h2><p><strong>nslookup（Name Server Lookup）</strong> 是一个用于查询 <strong>DNS（Domain Name System）记录</strong> 的命令行工具。</p>
+<p><strong>nslookup 是定位“域名解析”问题的首选工具。</strong>它不测网络连通性、不测端口，只查“域名 → IP”的映射是否正常。</p>
+<p>它可以：</p>
+<ul>
+<li>判断域名是否能正确解析；</li>
+<li>查看域名对应的 IP；</li>
+<li>检查 DNS 服务器是否可用；</li>
+<li>查看域名的详细解析记录（A、AAAA、MX、CNAME 等）。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup [选项] [域名或IP] [DNS服务器]</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<p><strong>参数</strong></p>
+<p><strong>说明</strong></p>
+<p>域名或IP</p>
+<p>要查询的目标，例如 <a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a> 或 8.8.8.8</p>
+<p>DNS服务器</p>
+<p>指定使用哪个 DNS 服务器（可选，不写则用系统默认）</p>
+<hr>
+<h3 id="查询域名对应的-IP-地址"><a href="#查询域名对应的-IP-地址" class="headerlink" title="查询域名对应的 IP 地址"></a><strong>查询域名对应的 IP 地址</strong></h3><p>$ nslookup <a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a></p>
+<p>Server:        10.100.160.80</p>
+<p>Address:    10.100.160.80#53</p>
+<p>Non-authoritative answer:</p>
+<p>Name:    <a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a></p>
+<p>Address: 142.250.189.196</p>
+<p>含义：</p>
+<ul>
+<li>使用的 DNS 服务器是 10.100.160.80#53</li>
+<li>查询结果中 Address 是目标 IP 地址</li>
+</ul>
+<hr>
+<h3 id="指定DNS服务器查询"><a href="#指定DNS服务器查询" class="headerlink" title="指定DNS服务器查询"></a>指定DNS服务器查询</h3><p>$ nslookup <a target="_blank" rel="noopener" href="http://www.openai.com/">www.openai.com</a> 8.8.8.8</p>
+<p>Server:        8.8.8.8</p>
+<p>Address:    8.8.8.8#53</p>
+<p>Non-authoritative answer:</p>
+<p><a target="_blank" rel="noopener" href="http://www.openai.com/">www.openai.com</a>    canonical name = <a target="_blank" rel="noopener" href="http://www.openai.com.cdn.cloudflare.net/">www.openai.com.cdn.cloudflare.net</a>.</p>
+<p>Name:    <a target="_blank" rel="noopener" href="http://www.openai.com.cdn.cloudflare.net/">www.openai.com.cdn.cloudflare.net</a></p>
+<p>Address: 104.18.33.45</p>
+<p>Name:    <a target="_blank" rel="noopener" href="http://www.openai.com.cdn.cloudflare.net/">www.openai.com.cdn.cloudflare.net</a></p>
+<p>Address: 172.64.154.211</p>
+<p>表示：</p>
+<p>向 Google 的公共 DNS（8.8.8.8）查询 <code>openai.com</code> 的解析结果。</p>
+<p>用途：</p>
+<ul>
+<li>对比不同 DNS 的解析差异；</li>
+<li>排查本地 DNS 缓存是否异常。</li>
+</ul>
+<hr>
+<h3 id="查询别名记录（CNAME）"><a href="#查询别名记录（CNAME）" class="headerlink" title="查询别名记录（CNAME）"></a><strong>查询别名记录（CNAME）</strong></h3><p>$ nslookup -type=CNAME <a target="_blank" rel="noopener" href="http://www.github.com/">www.github.com</a></p>
+<p>Server:     10.100.160.80</p>
+<p>Address:    10.100.160.80#53</p>
+<p>Non-authoritative answer:</p>
+<p><a target="_blank" rel="noopener" href="http://www.github.com/">www.github.com</a>  canonical name = github.com.</p>
+<p>Authoritative answers can be found from:</p>
+<hr>
+<h3 id="查询权威-DNS-服务器（NS-记录）"><a href="#查询权威-DNS-服务器（NS-记录）" class="headerlink" title="查询权威 DNS 服务器（NS 记录）"></a><strong>查询权威 DNS 服务器（NS 记录）</strong></h3><p>$ nslookup -type=NS github.com<br>Server:        10.100.160.90<br>Address:    10.100.160.90#53</p>
+<p>Non-authoritative answer:<br>github.com    nameserver = xxxxx</p>
+<p>Authoritative answers can be found from:<br>… …</p>
+<hr>
+<h3 id="查询-IPv6-地址（AAAA-记录）"><a href="#查询-IPv6-地址（AAAA-记录）" class="headerlink" title="查询 IPv6 地址（AAAA 记录）"></a><strong>查询 IPv6 地址（AAAA 记录）</strong></h3><p>$ nslookup -type=AAAA <a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a><br>Server:        10.100.160.80<br>Address:    10.100.160.80#53</p>
+<p>Non-authoritative answer:<br><a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a>    has AAAA address 2607:f8b0:4005:80d::2004</p>
+<p>Authoritative answers can be found from:</p>
+<hr>
+<h3 id="反向查询（IP-→-域名）"><a href="#反向查询（IP-→-域名）" class="headerlink" title="反向查询（IP → 域名）"></a><strong>反向查询（IP → 域名）</strong></h3><p>$ nslookup 142.250.189.196<br>Server:        10.100.160.80<br>Address:    10.100.160.80#53</p>
+<p>Non-authoritative answer:<br>196.189.250.142.in-addr.arpa    name = sfo03s25-in-f4.1e100.net.</p>
+<p>Authoritative answers can be found from:</p>
+<hr>
+<h2 id="ss"><a href="#ss" class="headerlink" title="ss"></a>ss</h2><p><strong>ss（socket statistics）</strong> 是 Linux 内核自带的网络连接状态查看工具，用于显示当前系统中所有的 <strong>socket 信息</strong>（包括 TCP、UDP、UNIX、RAW 等）。</p>
+<p>它比 netstat 更快、更轻量，因为直接从 <code>/proc/net</code> 读取内核数据，而不是通过 <code>/bin/netstat</code> 调系统接口。</p>
+<hr>
+<h3 id="查看所有-TCP-连接"><a href="#查看所有-TCP-连接" class="headerlink" title="查看所有 TCP 连接"></a><strong>查看所有 TCP 连接</strong></h3><p>ss -t</p>
+<hr>
+<h3 id="查看所有-UDP-连接"><a href="#查看所有-UDP-连接" class="headerlink" title="查看所有 UDP 连接"></a><strong>查看所有 UDP 连接</strong></h3><p>ss -u</p>
+<hr>
+<h3 id="查看所有-socket（包含-UNIX、RAW-等）"><a href="#查看所有-socket（包含-UNIX、RAW-等）" class="headerlink" title="查看所有 socket（包含 UNIX、RAW 等）"></a><strong>查看所有 socket（包含 UNIX、RAW 等）</strong></h3><p>ss -a</p>
+<hr>
+<h3 id="查看监听中的端口（Listen-状态）"><a href="#查看监听中的端口（Listen-状态）" class="headerlink" title="查看监听中的端口（Listen 状态）"></a><strong>查看监听中的端口（Listen 状态）</strong></h3><p>ss -lnt</p>
+<p>参数说明：</p>
+<ul>
+<li>-l：只显示监听状态（listening）</li>
+<li>-n：显示数字 IP，不解析域名</li>
+<li>-t：仅显示 TCP 连接</li>
+<li>-p：显示进程信息（需 root）</li>
+</ul>
+<p>输出：</p>
+<p>State      Recv-Q Send-Q Local Address:Port   Peer Address:Port  Process</p>
+<p>LISTEN     0      128    0.0.0.0:9200        0.0.0.0:*          users:((“java”,pid=2483,fd=143))</p>
+<p>表示：</p>
+<ul>
+<li><strong>State</strong>：TCP 状态（LISTEN、ESTABLISHED、TIME_WAIT…）</li>
+<li><strong>Recv-Q</strong>：接收队列（积压未被应用读取的数据）</li>
+<li><strong>Send-Q</strong>：发送队列（等待发送的数据）</li>
+<li><strong>Local/Peer Address</strong>：本地/对端 IP:Port</li>
+<li><strong>Process</strong>：进程名称与 PID</li>
+</ul>
+<hr>
+<h3 id="查看特定端口的连接"><a href="#查看特定端口的连接" class="headerlink" title="查看特定端口的连接"></a><strong>查看特定端口的连接</strong></h3><p>ss -tna | grep 9200</p>
+<hr>
+<h3 id="查看连接的统计汇总"><a href="#查看连接的统计汇总" class="headerlink" title="查看连接的统计汇总"></a><strong>查看连接的统计汇总</strong></h3><p>ss -s</p>
+<p>Total: 320 (kernel 1024)</p>
+<p>TCP:   120 (estab 40, closed 70, orphaned 0, timewait 10)</p>
+<p>Transport Total IP IPv6</p>
+<ul>
+<li><pre><code> 1024  800 224
+</code></pre>
+</li>
+</ul>
+<p>含义：</p>
+<ul>
+<li>当前系统的 socket 数量；</li>
+<li>TCP 连接状态分布（established、timewait 等）；</li>
+<li>对 IPv4 / IPv6 连接的比例。</li>
+</ul>
+<hr>
+<h3 id="查看与特定进程关联的连接"><a href="#查看与特定进程关联的连接" class="headerlink" title="查看与特定进程关联的连接"></a><strong>查看与特定进程关联的连接</strong></h3><p>ss -p | grep java</p>
+<p>可查看 Java 服务（例如 Kafka 或 ES）当前占用的端口与连接。</p>
+<hr>
+<h3 id="查看连接队列信息（分析拥塞）"><a href="#查看连接队列信息（分析拥塞）" class="headerlink" title="查看连接队列信息（分析拥塞）"></a><strong>查看连接队列信息（分析拥塞）</strong></h3><p>ss -tni</p>
+<p>输出关键字段</p>
+<p>State  Recv-Q Send-Q Local Address:Port Peer Address:Port</p>
+<p>ESTAB  0          23     10.1.1.5:9200           10.1.1.10:53022</p>
+<p>cubic wscale:7,7 rto:204 rtt:2.4/0.2 ato:40 mss:1448 cwnd:10</p>
+<p>说明：</p>
+<ul>
+<li><strong>rtt / rto</strong>：往返时延与重传超时；</li>
+<li><strong>cwnd</strong>：拥塞窗口；</li>
+<li><strong>mss</strong>：最大报文段大小；</li>
+<li><strong>Recv-Q / Send-Q</strong>：缓冲区积压情况。</li>
+</ul>
+<p>非常有助于诊断“网络延迟高”、“SocketTimeoutException”等问题！</p>
+<hr>
+<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a><strong>netstat</strong></h2><p><code>netstat</code>（<strong>network statistics</strong>）是一个用于显示系统<strong>网络连接状态、路由表、接口信息、监听端口等</strong>的命令行工具。</p>
+<p>它能帮助开发人员快速了解当前系统的网络活动状态、连接数、端口占用情况以及数据传输统计。</p>
+<p>命令格式：</p>
+<p>netstat [选项]</p>
+<p><strong>参数</strong></p>
+<p><strong>含义</strong></p>
+<p>-a</p>
+<p>显示所有连接（包括监听的和未监听的）</p>
+<p>-t</p>
+<p>显示 TCP 连接</p>
+<p>-u</p>
+<p>显示 UDP 连接</p>
+<p>-n</p>
+<p>以数字形式显示 IP 和端口（不做 DNS 解析）</p>
+<p>-l</p>
+<p>仅显示正在监听（LISTEN）的端口</p>
+<p>-p</p>
+<p>显示进程 ID（PID）和程序名（需 root 权限）</p>
+<p>-r</p>
+<p>显示路由表</p>
+<p>-i</p>
+<p>显示网络接口信息</p>
+<p>-s</p>
+<p>显示网络统计信息</p>
+<p>-c</p>
+<p>持续输出（持续刷新）</p>
+<hr>
+<h3 id="查看所有-TCP-连接-1"><a href="#查看所有-TCP-连接-1" class="headerlink" title="查看所有 TCP 连接"></a><strong>查看所有 TCP 连接</strong></h3><p>netstat -at</p>
+<hr>
+<h3 id="查看所有-UDP-连接-1"><a href="#查看所有-UDP-连接-1" class="headerlink" title="查看所有 UDP 连接"></a><strong>查看所有 UDP 连接</strong></h3><p>netstat -au</p>
+<hr>
+<h3 id="查看监听中的端口（Listen-状态）-1"><a href="#查看监听中的端口（Listen-状态）-1" class="headerlink" title="查看监听中的端口（Listen 状态）"></a><strong>查看监听中的端口（Listen 状态）</strong></h3><p>netstat -lntp</p>
+<p>输出示例：</p>
+<p>Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name</p>
+<p>tcp        0      0 0.0.0.0:9200            0.0.0.0:*               LISTEN      2483/java</p>
+<p>tcp        0      0 127.0.0.1:5601          0.0.0.0:*               LISTEN      2200/node</p>
+<p>含义：</p>
+<ul>
+<li><strong>Proto</strong>：协议（TCP/UDP）</li>
+<li><strong>Recv-Q / Send-Q</strong>：接收和发送队列</li>
+<li><strong>Local Address / Foreign Address</strong>：本地/远程 IP 和端口</li>
+<li><strong>State</strong>：连接状态（LISTEN、ESTABLISHED、TIME_WAIT 等）</li>
+<li><strong>PID/Program name</strong>：进程 ID 和程序名（如 java、nginx）</li>
+</ul>
+<hr>
+<h3 id="查看网络统计信息"><a href="#查看网络统计信息" class="headerlink" title="查看网络统计信息"></a><strong>查看网络统计信息</strong></h3><p>netstat -s</p>
+<p>用于查看各协议（TCP/UDP/ICMP/IP）的流量统计，例如：</p>
+<p>Tcp:</p>
+<p>245 active connections openings</p>
+<p>10 failed connection attempts</p>
+<p>5 connections reset</p>
+<p>有助于排查 <strong>Connection Reset</strong> 或 <strong>网络丢包</strong> 等问题。</p>
+<hr>
+<h3 id="查看路由表"><a href="#查看路由表" class="headerlink" title="查看路由表"></a><strong>查看路由表</strong></h3><p>netstat -r</p>
+<p>类似 route -n，输出：</p>
+<p>Kernel IP routing table</p>
+<p>Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface</p>
+<p>0.0.0.0         10.1.1.1        0.0.0.0         UG        0 0          0 eth0</p>
+<p>10.1.1.0        0.0.0.0         255.255.255.0   U         0 0          0 eth0</p>
+<p>说明：</p>
+<ul>
+<li><strong>Destination</strong>：目标网段</li>
+<li><strong>Gateway</strong>：网关地址</li>
+<li><strong>Iface</strong>：出口网卡</li>
+<li><strong>Flags</strong>：路由标志（U=up，G=gateway）</li>
+</ul>
+<hr>
+<h3 id="查看网卡接口状态"><a href="#查看网卡接口状态" class="headerlink" title="查看网卡接口状态"></a><strong>查看网卡接口状态</strong></h3><p>netstat -i</p>
+<p>输出示例：</p>
+<p>Iface   MTU Met RX-OK RX-ERR RX-DRP TX-OK TX-ERR TX-DRP Flg</p>
+<p>eth0   1500   0 10523     0     0  9342     0     0 BMRU</p>
+<p>查看是否有丢包、错误传输。</p>
+<hr>
+<h3 id="查看端口占用"><a href="#查看端口占用" class="headerlink" title="查看端口占用"></a><strong>查看端口占用</strong></h3><p>netstat -anp | grep 9200</p>
+<p>查看 Elasticsearch（9200端口）是否被占用。</p>
+<hr>
+<h3 id="持续监控连接变化"><a href="#持续监控连接变化" class="headerlink" title="持续监控连接变化"></a><strong>持续监控连接变化</strong></h3><p>netstat -antc</p>
+<p>每秒刷新 TCP 连接状态变化，用于观察连接数变化趋势（例如是否暴涨）。</p>
+<hr>
+<h3 id="常见连接状态"><a href="#常见连接状态" class="headerlink" title="常见连接状态"></a>常见连接状态</h3><p><strong>状态</strong></p>
+<p><strong>含义</strong></p>
+<p><strong>LISTEN</strong></p>
+<p>正在监听端口</p>
+<p><strong>ESTABLISHED</strong></p>
+<p>已建立连接</p>
+<p><strong>TIME_WAIT</strong></p>
+<p>连接关闭后等待超时</p>
+<p><strong>CLOSE_WAIT</strong></p>
+<p>被动关闭方等待应用层释放</p>
+<p><strong>SYN_SENT</strong></p>
+<p>正在发起连接请求</p>
+<p><strong>SYN_RECV</strong></p>
+<p>等待对方确认连接请求</p>
+<p><strong>FIN_WAIT1/2</strong></p>
+<p>正在关闭连接</p>
+<hr>
+<h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a><strong>tcpdump</strong></h2><p><strong>tcpdump</strong> 是一个基于命令行的 <strong>网络抓包工具</strong>，用于捕获通过指定网络接口的 <strong>TCP/IP、UDP、ICMP 等协议的数据包</strong>，并以人类可读的方式打印出来。</p>
+<p>它相当于 Wireshark 的命令行版本。</p>
+<p>可以实时观察网络通信、验证请求是否发出、确认包是否返回、分析延迟与丢包。</p>
+<p>命令基本格式：</p>
+<p>tcpdump [选项] [表达式]</p>
+<p>常用命令：</p>
+<p>sudo tcpdump -i eth0 -nn -s 0 -v port 9200</p>
+<p><strong>参数</strong></p>
+<p><strong>含义</strong></p>
+<p>-i </p>
+<p>指定要监听的网络接口（如 eth0、lo）</p>
+<p>-n</p>
+<p>不解析主机名和端口名（显示数字 IP 和端口）</p>
+<p>-nn</p>
+<p>不解析主机和协议名（推荐）</p>
+<p>-v, -vv, -vvv</p>
+<p>输出更详细的信息</p>
+<p>-s <len></p>
+<p>指定抓包长度（-s 0 表示抓完整包）</p>
+<p>-c <count></p>
+<p>只抓取指定数量的包</p>
+<p>-w <file></p>
+<p>将抓取的数据写入文件（可用 Wireshark 打开）</p>
+<p>-r <file></p>
+<p>从文件读取已抓取的数据进行分析</p>
+<hr>
+<h3 id="过滤表达式"><a href="#过滤表达式" class="headerlink" title="过滤表达式"></a>过滤表达式</h3><p><strong>类型</strong></p>
+<p><strong>示例</strong></p>
+<p><strong>含义</strong></p>
+<p><strong>主机过滤</strong></p>
+<p>host 10.1.1.5</p>
+<p>捕获往返该主机的包</p>
+<p><strong>源地址过滤</strong></p>
+<p>src 10.1.1.5</p>
+<p>只抓取来源 IP 为 10.1.1.5 的包</p>
+<p><strong>目标地址过滤</strong></p>
+<p>dst 10.1.1.5</p>
+<p>只抓取发往该主机的包</p>
+<p><strong>端口过滤</strong></p>
+<p>port 9200</p>
+<p>只抓取端口 9200（例如 ES）</p>
+<p><strong>协议过滤</strong></p>
+<p>tcp, udp, icmp</p>
+<p>过滤协议类型</p>
+<p><strong>组合过滤</strong></p>
+<p>src 10.1.1.5 and dst port 9200</p>
+<p>多条件组合</p>
+<p><strong>排除过滤</strong></p>
+<p>not port 22</p>
+<p>不抓取 SSH 流量</p>
+<p><strong>网络过滤</strong></p>
+<p>net 10.1.0.0/16</p>
+<p>捕获整个网段流量</p>
+<hr>
+<h3 id="抓取指定端口（例如-ES-9200）"><a href="#抓取指定端口（例如-ES-9200）" class="headerlink" title="抓取指定端口（例如 ES 9200）"></a><strong>抓取指定端口（例如 ES 9200）</strong></h3><p>sudo tcpdump -i eth0 -nn port 9200</p>
+<hr>
+<h3 id="抓取-HTTP-流量（80端口）"><a href="#抓取-HTTP-流量（80端口）" class="headerlink" title="抓取 HTTP 流量（80端口）"></a><strong>抓取 HTTP 流量（80端口）</strong></h3><p>sudo tcpdump -i eth0 -nn tcp port 80</p>
+<hr>
+<h3 id="抓取-HTTPS-TLS-握手过程（443端口）"><a href="#抓取-HTTPS-TLS-握手过程（443端口）" class="headerlink" title="抓取 HTTPS/TLS 握手过程（443端口）"></a><strong>抓取 HTTPS/TLS 握手过程（443端口）</strong></h3><p>sudo tcpdump -i eth0 -nn -s 0 port 443 -w tls_handshake.pcap</p>
+<hr>
+<h3 id="抓取-Kafka-的网络通信（端口-9092）"><a href="#抓取-Kafka-的网络通信（端口-9092）" class="headerlink" title="抓取 Kafka 的网络通信（端口 9092）"></a><strong>抓取 Kafka 的网络通信（端口 9092）</strong></h3><p>sudo tcpdump -i eth0 -nn tcp port 9092 -w kafka_capture.pcap</p>
+<hr>
+<h3 id="抓取特定服务-IP-的数据包"><a href="#抓取特定服务-IP-的数据包" class="headerlink" title="抓取特定服务 IP 的数据包"></a><strong>抓取特定服务 IP 的数据包</strong></h3><p>sudo tcpdump -i eth0 host 192.168.1.100</p>
+<hr>
+<h3 id="限制抓取包数量"><a href="#限制抓取包数量" class="headerlink" title="限制抓取包数量"></a><strong>限制抓取包数量</strong></h3><p>sudo tcpdump -i eth0 -c 10 tcp</p>
+<hr>
+<h3 id="从文件分析"><a href="#从文件分析" class="headerlink" title="从文件分析"></a><strong>从文件分析</strong></h3><p>sudo tcpdump -r kafka_capture.pcap -nn</p>
+<hr>
+<h3 id="输出结果解析"><a href="#输出结果解析" class="headerlink" title="输出结果解析"></a><strong>输出结果解析</strong></h3><p>10:30:12.142345 IP 10.1.1.5.53022 &gt; 10.1.1.8.9200: Flags [S], seq 123456, win 64240, length 0</p>
+<p>10:30:12.142512 IP 10.1.1.8.9200 &gt; 10.1.1.5.53022: Flags [S.], seq 987654, ack 123457, win 65160, length 0</p>
+<p>10:30:12.142520 IP 10.1.1.5.53022 &gt; 10.1.1.8.9200: Flags [.], ack 987655, win 65160, length 0</p>
+<p>解释：</p>
+<ul>
+<li>第一行：客户端（53022）向服务器（9200）发起 <strong>SYN</strong>；</li>
+<li>第二行：服务器返回 <strong>SYN+ACK</strong>；</li>
+<li>第三行：客户端发送 <strong>ACK</strong>；</li>
+<li>说明：<strong>TCP 三次握手成功</strong>！</li>
+</ul>
+<p>如果只看到第一行，说明：</p>
+<p>客户端发出了 SYN，但对方没有回应 → <strong>可能网络不通 / 防火墙 / 服务挂掉</strong></p>
+<p><strong>场景</strong></p>
+<p><strong>现象</strong></p>
+<p><strong>tcpdump 判断方法</strong></p>
+<p><strong>SocketTimeoutException</strong></p>
+<p>请求超时</p>
+<p>看是否只有 SYN，无响应包（说明对方没回包）</p>
+<p><strong>Connection reset by peer</strong></p>
+<p>连接被重置</p>
+<p>抓包中有 RST 标志</p>
+<p><strong>延迟高</strong></p>
+<p>RTT 增大</p>
+<p>观察请求与响应之间时间差</p>
+<p><strong>TLS 握手失败</strong></p>
+<p>HTTPS 连接断开</p>
+<p>抓取 443 流量看握手是否完成</p>
+<p><strong>负载均衡问题</strong></p>
+<p>请求打到错误机器</p>
+<p>看目标 IP 是否正确</p>
+<p><strong>Kafka Producer timeout</strong></p>
+<p>Producer 等不到 ACK</p>
+<p>抓包看 TCP 是否超时或 Broker 是否回应</p>
+<hr>
+<h2 id="telnet"><a href="#telnet" class="headerlink" title="telnet"></a>telnet</h2><p><code>telnet</code>（TELecommunication NETwork）最初是一种 <strong>远程登录协议</strong>，允许用户通过 TCP/IP 网络登录远程主机的命令行终端。</p>
+<p>但在现代运维中，我们通常<strong>不再用它登录系统</strong>，而是用它做 <strong>TCP 端口连通性测试工具</strong>（例如测试 HTTP、数据库、Kafka 等服务是否可达）。</p>
+<p><strong>命令格式：</strong></p>
+<p>telnet &lt;主机名或IP&gt; &lt;端口号&gt;</p>
+<p><strong>成功连接：</strong></p>
+<p>$ telnet 18.xx.xx.170 9889<br>Trying 18.xx.xx.170…<br>Connected to ec2-18-xx-xx-170.us-east-2.compute.amazonaws.com.<br>Escape character is ‘^]’.</p>
+<p>这表示：</p>
+<ul>
+<li>本机可以通过 TCP 三次握手成功连接到该地址和端口；</li>
+<li>对端端口开放且可访问；</li>
+<li>网络路由、防火墙、权限都正常。</li>
+</ul>
+<p><strong>连接失败：</strong></p>
+<p><strong>错误信息</strong></p>
+<p><strong>含义</strong></p>
+<p><strong>Connection refused</strong></p>
+<p>目标端口没有进程在监听（服务没启动或被防火墙拒绝）</p>
+<p><strong>Connection timed out</strong></p>
+<p>网络不可达、防火墙阻断、对端无响应</p>
+<p><strong>No route to host</strong></p>
+<p>路由不可达，可能 IP 地址错误或网关异常</p>
+<p><strong>Name or service not known</strong></p>
+<p>DNS 解析失败（主机名无法解析）</p>
+<p><strong>退出方法：</strong></p>
+<p>在 <code>telnet</code> 交互界面中：</p>
+<ul>
+<li>按 <code>Ctrl + ]</code> 进入 <strong>telnet</strong> 命令模式；</li>
+<li>输入 <code>quit</code> 退出。</li>
+</ul>
+<hr>
+<h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><p><code>ping</code> 是一个基于 <strong>ICMP（Internet Control Message Protocol）协议</strong> 的网络测试工具。</p>
+<p>它向目标主机发送 <strong>ICMP Echo Request（回显请求）</strong> 数据包，并等待目标返回 <strong>ICMP Echo Reply（回显应答）</strong>。</p>
+<p>如果能收到应答，就说明：</p>
+<ul>
+<li>网络连通；</li>
+<li>主机存活；</li>
+<li>可测出往返时延（RTT, Round Trip Time）。</li>
+</ul>
+<p>命令格式：</p>
+<p>ping [选项] &lt;目标主机&gt;</p>
+<p>输出结果：</p>
+<p>PING <a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a> (142.250.72.36): 56 data bytes<br>64 bytes from 142.250.72.36: icmp_seq=0 ttl=117 time=23.5 ms<br>64 bytes from 142.250.72.36: icmp_seq=1 ttl=117 time=24.1 ms<br>64 bytes from 142.250.72.36: icmp_seq=2 ttl=117 time=23.8 ms<br>^C<br>— <a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a> ping statistics —<br>3 packets transmitted, 3 received, 0% packet loss, time 2003ms<br>rtt min/avg/max/mdev = 23.5/23.8/24.1/0.3 ms</p>
+<p><strong>字段</strong></p>
+<p><strong>含义</strong></p>
+<p><strong>icmp_seq</strong></p>
+<p>包的序号（递增）</p>
+<p><strong>ttl（Time To Live）</strong></p>
+<p>数据包的最大跳数，反映路由层级（值越小，经过的路由越多）</p>
+<p><strong>time</strong></p>
+<p>往返时间（RTT），单位毫秒</p>
+<p><strong>packet loss</strong></p>
+<p>丢包率</p>
+<p><strong>rtt min/avg/max/mdev</strong></p>
+<p>最小 / 平均 / 最大 / 标准差（波动）延迟</p>
+<p><strong>常用选项</strong></p>
+<p><strong>选项</strong></p>
+<p><strong>说明</strong></p>
+<p><strong>示例</strong></p>
+<p><strong>-c &lt;次数&gt;</strong></p>
+<p>指定发送次数</p>
+<p><code>ping -c 4 8.8.8.8</code></p>
+<p><strong>-i &lt;间隔&gt;</strong></p>
+<p>设置每次发送间隔（默认 1 秒）</p>
+<p><code>ping -i 0.5 example.com</code></p>
+<p><strong>-s &lt;大小&gt;</strong></p>
+<p>设置 ICMP 数据包大小</p>
+<p><code>ping -s 1024 8.8.8.8</code></p>
+<p><strong>-t</strong>** (Windows)**</p>
+<p>一直 ping，直到手动中断</p>
+<p><code>ping -t www.baidu.com</code></p>
+<p><strong>-W &lt;秒&gt;</strong></p>
+<p>设置超时时间</p>
+<p><code>ping -W 3 192.168.1.1</code></p>
+<p><strong>-q</strong></p>
+<p>安静模式，仅输出统计信息</p>
+<p><code>ping -c 5 -q 8.8.8.8</code></p>
+<p><strong>现象分析：</strong></p>
+<p><strong>现象</strong></p>
+<p><strong>说明</strong></p>
+<p>64 bytes from … time=xx ms</p>
+<p>网络连通，延迟正常</p>
+<p>Request timed out / Destination Host Unreachable</p>
+<p>网络不通、防火墙阻断、目标关闭 ICMP</p>
+<p>丢包率高（&gt;10%）</p>
+<p>网络质量差、丢包严重</p>
+<p>延迟波动大</p>
+<p>网络拥塞或抖动</p>
+<p>unknown host</p>
+<p>DNS 无法解析</p>
+<ul>
+<li><p><strong>ping 使用的是 ICMP 协议，不是 TCP/UDP</strong>，所以：</p>
+</li>
+<li><p>目标主机可能禁用了 ICMP（例如防火墙屏蔽 ping）；</p>
+</li>
+<li><p>即使 ping 不通，也不一定说明服务不可达；</p>
+</li>
+<li><p>测 TCP 服务可用性时应使用 telnet 或 curl。</p>
+</li>
+<li><p><strong>TTL 值可用来推测路由层数</strong>（一般初始 64、128、255）。</p>
+</li>
+<li><p><strong>ICMP 报文大小与碎片化</strong>：</p>
+</li>
+<li><p>太大的包（&gt; MTU）可能被分片；</p>
+</li>
+<li><p>可用 ping -s 测试链路 MTU。</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[30]-%E5%B8%B8%E7%94%A8%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%91%BD%E4%BB%A4/">https://zhangxin66666.github.io/2026/10/14/9.网络/网络系列[30]-常用网络问题排查命令/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E7%BD%91%E7%BB%9C.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B28%5D-WebSocket%E5%8D%8F%E8%AE%AE/"><img class="prev-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">网络系列[28]-WebSocket协议</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B4%5D-%E5%A7%94%E6%89%98%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF/"><img class="next-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">网络系列[4]-委托协议栈发送消息</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B11%5D-%E7%BD%91%E7%BA%BF%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%BB%9E%E7%BA%BF/" title="网络系列[11]-网线为什么使用双绞线"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[11]-网线为什么使用双绞线</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B10%5D-UDP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/" title="网络系列[10]-UDP协议的收发操作"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[10]-UDP协议的收发操作</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B13%5D-%E8%B7%AF%E7%94%B1%E5%99%A8%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[13]-路由器的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[13]-路由器的包转发</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B14%5D-%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%88NAT%EF%BC%89/" title="网络系列[14]-网络地址转换（NAT）"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[14]-网络地址转换（NAT）</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B15%5D-%E4%BB%8E%E4%BA%92%E8%81%94%E7%BD%91%E8%AE%BF%E9%97%AE%E5%85%AC%E5%8F%B8%E5%86%85%E7%BD%91/" title="网络系列[15]-从互联网访问公司内网"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[15]-从互联网访问公司内网</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B12%5D-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[12]-交换机的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[12]-交换机的包转发</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#nslookup"><span class="toc-text">nslookup</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%9F%9F%E5%90%8D%E5%AF%B9%E5%BA%94%E7%9A%84-IP-%E5%9C%B0%E5%9D%80"><span class="toc-text">查询域名对应的 IP 地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9ADNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9F%A5%E8%AF%A2"><span class="toc-text">指定DNS服务器查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%88%AB%E5%90%8D%E8%AE%B0%E5%BD%95%EF%BC%88CNAME%EF%BC%89"><span class="toc-text">查询别名记录（CNAME）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%9D%83%E5%A8%81-DNS-%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88NS-%E8%AE%B0%E5%BD%95%EF%BC%89"><span class="toc-text">查询权威 DNS 服务器（NS 记录）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2-IPv6-%E5%9C%B0%E5%9D%80%EF%BC%88AAAA-%E8%AE%B0%E5%BD%95%EF%BC%89"><span class="toc-text">查询 IPv6 地址（AAAA 记录）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E6%9F%A5%E8%AF%A2%EF%BC%88IP-%E2%86%92-%E5%9F%9F%E5%90%8D%EF%BC%89"><span class="toc-text">反向查询（IP → 域名）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ss"><span class="toc-text">ss</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89-TCP-%E8%BF%9E%E6%8E%A5"><span class="toc-text">查看所有 TCP 连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89-UDP-%E8%BF%9E%E6%8E%A5"><span class="toc-text">查看所有 UDP 连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89-socket%EF%BC%88%E5%8C%85%E5%90%AB-UNIX%E3%80%81RAW-%E7%AD%89%EF%BC%89"><span class="toc-text">查看所有 socket（包含 UNIX、RAW 等）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%9B%91%E5%90%AC%E4%B8%AD%E7%9A%84%E7%AB%AF%E5%8F%A3%EF%BC%88Listen-%E7%8A%B6%E6%80%81%EF%BC%89"><span class="toc-text">查看监听中的端口（Listen 状态）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%89%B9%E5%AE%9A%E7%AB%AF%E5%8F%A3%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-text">查看特定端口的连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BF%9E%E6%8E%A5%E7%9A%84%E7%BB%9F%E8%AE%A1%E6%B1%87%E6%80%BB"><span class="toc-text">查看连接的统计汇总</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E4%B8%8E%E7%89%B9%E5%AE%9A%E8%BF%9B%E7%A8%8B%E5%85%B3%E8%81%94%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-text">查看与特定进程关联的连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E4%BF%A1%E6%81%AF%EF%BC%88%E5%88%86%E6%9E%90%E6%8B%A5%E5%A1%9E%EF%BC%89"><span class="toc-text">查看连接队列信息（分析拥塞）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netstat"><span class="toc-text">netstat</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89-TCP-%E8%BF%9E%E6%8E%A5-1"><span class="toc-text">查看所有 TCP 连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89-UDP-%E8%BF%9E%E6%8E%A5-1"><span class="toc-text">查看所有 UDP 连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%9B%91%E5%90%AC%E4%B8%AD%E7%9A%84%E7%AB%AF%E5%8F%A3%EF%BC%88Listen-%E7%8A%B6%E6%80%81%EF%BC%89-1"><span class="toc-text">查看监听中的端口（Listen 状态）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%BD%91%E7%BB%9C%E7%BB%9F%E8%AE%A1%E4%BF%A1%E6%81%AF"><span class="toc-text">查看网络统计信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%B7%AF%E7%94%B1%E8%A1%A8"><span class="toc-text">查看路由表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%BD%91%E5%8D%A1%E6%8E%A5%E5%8F%A3%E7%8A%B6%E6%80%81"><span class="toc-text">查看网卡接口状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8"><span class="toc-text">查看端口占用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E7%BB%AD%E7%9B%91%E6%8E%A7%E8%BF%9E%E6%8E%A5%E5%8F%98%E5%8C%96"><span class="toc-text">持续监控连接变化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E8%BF%9E%E6%8E%A5%E7%8A%B6%E6%80%81"><span class="toc-text">常见连接状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcpdump"><span class="toc-text">tcpdump</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">过滤表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8F%96%E6%8C%87%E5%AE%9A%E7%AB%AF%E5%8F%A3%EF%BC%88%E4%BE%8B%E5%A6%82-ES-9200%EF%BC%89"><span class="toc-text">抓取指定端口（例如 ES 9200）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8F%96-HTTP-%E6%B5%81%E9%87%8F%EF%BC%8880%E7%AB%AF%E5%8F%A3%EF%BC%89"><span class="toc-text">抓取 HTTP 流量（80端口）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8F%96-HTTPS-TLS-%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B%EF%BC%88443%E7%AB%AF%E5%8F%A3%EF%BC%89"><span class="toc-text">抓取 HTTPS&#x2F;TLS 握手过程（443端口）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8F%96-Kafka-%E7%9A%84%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%EF%BC%88%E7%AB%AF%E5%8F%A3-9092%EF%BC%89"><span class="toc-text">抓取 Kafka 的网络通信（端口 9092）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8F%96%E7%89%B9%E5%AE%9A%E6%9C%8D%E5%8A%A1-IP-%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="toc-text">抓取特定服务 IP 的数据包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%90%E5%88%B6%E6%8A%93%E5%8F%96%E5%8C%85%E6%95%B0%E9%87%8F"><span class="toc-text">限制抓取包数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-text">从文件分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C%E8%A7%A3%E6%9E%90"><span class="toc-text">输出结果解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#telnet"><span class="toc-text">telnet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ping"><span class="toc-text">ping</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>网络系列[26]-HTTPS协议 | 金子爸爸の家</title><meta name="keywords" content="网络"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="HTTPS协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络系列[26]-HTTPS协议">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[26]-HTTPS%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="HTTPS协议">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:23.504Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/%E7%BD%91%E7%BB%9C.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[26]-HTTPS%E5%8D%8F%E8%AE%AE/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络系列[26]-HTTPS协议',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">网络系列[26]-HTTPS协议</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:23.504Z" title="更新于 2026-10-14 16:48:23">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/9-%E7%BD%91%E7%BB%9C/">9.网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网络系列[26]-HTTPS协议"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="HTTP的缺点"><a href="#HTTP的缺点" class="headerlink" title="HTTP的缺点"></a>HTTP的缺点</h1><h2 id="通信使用明文，内容可能被窃听"><a href="#通信使用明文，内容可能被窃听" class="headerlink" title="通信使用明文，内容可能被窃听"></a>通信使用明文，内容可能被窃听</h2><h3 id="TCP-IP是可能被窃听的网络"><a href="#TCP-IP是可能被窃听的网络" class="headerlink" title="TCP/IP是可能被窃听的网络"></a>TCP/IP是可能被窃听的网络</h3><p>即使经过加密处理的通信，也会被窥视到通信内容，这点和没加密的通信是相同的。只是说如果通信经过加密，就有可能让人无法破解报文信息的含义，但是加密处理后的报文信息本身还是会被看到。</p>
+<p>窃听相同段上的通信并非难事。只需要收集在互联网上流动的数据包就行了。对于收集来的数据包解析工作，可交给抓包或者嗅探器工具。比如被广泛使用的抓包工具Wireshark，它可以获取HTTP协议的请求和响应的内容，并对其进行解析。</p>
+<hr>
+<h3 id="加密处理防止被窃听"><a href="#加密处理防止被窃听" class="headerlink" title="加密处理防止被窃听"></a>加密处理防止被窃听</h3><p>目前放窃听保护信息的几种策略中，最普及的就是加密技术。</p>
+<ol>
+<li><strong>通信的加密</strong></li>
+</ol>
+<ul>
+<li>HTTP可以和SSL/TLS组合使用，加密HTTP的通信内容。用了SSL建立安全通信线路之后，就可以在这条线路上进行HTTP通信了。与SSL组合使用的HTTP被称为HTTPS。</li>
+</ul>
+<ol>
+<li><strong>内容加密</strong></li>
+</ol>
+<ul>
+<li>可以将参与通信的内容本身加密的方式。由于HTTP协议中没有加密机制，那么就对HTTP协议传输的内容本身加密。即把HTTP报文里所含的内容进行加密处理。</li>
+<li>在这种情况下，客户端需要对HTTP报文进行加密处理后再发送请求。但是该方式不同于SSL/TLS将整个通信线路加密，内容仍然有被篡改的风险。</li>
+</ul>
+<hr>
+<h2 id="不验证通信方的身份，可能遭遇伪装"><a href="#不验证通信方的身份，可能遭遇伪装" class="headerlink" title="不验证通信方的身份，可能遭遇伪装"></a>不验证通信方的身份，可能遭遇伪装</h2><h3 id="任何人都可以发起请求"><a href="#任何人都可以发起请求" class="headerlink" title="任何人都可以发起请求"></a>任何人都可以发起请求</h3><ul>
+<li>无法确定请求发送至目标的WEB服务器是否按照真实意图返回响应的那台服务器，有可能是已经伪装的WEB服务器。</li>
+<li>无法确定响应返回到的客户端是否是按照真实意图接收响应的那个客户端。有可能是已伪装的客户端。</li>
+<li>无法确定正在通信的双方是否具备访问权限。因为某些WEB服务器上保存重要信息，只想发给特定用户通信的权限。</li>
+<li>无法判定请求来自何方，出自谁手。</li>
+<li>即使是无意义的请求也会照单全收。无法阻止海量请求下的DoS攻击。</li>
+</ul>
+<hr>
+<h3 id="查明对手的证书"><a href="#查明对手的证书" class="headerlink" title="查明对手的证书"></a>查明对手的证书</h3><p>使用HTTP协议无法确定通信方，但是SSL协议不仅提供了加密处理，还使用了一种被称为证书的手段，用于确定通信方。</p>
+<p>证书由获得信任的第三方机构颁发，用来证明客户端和服务器是实际存在的。另外伪造证书基本不可能，所以只要确定通信方持有的证书，就可以判断通信方的真实意图。</p>
+<p>通过使用证书，以证明通信方就是意料中的服务器。</p>
+<hr>
+<h2 id="无法证明报文完整性，所以有可能已被篡改"><a href="#无法证明报文完整性，所以有可能已被篡改" class="headerlink" title="无法证明报文完整性，所以有可能已被篡改"></a>无法证明报文完整性，所以有可能已被篡改</h2><p>HTTP无法证明通信报文的完整性，因此，在请求或响应送出之后直到对方接收之前的这段时间内，即使请求或者响应的内容遭到篡改，也没有办法获悉。</p>
+<p>为了有效防止这些弊端，有必要使用HTTPS。SSL提供认证和加密处理及摘要功能。仅靠HTTP确保完整性是非常困难的，因此通过和其他协议组合使用来实现这个目标。</p>
+<hr>
+<h1 id="HTTPS加密通信"><a href="#HTTPS加密通信" class="headerlink" title="HTTPS加密通信"></a>HTTPS加密通信</h1><h2 id="HTTPS-HTTP-SSL"><a href="#HTTPS-HTTP-SSL" class="headerlink" title="HTTPS = HTTP + SSL"></a>HTTPS = HTTP + SSL</h2><p>HTTPS并非是应用层的新协议。<strong>而是HTTP通信接口部分用SSL和TLS协议代替</strong>。通常HTTP直接和TCP通信，当使用SSL的时候，HTTP和SSL通信，SSL再和TCP通信。</p>
+<p>加入了SSL层之后，HTTP就拥有了HTTPS的加密，证书和完整性保护这些功能。</p>
+<p>SSL是独立于HTTP应用层的协议，所以其它运行在应用层的协议，比如SMTP和Telnet等协议均可以配合SSL协议使用。</p>
+<hr>
+<h2 id="HTTPS通信原理"><a href="#HTTPS通信原理" class="headerlink" title="HTTPS通信原理"></a>HTTPS通信原理</h2><ol>
+<li><strong>服务器申请数字证书</strong></li>
+</ol>
+<p>服务器首先向数字证书认证机构（CA, Certificate Authority）提交申请，请求为自己的公钥签发一份数字证书。CA 会验证服务器身份后，用自己的私钥对服务器的公钥及域名信息进行数字签名，生成一份受信任的<strong>公钥证书（Digital Certificate）</strong>。</p>
+<ol>
+<li><strong>客户端验证证书合法性</strong></li>
+</ol>
+<p>当浏览器（客户端）访问网站时，服务器会将这份数字证书发送给客户端。</p>
+<p>客户端使用内置的 CA 公钥验证证书的签名是否正确：</p>
+<ul>
+<li>如果验证通过，说明该服务器确实拥有合法身份，证书中的公钥是可信的；</li>
+<li>如果验证失败（例如证书过期、签名伪造或非受信任机构签发），浏览器会警告用户连接不安全。</li>
+</ul>
+<ol>
+<li><strong>协商加密方式与生成会话密钥</strong></li>
+</ol>
+<p>一旦服务器身份得到确认，客户端与服务器会通过 <strong>TLS 握手</strong> 共同协商一个会话密钥。</p>
+<p>在现代的 TLS 协议（如 TLS 1.3）中，这一步通常采用 <strong>椭圆曲线 Diffie-Hellman 临时密钥交换（ECDHE）</strong> 算法：</p>
+<ul>
+<li>双方各自生成一个临时密钥对，并交换公钥；</li>
+<li>双方利用各自的私钥与对方的公钥计算出相同的共享密钥；</li>
+<li>这个共享密钥就是本次会话中使用的 <strong>对称加密密钥</strong>。</li>
+</ul>
+<p>在整个过程中，<strong>服务器的私钥只是用于身份验证，而非直接加密对称密钥</strong>。</p>
+<ol>
+<li><strong>安全通信阶段</strong></li>
+</ol>
+<p>握手完成后，客户端与服务器都持有相同的会话密钥，后续所有的 HTTP 数据都会通过对称加密算法（如 AES、ChaCha20）加密传输。</p>
+<p>对称加密速度快、效率高，能保障通信内容的<strong>机密性与完整性</strong>，即使被第三方截获，也无法还原明文。</p>
+<hr>
+<h2 id="单向TLS与双向TLS"><a href="#单向TLS与双向TLS" class="headerlink" title="单向TLS与双向TLS"></a>单向TLS与双向TLS</h2><p>在 TLS 通信中，<strong>只有客户端验证服务器证书、以确认服务器身份</strong>的方式，称为 <strong>单向 TLS（One-Way TLS）</strong>。</p>
+<p>如果客户端也持有证书，并需要向服务器出示以供验证，则称为 <strong>双向 TLS（Mutual TLS，简称 mTLS）</strong>。</p>
+<p>在绝大多数 Web 场景中，我们访问的网站都采用 <strong>单向 TLS + OAuth 等应用层认证机制</strong>。</p>
+<p>其中：</p>
+<ul>
+<li><strong>单向 TLS</strong> 主要负责保障通信安全，验证服务器的真实身份，防止用户访问伪造的网站；</li>
+<li><strong>OAuth 等认证机制</strong> 则负责识别和授权客户端用户的身份。</li>
+</ul>
+<p>相比之下，<strong>双向 TLS</strong> 实现了客户端与服务器的双向身份验证，安全级别更高，但也带来了更高的成本和管理复杂度（例如证书的申请、分发与定期更新）。</p>
+<p>因此，双向 TLS 通常仅在 <strong>金融机构、企业内部系统、政务门户</strong>等对安全要求极高的场景中使用</p>
+<hr>
+<h2 id="自签名证书"><a href="#自签名证书" class="headerlink" title="自签名证书"></a>自签名证书</h2><p>通过 <strong>OpenSSL</strong> 等工具自行生成的证书，通常被称为 <strong>自签名证书（Self-Signed Certificate）</strong>。</p>
+<p>与由权威 CA（Certificate Authority）签发的证书不同，自签名证书的签名者与被签名者是同一个实体，因此它<strong>缺乏第三方信任背书</strong>。</p>
+<p>换句话说，客户端（如浏览器）无法验证该证书的真实性和可信度，也就无法确认服务器的身份是否可靠。</p>
+<p>这类证书通常仅用于<strong>开发、测试或内部环境</strong>，在正式的生产环境中并不推荐使用。</p>
+<p>自签名证书能加密通信，但无法建立信任。只有由受信任 CA 签发的证书，才能让客户端确信自己连接的是真正的服务器。</p>
+<hr>
+<h2 id="SSL和TLS"><a href="#SSL和TLS" class="headerlink" title="SSL和TLS"></a>SSL和TLS</h2><p>TLS是SSL的后继版本，以SSL3.0为原型开发的协议，有时会统称为SSL。</p>
+<hr>
+<h2 id="SSL慢么"><a href="#SSL慢么" class="headerlink" title="SSL慢么"></a>SSL慢么</h2><p>SSL/TLS 连接相比明文通信确实更“慢”，主要体现在两方面：</p>
+<ol>
+<li>加密解密过程增加 CPU 负担。</li>
+<li>握手阶段引入额外的网络往返。</li>
+</ol>
+<p>不过，目前 TLS 1.3、硬件加速、连接复用等技术已经显著降低了性能损耗，使得“SSL 慢”不再是主要瓶颈。</p>
+<hr>
+<h2 id="安全通信机制"><a href="#安全通信机制" class="headerlink" title="安全通信机制"></a>安全通信机制</h2><p>在 TCP 连接建立后，还要完成一次 <strong>TLS 握手（安全层握手）</strong> 才能传输加密数据。</p>
+<ol>
+<li><strong>TCP 三次握手</strong></li>
+</ol>
+<ul>
+<li>建立基础传输通道。</li>
+</ul>
+<ol>
+<li><strong>ClientHello</strong></li>
+</ol>
+<ul>
+<li><p>客户端发起 TLS 握手：</p>
+</li>
+<li><p>支持的加密套件列表（Cipher Suites）。</p>
+</li>
+<li><p>随机数、TLS 版本、SNI（域名）等。</p>
+</li>
+</ul>
+<ol>
+<li><strong>ServerHello + 证书</strong></li>
+</ol>
+<ul>
+<li><p>服务器选择加密算法，返回：</p>
+</li>
+<li><p>自己的证书（含公钥）。</p>
+</li>
+<li><p>随机数。</p>
+</li>
+<li><p>可能包含 ServerKeyExchange（用于临时密钥交换）。</p>
+</li>
+</ul>
+<ol>
+<li><strong>客户端验证证书</strong></li>
+</ol>
+<ul>
+<li>验证服务器证书是否可信（根证书链、域名匹配、未过期等）。</li>
+<li>生成“预主密钥（Pre-Master Secret）”，用服务器公钥加密发给服务器。</li>
+</ul>
+<ol>
+<li><strong>密钥生成</strong></li>
+</ol>
+<ul>
+<li>双方根据两端的随机数 + 预主密钥，生成会话密钥（对称加密密钥）。</li>
+</ul>
+<ol>
+<li><strong>ChangeCipherSpec / Finished</strong></li>
+</ol>
+<ul>
+<li>客户端发送“切换到加密通信”的消息。</li>
+<li>服务端确认后也切换。</li>
+<li>双方验证握手是否成功（Finished 消息）。</li>
+</ul>
+<ol>
+<li><strong>HTTP 请求/响应（加密传输）</strong></li>
+</ol>
+<ul>
+<li>从此开始，所有 HTTP 数据都经过 TLS 加密传输。</li>
+</ul>
+<p>📌 和 TLS1.2 相比，<strong>TLS1.3 的主要区别</strong>：</p>
+<ul>
+<li>🚀 握手更快（1-RTT，甚至支持 0-RTT）。</li>
+<li>🔑<strong>不再直接用 RSA 公钥加密 Session Key</strong>，而是通过 <strong>ECDHE（椭圆曲线 Diffie-Hellman）</strong> 协商共享密钥。</li>
+<li>🔒 更安全（前向安全性：即使服务器私钥泄露，也无法解密过去的会话）。</li>
+</ul>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97[26]-HTTPS%E5%8D%8F%E8%AE%AE/">https://zhangxin66666.github.io/2026/10/14/9.网络/网络系列[26]-HTTPS协议/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/%E7%BD%91%E7%BB%9C.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B25%5D-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86/"><img class="prev-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">网络系列[25]-服务端请求处理</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B27%5D-%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81/"><img class="next-cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">网络系列[27]-用户认证</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B11%5D-%E7%BD%91%E7%BA%BF%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8F%8C%E7%BB%9E%E7%BA%BF/" title="网络系列[11]-网线为什么使用双绞线"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[11]-网线为什么使用双绞线</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B10%5D-UDP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/" title="网络系列[10]-UDP协议的收发操作"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[10]-UDP协议的收发操作</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B13%5D-%E8%B7%AF%E7%94%B1%E5%99%A8%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[13]-路由器的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[13]-路由器的包转发</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B14%5D-%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%88NAT%EF%BC%89/" title="网络系列[14]-网络地址转换（NAT）"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[14]-网络地址转换（NAT）</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B15%5D-%E4%BB%8E%E4%BA%92%E8%81%94%E7%BD%91%E8%AE%BF%E9%97%AE%E5%85%AC%E5%8F%B8%E5%86%85%E7%BD%91/" title="网络系列[15]-从互联网访问公司内网"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[15]-从互联网访问公司内网</div></div></a></div><div><a href="/2026/10/14/9.%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%B3%BB%E5%88%97%5B12%5D-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%85%E8%BD%AC%E5%8F%91/" title="网络系列[12]-交换机的包转发"><img class="cover" src="/images/cover/%E7%BD%91%E7%BB%9C.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-14</div><div class="title">网络系列[12]-交换机的包转发</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text">HTTP的缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E4%BD%BF%E7%94%A8%E6%98%8E%E6%96%87%EF%BC%8C%E5%86%85%E5%AE%B9%E5%8F%AF%E8%83%BD%E8%A2%AB%E7%AA%83%E5%90%AC"><span class="toc-text">通信使用明文，内容可能被窃听</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP%E6%98%AF%E5%8F%AF%E8%83%BD%E8%A2%AB%E7%AA%83%E5%90%AC%E7%9A%84%E7%BD%91%E7%BB%9C"><span class="toc-text">TCP&#x2F;IP是可能被窃听的网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E5%AF%86%E5%A4%84%E7%90%86%E9%98%B2%E6%AD%A2%E8%A2%AB%E7%AA%83%E5%90%AC"><span class="toc-text">加密处理防止被窃听</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E9%AA%8C%E8%AF%81%E9%80%9A%E4%BF%A1%E6%96%B9%E7%9A%84%E8%BA%AB%E4%BB%BD%EF%BC%8C%E5%8F%AF%E8%83%BD%E9%81%AD%E9%81%87%E4%BC%AA%E8%A3%85"><span class="toc-text">不验证通信方的身份，可能遭遇伪装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E4%BD%95%E4%BA%BA%E9%83%BD%E5%8F%AF%E4%BB%A5%E5%8F%91%E8%B5%B7%E8%AF%B7%E6%B1%82"><span class="toc-text">任何人都可以发起请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E6%98%8E%E5%AF%B9%E6%89%8B%E7%9A%84%E8%AF%81%E4%B9%A6"><span class="toc-text">查明对手的证书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E6%B3%95%E8%AF%81%E6%98%8E%E6%8A%A5%E6%96%87%E5%AE%8C%E6%95%B4%E6%80%A7%EF%BC%8C%E6%89%80%E4%BB%A5%E6%9C%89%E5%8F%AF%E8%83%BD%E5%B7%B2%E8%A2%AB%E7%AF%A1%E6%94%B9"><span class="toc-text">无法证明报文完整性，所以有可能已被篡改</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTPS%E5%8A%A0%E5%AF%86%E9%80%9A%E4%BF%A1"><span class="toc-text">HTTPS加密通信</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS-HTTP-SSL"><span class="toc-text">HTTPS &#x3D; HTTP + SSL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86"><span class="toc-text">HTTPS通信原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E5%90%91TLS%E4%B8%8E%E5%8F%8C%E5%90%91TLS"><span class="toc-text">单向TLS与双向TLS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6"><span class="toc-text">自签名证书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSL%E5%92%8CTLS"><span class="toc-text">SSL和TLS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSL%E6%85%A2%E4%B9%88"><span class="toc-text">SSL慢么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6"><span class="toc-text">安全通信机制</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/%E7%BD%91%E7%BB%9C.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

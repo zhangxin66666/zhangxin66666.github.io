@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Redis系列解读[1]Redis服务端启动流程 | 金子爸爸の家</title><meta name="keywords" content="redis"><meta name="author" content="金子爸爸"><meta name="copyright" content="金子爸爸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Redis 服务端启动流程与事件循环建立过程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis系列解读[1]Redis服务端启动流程">
+<meta property="og:url" content="https://zhangxin66666.github.io/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB[1]Redis%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="金子爸爸の家">
+<meta property="og:description" content="Redis 服务端启动流程与事件循环建立过程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangxin66666.github.io/images/cover/redis.png">
+<meta property="article:published_time" content="2026-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-14T08:48:23.137Z">
+<meta property="article:author" content="金子爸爸">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangxin66666.github.io/images/cover/redis.png"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://zhangxin66666.github.io/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB[1]Redis%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Redis系列解读[1]Redis服务端启动流程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-10-14 16:48:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="referrer" content="no-referrer" /><meta name="generator" content="Hexo 5.4.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/cover/redis.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">金子爸爸の家</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Redis系列解读[1]Redis服务端启动流程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-14T08:48:23.137Z" title="更新于 2026-10-14 16:48:23">2026-10-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/5-%E7%BC%93%E5%AD%98/">5.缓存</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Redis系列解读[1]Redis服务端启动流程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Redis 是典型的 单 Reactor 单线程 的事件驱动模型，其服务端的启动也就是事件循环的建立过程，服务端启动的入口是 server.c文件内的主函数。</p>
+<p>关于事件驱动的部分内容比较多，后面我会单独分出一到两篇文章介绍，本文主要关注Redis-server的启动流程即可。</p>
+<p>当我们在命令行输入了redis-server命令后，Redis的服务端就会启动起来并对外提供服务了，这个时候我们就可以通过客户端连接Redis的服务端进行操作了。接下来我们通过源码来看一下，这个过程中都发生了什么事，才能让高并发必备的Redis启动起来。Redis启动流程涉及到的函数都比较长，我会截取一些关键部分进行分析，然后最后在做一个统一的梳理。</p>
+<h2 id="1-main函数的流程"><a href="#1-main函数的流程" class="headerlink" title="1.main函数的流程"></a>1.main函数的流程</h2><p>首先我们先来到server.c文件，该文件的main函数就是Redis启动的入口，这个函数的内容很多，看起来有一些没有头绪，这个时候我们就说一下看源码的方法，首先源码的方法上一般会有一些注释，来对这个方法的功能出入参进行简单的介绍，这个其实对于我们刚开始看一个不熟悉的源码是很重要的，如果对一个方法的内容不了解的情况下，一定要看一下作者的注释，再通过注释了解了这个方法的大概功能以后，我们就可以顺着方法的功能来对方法内的代码进行分析了。在这个过程中可能有一些代码的逻辑我们一下并不能看懂，这个时候不要过于纠结，可以先打一个标记后暂时跳过，很多代码的前后关联性很强，可能在你看完了后面的代码后，前面看不懂的部分水到渠成的就明白是什么意思了。源码切忌按部就班，逐行看懂的钻牛角尖，这样很容易事倍功半，还会打击看源码的信心。</p>
+<p>言归正传，我们来看一下这个方法主要都做了些什么？首先源码里面的很多函数都是见名知意的，比如这个initServerConfig函数，一眼看去就晓得是初始化服务端配置，但是具体初始化什么配置我们并不知道，这个时候我们可以在这行代码上加一行注释，等看完当前方法的主要流程后，在针对里面的重要方法和步骤进行分析。接下来我们我们按照这种方法标记出加载服务端配置的loadServerConfig方法，初始化服务端的initServer方法和事件模型的主函数aeMain方法。在我们对这些方法进行分析之前，我们先来梳理下Redis入口函数的逻辑，加载配置，根据配置进行一些必要的初始化工作，调用事件模型的入口函数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">//初始化 server 端的各项配置</span></span><br><span class="line">    initServerConfig();    </span><br><span class="line">    .....</span><br><span class="line">    <span class="comment">//加载配置文件redis.conf 初始化服务端的配置 ，eg：设置redis的监听端口 6379</span></span><br><span class="line">    loadServerConfig(server.configfile, config_from_stdin, options);</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">//创建事件循环对象，配置server用来处理socket event 的函数 &amp; 处理 定时 event 的函数</span></span><br><span class="line">    initServer();</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">//启动事件循环的处理线程，到了这里，redis就可以接收客户端的请求命令了</span></span><br><span class="line">    aeMain(server.el);</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-初始化配置"><a href="#2-初始化配置" class="headerlink" title="2.初始化配置"></a>2.初始化配置</h2><p>首先我们来看一下<code>initServerConfig</code>函数，这里面比较重要的一行代码就是调用了populateCommandTable函数，我们来看一下这个函数做了些什么？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">initServerConfig</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">	...</span><br><span class="line">    populateCommandTable();</span><br><span class="line">	....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实这里的逻辑很简单，主要是把server.c文件顶部硬编码的<code>redisCommand</code>类型的列表填充为redis的命令。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; numcommands; j++) &#123; </span><br><span class="line">    <span class="keyword">if</span> (populateCommandTableParseFlags(c, c-&gt;sflags) == C_ERR)</span><br><span class="line">        serverPanic(<span class="string">&quot;Unsupported command flag&quot;</span>);</span><br><span class="line">    retval1 = dictAdd(server.commands, sdsnew(c-&gt;name), c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么接下来我们就可以来看一下<code>redisCommand</code>长什么样子。redisCommand 是一条命令的存储结构，所谓的一条命令就是我们可以在Redis客户端输入然后发送给Redis服务端执行的指令。其中 name 属性为命令名称，proc 为函数的指针，就是通过该指针建立了命令名称与处理函数之间的映射关系。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisCommand</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> *name;  </span><br><span class="line">    redisCommandProc *proc; </span><br><span class="line">    ....</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>redisCommandTable</code> 是一个硬编码的数组，位于server.c文件中，里面定义了redis服务端可以接收的所有命令和对应的处理函数，通过这个数组我们可以很快定位到某个命令的入口函数。这对于我们看源码来说很关键。</p>
+<h2 id="3-加载服务端配置文件"><a href="#3-加载服务端配置文件" class="headerlink" title="3.加载服务端配置文件"></a>3.加载服务端配置文件</h2><p>接下来的<code>loadServerConfig</code>函数从指定的文件名加载服务器配置。在加载完文件以后，还会继续加载stdin输入的内容和执行redis启动命令的时候输入的参数，加载完成后，将他们追加到内存中的redis.conf配置文件。这也就解释了为什么我们在redis-server指令后面追加的命令参数会覆盖配置文件的配置。因为先加载的配置文件的配置后加载的命令行的配置，这样当加载命令行的配置时，就会对内存中已经有的配置进行覆盖操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">   ....</span><br><span class="line">       </span><br><span class="line">   <span class="comment">/* 加载配置文件 */</span></span><br><span class="line">   <span class="keyword">if</span> (filename) &#123;</span><br><span class="line">       <span class="keyword">while</span>(fgets(buf,CONFIG_MAX_LINE+<span class="number">1</span>,fp) != NULL)</span><br><span class="line">           config = sdscat(config,buf);</span><br><span class="line">       fclose(fp);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">/* 将stdin的输入内容追加到加载的配置文件 */</span></span><br><span class="line">   <span class="keyword">if</span> (config_from_stdin) &#123;</span><br><span class="line">       fp = stdin;</span><br><span class="line">       <span class="keyword">while</span>(fgets(buf,CONFIG_MAX_LINE+<span class="number">1</span>,fp) != NULL)</span><br><span class="line">           config = sdscat(config,buf);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">/* 将命令行参数追加到加载的配置文件 */</span></span><br><span class="line">   <span class="keyword">if</span> (options) &#123;</span><br><span class="line">       config = sdscat(config,<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">       config = sdscat(config,options);</span><br><span class="line">   &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-初始化server"><a href="#4-初始化server" class="headerlink" title="4.初始化server"></a>4.初始化server</h2><p>这个函数有点长，不过没关系，我们可以配合方法头和方法内的注释来阅读代码进行分析。</p>
+<ol>
+<li>首先根据上一个方法从配置文件，命令行加载的配置（包括一些：定时任务执行频率，客户端链表结构，从机链表结构等等）对服务端进行初始化。</li>
+<li>接下来调用aeCreateEventLoop函数创建事件循环实例，不了解事件循环实例不要紧，我们先继续往下看。</li>
+<li>zmalloc函数式Redis里面很重要的一个函数，就是分配内存，所以很明显这里的操作就是为数据库分配内存。</li>
+<li>绑定服务端socket监听端口，通过unix套接字实现监听</li>
+<li>初始化redis的数据库结构【redisDB】，默认一共有16个。</li>
+<li>指定一下定时事件的处理函数为【serverCron】，包括：主从节点&amp;集群模式 各个节点的定时通信。</li>
+<li>创建一个事件处理程序【acceptTcpHandler】，用于接受TCP和Unix域套接字中的新连接。</li>
+<li>判断当因为客户端命令发生阻塞的时候，创建一个可读事件。</li>
+<li>设置每次事件处理之前需要进行的操作为【beforeSleep】，他会对一些数据进行淘汰，还会设置事件处理之后的函数【afterSleep】。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">initServer</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* 从配置系统设置默认值后的初始化。</span></span><br><span class="line"><span class="comment">     * 包括一些：定时任务执行频率，客户端链表结构，从机链表结构等等。*/</span></span><br><span class="line">    server.aof_state = server.aof_enabled ? AOF_ON : AOF_OFF;</span><br><span class="line">    ....</span><br><span class="line">    <span class="comment">//此处省略一些参数的初始化</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">//创建事件循环实例</span></span><br><span class="line">    server.el = aeCreateEventLoop(server.maxclients+CONFIG_FDSET_INCR);</span><br><span class="line">    <span class="keyword">if</span> (server.el == NULL) &#123;</span><br><span class="line">        exit(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//为数据库分配内存</span></span><br><span class="line">    server.db = zmalloc(sizeof(redisDb)*server.dbnum);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 绑定服务端socket监听端口 */</span></span><br><span class="line">    <span class="keyword">if</span> (server.port != <span class="number">0</span> &amp;&amp;</span><br><span class="line">        listenToPort(server.port,server.ipfd,&amp;server.ipfd_count) == C_ERR)</span><br><span class="line">        exit(<span class="number">1</span>);</span><br><span class="line">    ....</span><br><span class="line">    <span class="comment">/* 此处省略了通过unix套接字实现监听 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 初始化redis的数据库结构【redisDB】，默认一共有16个。 */</span></span><br><span class="line">    <span class="comment">/* 初始化 redisDB 等，详见上文 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-创建事件循环实例"><a href="#5-创建事件循环实例" class="headerlink" title="5.创建事件循环实例"></a>5.创建事件循环实例</h2><p>在上一步初始化服务端的代码分析过程中，我们看到了一个函数aeCreateEventLoop，这个函数其实是创建事件循环对象，接下来我们来看一下aeCreateEventLoop函数的流程，其实如果你以前有过看源码的经验，一眼就能看出整个方法就是根据传入的 size创建两个数组加一些其他的参数给事件循环eventLoop对象赋能，至于这两个数组是做什么的，我们暂时不用关心，后面到了具体细节分析的时候我们会详细说明。</p>
+<p>在Redis源代码中对于对于setsize的定义：<code>setsize：server.maxclients+CONFIG_FDSET_INCR</code>。其中：<code>maxclients</code>代表用户配置的最大连接数，可以在启动的时候通过<code> --maxclients</code>指定，默认为10000；<code>CONFIG_FDSET_INCR</code>参数的大小为128，给Redis预留一些安全的空间。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">eventLoop-&gt;events = zmalloc(<span class="keyword">sizeof</span>(aeFileEvent) * setsize);</span><br><span class="line">eventLoop-&gt;fired = zmalloc(<span class="keyword">sizeof</span>(aeFiredEvent) * setsize);</span><br><span class="line"><span class="comment">//省略一些事件循环参数的初始化</span></span><br><span class="line"><span class="keyword">return</span> eventLoop;</span><br><span class="line"><span class="comment">//省略错误处理的逻辑</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="6-启动事件循环的处理线程"><a href="#6-启动事件循环的处理线程" class="headerlink" title="6.启动事件循环的处理线程"></a>6.启动事件循环的处理线程</h2><p>终于到了入口函数里面的最后一个方法aeMain，可以看到这个函数的核心逻辑就是不停的循环调用<code>aeProcessEvents</code>方法，直到事件循环对象的stop属性不等于0。<code>aeProcessEvents</code>方法比较长，我就不再上代码了，直接做一个梳理：</p>
+<p><code>aeProcessEvents()</code> 函数会处理两种事件，分别是定时触发的事件和Socket I/O触发的读写事件。因为 redis 是单线程的，这两种事件不可以同时处理，所以该函数中有一种时间分片的策略，简单来说就是首先计算当前时间距离最近的定时事件触发时的时间差 T，然后调用 <code>aeApiPoll()</code>设置轮询 Socket 的超时时间为 T，在超时时间内只处理 Socket 读写事件，超时时间到了后再调用 <code>processTimeEvents()</code> 函数处理定时事件。这个函数最终会返回处理的事件个数。这个函数后面我会在Redis的多路复用模型里面展开分析源码。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">aeMain</span><span class="params">(aeEventLoop *eventLoop)</span> </span>&#123;</span><br><span class="line">    eventLoop-&gt;stop = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//当事件组没有停止的时候</span></span><br><span class="line">    <span class="keyword">while</span> (!eventLoop-&gt;stop) </span><br><span class="line">        <span class="comment">//就会执行这个函数，所以看这个函数的逻辑</span></span><br><span class="line">        aeProcessEvents(eventLoop, AE_ALL_EVENTS | AE_CALL_BEFORE_SLEEP | AE_CALL_AFTER_SLEEP);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>启动了事件处理线程以后，redis就可以接收客户端的请求和命令了。</p>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7.总结"></a>7.总结</h2><p>至此，redis-server就启动起来了，接下来就是处理客户端请求的流程，我将会在下一篇文章分析。最后我们再来回顾下server的启动流程：</p>
+<ol>
+<li><p>初始化配置</p>
+</li>
+<li><p>加载server.c硬编码的命令列表</p>
+</li>
+<li><p>处理启动的时候通过命令行带过来的配置</p>
+</li>
+<li><p>加载服务端配置文件</p>
+</li>
+<li><p>初始化server</p>
+</li>
+<li><p>从配置系统设置默认值后的初始化。包括一些：定时任务执行频率，客户端链表结构，从机链表结构等等。</p>
+</li>
+<li><p>tls 相关的配置</p>
+</li>
+<li><p>创建事件循环实例</p>
+</li>
+<li><p>绑定服务端socket监听端口，通过unix套接字实现监听</p>
+</li>
+<li><p>初始化redis的数据库结构【redisDB】，默认一共有16个。</p>
+</li>
+<li><p>指定一下定时事件的处理函数为【serverCron】，包括：主从节点&amp;集群模式 各个节点的定时通信。</p>
+</li>
+<li><p>创建一个事件处理程序【acceptTcpHandler】，用于接受TCP和Unix域套接字中的新连接。</p>
+</li>
+<li><p>当因为客户端命令发生阻塞的时候，创建一个可读事件。</p>
+</li>
+<li><p>设置每次事件处理之前需要进行的操作为【beforeSleep】，他会对一些数据进行淘汰，【一些内存淘汰策略相关的内容】</p>
+</li>
+<li><p>创建事件处理器，将<code>acceptTcpHandler</code>赋值给文件事件处理的读指针</p>
+</li>
+<li><p>启动事件循环的处理线程</p>
+</li>
+<li><p>处理定时触发的事件</p>
+</li>
+<li><p>处理socket io触发的事件</p>
+</li>
+</ol>
+<p><img src="https://zhangxin66666.github.io/imageCenter/uPic/202610/14/hKrAdf.png" alt="Redis服务端启动&amp;命令执行.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">金子爸爸</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://zhangxin66666.github.io/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB[1]Redis%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/">https://zhangxin66666.github.io/2026/10/14/5.缓存/Redis系列解读[1]Redis服务端启动流程/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸</a> 许可协议。转载请注明来自 <a href="https://zhangxin66666.github.io" target="_blank">金子爸爸の家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/redis/">redis</a></div><div class="post_share"><div class="social-share" data-image="/images/cover/redis.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat_pay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat_pay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB%5B19%5D%E4%B8%BB%E4%BB%8E%E9%9B%86%E7%BE%A4/"><img class="prev-cover" src="/images/cover/redis.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Redis系列解读[19]主从集群</div></div></a></div><div class="next-post pull-right"><a href="/2026/10/14/5.%E7%BC%93%E5%AD%98/Redis%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB%5B20%5DRedis%E5%AE%89%E5%85%A8/"><img class="next-cover" src="/images/cover/redis.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Redis系列解读[20] Redis安全</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2025/01/03/5.%E7%BC%93%E5%AD%98/Redis-%E9%81%BF%E5%85%8D%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E7%9A%84%E5%88%A9%E5%99%A8%E4%B9%8BBloomFilter/" title="Redis-避免缓存穿透的利器之BloomFilter"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-03</div><div class="title">Redis-避免缓存穿透的利器之BloomFilter</div></div></a></div><div><a href="/2024/12/26/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(1)%E2%80%94%E2%80%94dict/" title="Redis内部数据结构详解(1)——dict"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-26</div><div class="title">Redis内部数据结构详解(1)——dict</div></div></a></div><div><a href="/2024/12/30/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(2)%E2%80%94%E2%80%94sds/" title="Redis内部数据结构详解(2)——sds"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="title">Redis内部数据结构详解(2)——sds</div></div></a></div><div><a href="/2024/12/30/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(4)%E2%80%94%E2%80%94ziplist/" title="Redis内部数据结构详解(4)——ziplist"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="title">Redis内部数据结构详解(4)——ziplist</div></div></a></div><div><a href="/2024/12/30/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(5)%E2%80%94%E2%80%94quicklist/" title="Redis内部数据结构详解(5)——quicklist"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="title">Redis内部数据结构详解(5)——quicklist</div></div></a></div><div><a href="/2025/01/02/5.%E7%BC%93%E5%AD%98/Redis%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3(7)%E2%80%94%E2%80%94intset/" title="Redis内部数据结构详解(7)——intset"><img class="cover" src="/images/cover/redis.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-02</div><div class="title">Redis内部数据结构详解(7)——intset</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">金子爸爸</div><div class="author-info__description">欢迎来到金子爸爸的博客....</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">169</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhangxin66666"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhangxin66666" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:379104065@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到金子爸爸的个人博客，对本站的文章和技术问题有疑问和建议请联系作者：QQ：379104065</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-main%E5%87%BD%E6%95%B0%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-text">1.main函数的流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="toc-text">2.初始化配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8A%A0%E8%BD%BD%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3.加载服务端配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%9D%E5%A7%8B%E5%8C%96server"><span class="toc-text">4.初始化server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%88%9B%E5%BB%BA%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E5%AE%9E%E4%BE%8B"><span class="toc-text">5.创建事件循环实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%90%AF%E5%8A%A8%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E7%9A%84%E5%A4%84%E7%90%86%E7%BA%BF%E7%A8%8B"><span class="toc-text">6.启动事件循环的处理线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%80%BB%E7%BB%93"><span class="toc-text">7.总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读"><img src="/images/cover/%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ConcurrentHashMap源码解读"/></a><div class="content"><a class="title" href="/2026/10/14/1.%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ConcurrentHashMap/" title="ConcurrentHashMap源码解读">ConcurrentHashMap源码解读</a><time datetime="2026-10-14T08:48:22.799Z" title="发表于 2026-10-14 16:48:22">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[10]-结构型模式之代理模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B10%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="设计模式系列[10]-结构型模式之代理模式">设计模式系列[10]-结构型模式之代理模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[11]-结构型模式之适配器模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B11%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="设计模式系列[11]-结构型模式之适配器模式">设计模式系列[11]-结构型模式之适配器模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[12]-结构型模式之桥接模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B12%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" title="设计模式系列[12]-结构型模式之桥接模式">设计模式系列[12]-结构型模式之桥接模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式"><img src="/images/cover/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式系列[13]-结构型模式之装饰者模式"/></a><div class="content"><a class="title" href="/2026/10/14/10.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%5B13%5D-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" title="设计模式系列[13]-结构型模式之装饰者模式">设计模式系列[13]-结构型模式之装饰者模式</a><time datetime="2026-10-13T16:00:00.000Z" title="发表于 2026-10-14 00:00:00">2026-10-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/cover/redis.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2026 By 金子爸爸</div><div class="footer_custom_text">学无止境</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/chocolate.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="哆啦A梦,足球小子,四驱兄弟,宠物小精灵,火影忍者,美少女战士,数码宝贝,龙珠,光能使者,奥特曼,铁胆火车侠,变形金刚,海尔兄弟,蜡笔小新" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
